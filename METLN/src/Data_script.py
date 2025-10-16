@@ -1,7 +1,7 @@
 import pandas as pd
 import gender_guesser.detector as gender #found on internet
 
-def clean_and_merge(transactions='src/data/transactions_clean - transactions.csv', customers='src/data/customer_summary_clean.csv'):
+def clean_and_merge(transactions='METLN/src/data/transactions_clean - transactions.csv', customers='METLN/src/data/customer_summary_clean.csv'):
     '''Input: 2 CSVS from MLET (one of customers and one transactions)
        Output - Add Gender Column using gender guesser and merge
     '''
@@ -15,7 +15,7 @@ def clean_and_merge(transactions='src/data/transactions_clean - transactions.csv
     else 'F' if x in ['female', 'mostly_female'] #makes it easier to filter m/f
     else 'unknown') #we can make a dictionary of common unknown names but this isn't scalable
     df=pd.merge(df_customers,df_transactions, on='Hashed Email Address')
-    df.to_csv('src/data/merged.csv', index=False)
+    df.to_csv('METLN/src/data/merged.csv', index=False)
 
 def main():
     clean_and_merge()
