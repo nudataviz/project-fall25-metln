@@ -3,8 +3,8 @@ title: Time Graphs
 ---
 
 ```js
-let customerSum = await FileAttachment("Project_Proposal/project-fall25-Jordan-NE/METLN/src/data/customer_summary_clean.csv").csv({typed: true})
-let transactSum = await FileAttachment ("Project_Proposal/project-fall25-Jordan-NE/METLN/src/data/transactions_clean - transactions.csv").csv({typed: true})
+let customerSum = await FileAttachment("data/customer_summary_clean.csv").csv({typed: true})
+let transactSum = await FileAttachment ("data/transactions_clean - transactions.csv").csv({typed: true})
 ```
 
 
