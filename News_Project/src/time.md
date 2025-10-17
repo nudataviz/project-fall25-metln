@@ -58,14 +58,16 @@ let totalTicketsArray = Array.from(totalTickets, ([key, value]) => ({
   "Ticket Count": value
 }));
 
+let minTickets = view(Inputs.range([0, 300], {step: 1}))
+
 const netSalesPerEvent = Plot.plot({
     title: "Ticket Sales per Event",
     width: 2000,
     height: 1000,
-    style: {fontsize: "16px"}, 
+    
     
     marks: [
-        Plot.barY(totalTicketsArray.filter(d => d["Ticket Count"] >= 80), {x: "Item Names", y: "Ticket Count"})
+        Plot.barY(totalTicketsArray.filter(d => d["Ticket Count"] >= 60), {x: "Item Names", y: "Ticket Count"})
     ]
 })
 
@@ -79,4 +81,15 @@ display(netSalesPerEvent)
 //I will create the time of day, date, tickets sold by event type, number of tickets purchased by event type
 // dot plot of net earnings vs ticket price or maybe number of tickets sold
 // first time attendees
+// Value prop is to be able to look at these things by event type or by singular event to advertise to a new vendor
+/* Interactive interface where they can see the best selling events in a table
+Can then have them select a couple options
+    - look at metrics by event type
+    - metrics by individual events
+Table should should certain stats on the events
+    - net earnings
+    - total tickets sold
+    - price per ticket
+    - 
+*/
 ```
