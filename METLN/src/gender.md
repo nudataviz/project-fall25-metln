@@ -10,7 +10,7 @@ const data_filter=data.filter(d => d.Gender === "M" || d.Gender === "F")
 ```
 
 ```js
-const  by_event = view(Inputs.select(d3.group(data_filter, d => d["Item Names"]), {label: "Event"}))
+const  by_event = view(Inputs.select(d3.group(data_filter, d => d["Individual Event"]), {label: "Event"}))
 
 ```
 
