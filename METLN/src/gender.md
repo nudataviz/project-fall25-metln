@@ -10,17 +10,19 @@ const data_filter=data.filter(d => d.Gender === "M" || d.Gender === "F")
 ```
 
 ```js
+const  by_event = view(Inputs.select(d3.group(data_filter, d => d["Individual Event"]), {label: "Event"}))
+
+```
+
+```js
 Plot.plot({
-  color: {legend: true},
   title: 'Ticket Purchased by Event',
-  x: {tickRotate: -60}, //this is a mess these are so lengthy
-  marginBottom:450,
   marginLeft:150,
   marks: [
-    Plot.barY(data_filter, 
+    Plot.barY(by_event, 
       Plot.groupX(
         {y: "count"},
-        {x: "Item Names", fill: "Gender"}
+        {x: "Gender", fill: "Gender"}
       )
     )
   ]

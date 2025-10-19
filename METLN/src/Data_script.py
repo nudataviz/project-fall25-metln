@@ -15,6 +15,12 @@ def clean_and_merge(transactions='METLN/src/data/transactions_clean - transactio
     else 'F' if x in ['female', 'mostly_female'] #makes it easier to filter m/f
     else 'unknown') #we can make a dictionary of common unknown names but this isn't scalable
     df=pd.merge(df_customers,df_transactions, on='Hashed Email Address')
+    '''noticed that some transactions had multiple events on them so trying to split them-this may not be the best way'''
+    df['Event Name'] = df['Item Name'].str.split(', ', n=1)  #IF THERE ARE COMMAS THIS BARELY WORKS
+    df = df.explode('Event Name').reset_index(drop=True)
+    df = df.rename(columns={'Event Name': 'Individual Event'})
+
+
     df.to_csv('METLN/src/data/merged.csv', index=False)
 
 def main():
