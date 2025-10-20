@@ -9,9 +9,6 @@ let transactSum = await FileAttachment ("data/transactions_clean - transactions.
 
 
 ```js
-/*Updates time of transactions to date/time in the transactionSum array
-Unsure why this is updating the original transactSum array too.  all of my googling seems to indicate that this should be a shallow copy
-Happy to discuss/review further but it may not even be an issue in this scenario*/
 
 let updatedTransact = Array.from(transactSum)
 for (let i = 0; i < updatedTransact.length; i++){
