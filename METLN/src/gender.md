@@ -129,6 +129,7 @@ function PieChart(data, {
   return Object.assign(svg.node(), {scales: {color}});
 }
 ```
+
 ```js
 PieChart(pie_array, {
   name: d => d.name,
@@ -137,9 +138,15 @@ PieChart(pie_array, {
   height: 400,
   colors: ["blue", "lavender"],
   labelRadius: 90,
-
+  title: (d) => {
+    const total = d3.sum(pie_array, p => p.value);
+    const percentage = ((d.value / total) * 100).toFixed(1);
+    return `${d.name}\n${percentage}%\n${d.value}`;
+  }
 })
 ```
+
+
 
 
 ```js
