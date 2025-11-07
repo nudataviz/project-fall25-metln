@@ -161,7 +161,7 @@ PieChart(transaction_array, {
   value: d => d.value,
   width: 500,
   height: 400,
-  colors: ["#ffd725ff", "#2bda88ff", "#5955d3ff"],  
+  colors: ["#ffd725ff", "#feaa0fff", "#b72de4ff"],  
   labelRadius: 90,
   startAngle: -Math.PI / 2,  
   endAngle: Math.PI / 2,
@@ -176,7 +176,7 @@ PieChart(transaction_array, {
 
 
 ```html
-<div style="background-color: #eee;">
+<div style="background-color: #fffafaff;">
   ${chart()}
 </div>
 ```
@@ -212,7 +212,7 @@ function chart() {
 
   const color = d3.scaleOrdinal()
       .domain(order)
-      .range(["#ffd725ff", "#2bda88ff", "#5955d3ff"]);
+      .range(["#ffd725ff", "#e78a19ff", "#5955d3ff"]);
 
   const svg = d3.create("svg")
       .attr("width", width)
