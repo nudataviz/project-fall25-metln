@@ -252,3 +252,25 @@ function chart() {
 }
 ```
 
+
+```js
+
+htl.html`<button onclick="window.print()" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 20px 0;">
+Print/Save as PDF
+</button>`
+
+```
+```js
+{
+  const button = document.getElementById("print-button");
+  if (button) {
+    button.addEventListener("click", () => {
+      window.print();
+    });
+  }
+}
+```
+```js
+//notes!
+// https://www.nutrient.io/blog/how-to-print-pdfs-using-pdfjs/
+///

@@ -1,4 +1,8 @@
-# Maine Trust for Local News Ticket Sales 
+# Maine Ticket Sale Analyis </h1>
+## A visualiztion of trends in local ticket sales</h2>
+
+This interactive dashboard was made using data provided by the Main Trust for Local News to look at trends from <a href="https://www.tickets207.com/" title="Tickets207">Tickets207</a>
+
 
 <style>
 .hero {
