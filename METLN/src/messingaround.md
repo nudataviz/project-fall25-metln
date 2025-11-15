@@ -208,7 +208,7 @@ function PieChart(data, {
 ```
 ```js
 function chart_dow() {
-  const height = Math.min(width, 750);
+  const height = Math.min(width, 550);
   const radius = Math.min(width, height) / 2;
 
   const arc = d3.arc()
@@ -266,7 +266,7 @@ function chart_dow() {
 
 
 ```js
-const height = Math.min(width, 750);
+const height = Math.min(width, 700);
 const radius = Math.min(width, height) / 2;
 
 const pie_dow = d3.pie()
@@ -317,9 +317,8 @@ const pie_dow = d3.pie()
 })}
   </div>
 
-  <div class="card">
+<div class="card" style="grid-column: span 2; padding: 0 0.5rem; min-height: 0; max-height: 450px;">
     <h2>What Day of the week are you most likely to get a response</h2>
-    <h3>Hint: Its not the weekend! <h3>
     ${chart_dow()}
 </div>
 ```
