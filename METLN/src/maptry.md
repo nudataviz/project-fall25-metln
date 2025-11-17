@@ -1,0 +1,149 @@
+---
+title: Map Attempt
+---
+```js
+import maplibregl from "npm:maplibre-gl";
+html`<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.13.0/dist/maplibre-gl.css" />`
+
+```
+```js
+let customers_full = await FileAttachment("/data/Event_Purchaser_2025-11-10T1531_CLEAN - Event_Purchaser_2025-11-10T1531.csv").csv({typed: true})
+```
+
+```js
+//is this the correct Column? The correct number for that column?! I do not know. 
+let customer_data = Array.from(customers_full)
+for (let i = 0; i < customer_data.length; i++){
+    if (customer_data[i]["mr_geo_latlong"]) {  // a few null categories
+        const [lat, lon] = customer_data[i]["mr_geo_latlong"].split(";")[0].split(",").map(Number);
+        customer_data[i]["latitude"] = lat;
+        customer_data[i]["longitude"] = lon;
+    } else {
+        customer_data[i]["latitude"] = null;
+        customer_data[i]["longitude"] = null;
+    }
+}
+```
+
+```js
+const us = fetch(import.meta.resolve("npm:us-atlas/counties-10m.json")).then((r) => r.json());
+
+```
+```js
+const new_england = {
+  type: "FeatureCollection",
+  features: topojson
+    .feature(us, us.objects.states)
+    .features
+    .filter(d => ["23", "25", "33", '09', '44'].includes(d.id))
+};
+```
+
+```js
+Plot.plot({
+
+  projection: {
+    type: "albers",
+    domain: new_england
+  },
+  marks: [
+    Plot.geo(new_england, {
+      stroke: "black",
+      fill: "white"
+    }),
+    Plot.dot(customer_data.filter(d => d.latitude && d.longitude), {
+      x: "longitude",
+      y: "latitude",
+      fill: "red",
+      r: 3,
+      fillOpacity: 0.5
+    })
+  ]
+})
+  
+```
+
+
+
+```js
+const mapv2 = (() => {
+  const container = html`<div style="height: 800px; width: 100%;"></div>`;
+  
+  const map = new maplibregl.Map({
+    container: container,
+    style: 'https://tiles.openfreemap.org/styles/bright',
+    center: [-70.5, 43.5],
+    zoom: 7
+  });
+  
+  map.addControl(new maplibregl.NavigationControl());
+  
+  map.on('load', () => {
+    // Create GeoJSON from customer data
+    const geojson = {
+      type: 'FeatureCollection',
+      features: customer_data
+        .filter(d => d.latitude && d.longitude)
+        .map(d => ({
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [d.longitude, d.latitude]
+          },
+          properties: {}
+        }))
+    };
+    
+    map.addSource('customers', {
+      type: 'geojson',
+      data: geojson
+    });
+    
+    map.addLayer({
+      id: 'customers-heat',
+      type: 'heatmap',
+      source: 'customers',
+      maxzoom: 15,
+      paint: {
+        'heatmap-weight': 1,
+        'heatmap-intensity': 1,
+        'heatmap-color': [
+          'interpolate',
+          ['linear'],
+          ['heatmap-density'],
+          0, 'rgba(33,102,172,0)',
+          0.2, 'rgb(103,169,207)',
+          0.4, 'rgb(209,229,240)',
+          0.6, 'rgb(253,219,199)',
+          0.8, 'rgb(239,138,98)',
+          1, 'rgb(178,24,43)'
+        ],
+        'heatmap-radius': 30,
+        'heatmap-opacity': 0.8
+      }
+    });
+    
+    // Add circle layer for zoomed in view
+    map.addLayer({
+      id: 'customers-point',
+      type: 'circle',
+      source: 'customers',
+      minzoom: 14,
+      paint: {
+        'circle-radius': 5,
+        'circle-color': 'rgb(178,24,43)',
+        'circle-stroke-width': 1,
+        'circle-stroke-color': '#fff'
+      }
+    });
+  });
+  
+  return container;
+})();
+```
+
+
+
+  <div class="card">
+    ${mapv2}
+  </div>
