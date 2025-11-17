@@ -67,19 +67,19 @@ Plot.plot({
 
 ```js
 const mapv2 = (() => {
-  const container = html`<div style="height: 800px; width: 100%;"></div>`;
+  const container = html`<div style="height: 600; width: 100%;"></div>`;
   
   const map = new maplibregl.Map({
     container: container,
     style: 'https://tiles.openfreemap.org/styles/bright',
-    center: [-70.5, 43.5],
+    center: [-70.2, 43.6], //portland
     zoom: 7
   });
   
   map.addControl(new maplibregl.NavigationControl());
   
   map.on('load', () => {
-    // Create GeoJSON from customer data
+    // Add GeoJson Layer ie classnotes
     const geojson = {
       type: 'FeatureCollection',
       features: customer_data
@@ -140,6 +140,7 @@ const mapv2 = (() => {
   
   return container;
 })();
+//from heatmap documentation on maplibre
 ```
 
 
