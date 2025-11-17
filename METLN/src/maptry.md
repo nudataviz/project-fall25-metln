@@ -71,15 +71,15 @@ const mapv2 = (() => {
   
   const map = new maplibregl.Map({
     container: container,
-    style: 'https://tiles.openfreemap.org/styles/bright',
-    center: [-70.5, 43.5],
+    style: 'https://tiles.openfreemap.org/styles/bright', //this is from an example I found not wedded
+    center: [-70.2, 43.6], //portland
     zoom: 7
   });
   
   map.addControl(new maplibregl.NavigationControl());
   
   map.on('load', () => {
-    // Create GeoJSON from customer data
+    // Add GeoJson Layer ie classnotes
     const geojson = {
       type: 'FeatureCollection',
       features: customer_data
@@ -123,7 +123,7 @@ const mapv2 = (() => {
       }
     });
     
-    // Add circle layer for zoomed in view
+    
     map.addLayer({
       id: 'customers-point',
       type: 'circle',
@@ -140,8 +140,8 @@ const mapv2 = (() => {
   
   return container;
 })();
+//https://maplibre.org/maplibre-gl-js/docs/examples/create-a-heatmap-layer/
 ```
-
 
 
   <div class="card">
