@@ -67,11 +67,11 @@ Plot.plot({
 
 ```js
 const mapv2 = (() => {
-  const container = html`<div style="height: 800px; width: 100%;"></div>`;
+  const container = html`<div style="height: 600; width: 100%;"></div>`;
   
   const map = new maplibregl.Map({
     container: container,
-    style: 'https://tiles.openfreemap.org/styles/bright', //this is from an example I found not wedded
+    style: 'https://tiles.openfreemap.org/styles/bright',
     center: [-70.2, 43.6], //portland
     zoom: 7
   });
@@ -123,7 +123,7 @@ const mapv2 = (() => {
       }
     });
     
-    
+    // Add circle layer for zoomed in view
     map.addLayer({
       id: 'customers-point',
       type: 'circle',
@@ -140,8 +140,9 @@ const mapv2 = (() => {
   
   return container;
 })();
-//https://maplibre.org/maplibre-gl-js/docs/examples/create-a-heatmap-layer/
+//from heatmap documentation on maplibre
 ```
+
 
 
   <div class="card">
