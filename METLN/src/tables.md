@@ -131,24 +131,19 @@ Selection Array
 display(selection)
 ```
 
-iterable array
+
 ```js
 // Removing final object from array
+// this array is for the gender graph
 const iterableArray = selection.slice(0, selection.length)
 ```
-
-```js
-display(iterableArray)
-```
-
 
 To-do for gender breakdown:
 1. Reactive title
 2. Change colors
 3. Add total revenue values to bars and maybe percentage
 ```js
-// What is best way to disable error message?  Currently get error when first loading dashboard
-// This is becaus
+// Creating a small array to map the bar graph with
 const genderArray = [{Gender: "Male", Count: d3.sum(iterableArray, d => d["Male Count"])},
                      {Gender: "Female", Count: d3.sum(iterableArray, d => d["Female Count"])}]
 ```
@@ -187,13 +182,11 @@ Plot.plot({
     y: {label: "Hour"},
     x: {label: "Day"},
     marks: [
-        Plot.dot(chosenEvents[selection["Name"]], {
+        Plot.dot(specificTransacts, {
         x: d => new Date(d.Date),
         y: d => new Date(d.Date).getHours(),
         stroke: "black",
         tip: true}),
-        Plot.ruleX([chosenEvents[selection["Name"]][0]["Event Date"]], {stroke: "red", tip: true}),
-        Plot.dot([chosenEvents[selection["Name"]][0]["Event Date"]], {stroke: "red"})
     ]
 })
 ```
@@ -348,11 +341,44 @@ function PieChart(data, {
 }
 ```
 
+"chosenEvents[selection["Name"]]"
+```js
+
+display(chosenEvents[selection["Name"]])
+```
+
+```js
+// Creating separate array just to log names of checkboxed items
+const selectedNames = []
+for (const event of iterableArray){
+    if (!(event["Name"] in selectedNames)){
+          selectedNames.push(event["Name"])
+    }
+}
+```
+
+```js
+//Creating array that just contains transaction details for the selected events
+//Should be used for the pie chart and other graphs
+const specificTransacts = transactionArray.filter(d => selectedNames.includes(d["Item Name"]))
+```
+
+Selected Names
+```js
+display(selectedNames)
+```
+
+Filtered for Selected Names
+```js
+display(specificTransacts)
+```
+
 ```js
 //THE NEXT 3 BLOCKS ARE THE TOD PIE CHART 
 const tod_pie = Array.from(
   d3.rollup(
-    chosenEvents[selection["Name"]],  
+    specificTransacts,
+    //chosenEvents[selection["Name"]],  
     v => v.length,
     d => d.timeOfDay
   ),
@@ -392,7 +418,7 @@ PieChart(tod_pie_ordered, {
 
 ```js
 const salesByWeek = d3.rollup(
-  transactionArray,
+  specificTransacts,
   v => v.length, // count tickets
   d => {
     const eventDate = new Date(d["Event Date"]);
@@ -409,6 +435,10 @@ const salesData = Array.from(salesByWeek, ([week, count]) => ({
   weeksUntil: week,
   ticketsSold: count
 })).sort((a, b) => b.weeksUntil - a.weeksUntil);
+```
+
+```js
+display(salesData)
 ```
 
 ```js
