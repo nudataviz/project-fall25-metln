@@ -66,7 +66,7 @@ for (let i = 0; i < transactionArray.length; i++){
 
 
 }
-
+display(transactionArray)
 ```
 
 
@@ -76,19 +76,6 @@ For both events and event types, the overarching type is an object with a series
 Ideally, this would be an array for iteration, but the code does not function without.  Need to revisit to make sure nothing is being overlooked.
 When changing to an array, it sometimes works but the array is shown as having 0 items. May be a non-issues */
 //Creating separate array with details on each individual event
-const groupedCategories = {};
-
-for (const customer of customerArray) {
-  const event = customer["Event Categories"];
-
-    // Check if event name is in other array
-  if (!groupedCategories[event]) {
-    groupedCategories[event] = [];
-  }
-
-  // Add the customer details under this event
-  groupedCategories[event].push(customer);
-}
 
 const chosenEvents = {}
 for (const row of transactionArray) {
@@ -102,24 +89,11 @@ for (const row of transactionArray) {
 }
 
 ```
-
-
-
-
+Chosen Events
 ```js
-// Creates array which is displayed within table for viewing pleasure, collates some of the values, graphs calculated separately
-const arrayforTable = []
-for (const [key, val] of Object.entries(groupedCategories)){
-    arrayforTable.push({"Event Type" : key,
-                        "Total Tickets" : d3.sum(val, d => d["Ticket Count"]),
-                        "Total Sales" : d3.sum(val, d => d["Ticket Total"])
-
-    }
-  )
-
-}
-
+display(chosenEvents)
 ```
+
 
 
 ```js
@@ -149,7 +123,22 @@ for (const [key, val] of Object.entries(chosenEvents)){
 const search = view(Inputs.search(singleEventTable, {placeholder: "Search events"}));
 ```
 ```js
-const selection = view(Inputs.table(search, {sort: "Total Tickets", reverse: true, multiple: false}));
+const selection = view(Inputs.table(search, {sort: "Total Tickets", reverse: true}));
+```
+
+Selection Array
+```js
+display(selection)
+```
+
+iterable array
+```js
+// Removing final object from array
+const iterableArray = selection.slice(0, selection.length)
+```
+
+```js
+display(iterableArray)
 ```
 
 
@@ -160,22 +149,28 @@ To-do for gender breakdown:
 ```js
 // What is best way to disable error message?  Currently get error when first loading dashboard
 // This is becaus
+const genderArray = [{Gender: "Male", Count: d3.sum(iterableArray, d => d["Male Count"])},
+                     {Gender: "Female", Count: d3.sum(iterableArray, d => d["Female Count"])}]
+```
+
+```js
+
 Plot.plot({
   title: 'Gender Breakdown',
   marginLeft:150,
   color: {
     range: ["pink", "blue"]},
   marks: [
-    Plot.barY(chosenEvents[selection["Name"]], 
-      Plot.groupX(
-        {y: "count"},
-        {x: "Gender", fill: "Gender"}
-      )
-    )
+    Plot.barY(genderArray, {
+              x: "Gender",
+              y: "Count",
+              fill: "Gender"
+    })
   ]
- 
+
 })
 ```
+
 
 
 Shows scatterplot of purchases for selected event
@@ -397,7 +392,7 @@ PieChart(tod_pie_ordered, {
 
 ```js
 const salesByWeek = d3.rollup(
-  chosenEvents[selection["Name"]],
+  transactionArray,
   v => v.length, // count tickets
   d => {
     const eventDate = new Date(d["Event Date"]);
@@ -415,6 +410,7 @@ const salesData = Array.from(salesByWeek, ([week, count]) => ({
   ticketsSold: count
 })).sort((a, b) => b.weeksUntil - a.weeksUntil);
 ```
+
 ```js
 let cumulative = 0;
 salesData.forEach(d => {
