@@ -170,14 +170,13 @@ const bubbleData = Array.from(categoryCount, ([preferred_main_category, count]) 
 Plot.plot({
   axis: null,
   // width: 400,
-  // height: 400,
+  height: 400,
   marks: [
     Plot.dot(bubbleData, {
       x: d => d.preferred_main_category,
       y: () => Math.random(),     
       r: "count",
       fill: "preferred_main_category",
-      fillOpacity: 0.7,
       stroke: "black",
       strokeWidth: 0.5,
       title: "preferred_main_category"
