@@ -75,6 +75,7 @@ This interactive dashboard was made using data provided by the Main Trust for Lo
 </style>
 
 <div class="nav-buttons">
-  <a href="./TimeOfDay" class="nav-button">When?</a>
-  <a href="./gender" class="nav-button">Who?</a>
+  <a href="./maptry" class="nav-button">Customer Overview?</a>
+  <a href="./totalevents" class="nav-button">All Events</a>
+  <a href="./tables" class="nav-button">Individual Events</a>
 </div>
