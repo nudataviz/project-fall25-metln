@@ -1,5 +1,5 @@
 ---
-title: Map Attempt
+title: Customer Overview
 ---
 ```js
 import maplibregl from "npm:maplibre-gl";
@@ -148,3 +148,45 @@ const mapv2 = (() => {
   <div class="card">
     ${mapv2}
   </div>
+
+
+```js
+const categoryCount = d3.rollup(
+  customers_full.filter(d => d.preferred_main_category != null),
+  v => v.length,
+  d => d.preferred_main_category
+);
+
+const bubbleData = Array.from(categoryCount, ([preferred_main_category, count]) => ({
+  preferred_main_category,
+  count
+}));
+```
+
+
+
+
+```js
+Plot.plot({
+  axis: null,
+  // width: 400,
+  // height: 400,
+  marks: [
+    Plot.dot(bubbleData, {
+      x: d => d.preferred_main_category,
+      y: () => Math.random(),     
+      r: "count",
+      fill: "preferred_main_category",
+      fillOpacity: 0.7,
+      stroke: "black",
+      strokeWidth: 0.5,
+      title: "preferred_main_category"
+    })
+  ]
+})
+
+```
+
+
+```js
+bubbleData
