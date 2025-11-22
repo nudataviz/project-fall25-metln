@@ -169,12 +169,12 @@ const bubbleData = Array.from(categoryCount, ([preferred_main_category, count]) 
 ```js
 Plot.plot({
   axis: null,
-  // width: 400,
-  height: 400,
+  width: 420,
+  height: 420,
   marks: [
     Plot.dot(bubbleData, {
       x: d => d.preferred_main_category,
-      y: () => Math.random(),     
+      y: () => Math.random() * 0.2 + 0.4,     
       r: "count",
       fill: "preferred_main_category",
       stroke: "black",
@@ -185,7 +185,95 @@ Plot.plot({
 })
 
 ```
-
-
 ```js
 bubbleData
+```
+
+
+<div class="card" style="grid-column: span 2; padding: 1rem 1rem; max-height: 420px; background-color: #0f0e0eff;">    
+<h2 style="color:white;">Preferred Main Categories</h2>
+    ${Plot.plot({
+  axis: null,
+  height: 420,
+  x: { domain: [0, 1] },
+  y: { domain: [0, 1] },
+  marks: [
+    Plot.dot(bubbleData, Plot.dodgeY("middle", {
+      x: () => 0.5 + (Math.random() - 0.5) * 0.4, 
+      y: () => 0.5 + (Math.random() - 0.5) * 0.4,
+      r: "count",
+      fill: "preferred_main_category",
+      stroke: "black",
+      strokeWidth: 0.5,
+      title: "preferred_main_category"
+    }))
+  ]
+})}
+</div>
+
+```js
+const data = { 
+  name: "root", 
+  children: bubbleData.map(d => ({
+    name: d.preferred_main_category,
+    value: d.count
+  }))
+};
+
+const width = 928;
+const height = width;
+const margin = 1;
+
+const format = d3.format(",d");
+
+const pack = d3.pack()
+  .size([width - margin * 2, height - margin * 2])
+  .padding(3);
+
+const root = pack(
+  d3.hierarchy(data)
+    .sum(d => d.value)
+    .sort((a, b) => b.value - a.value)
+);
+
+const svg = d3.create("svg")
+  .attr("width", width)
+  .attr("height", height)
+  .attr("viewBox", [-margin, -margin, width, height])
+  .attr("style", "width: 100%; height: auto; font: 10px sans-serif;")
+  .attr("text-anchor", "middle");
+
+const node = svg.append("g")
+  .selectAll("g")
+  .data(root.descendants())
+  .join("g")
+    .attr("transform", d => `translate(${d.x},${d.y})`);
+
+node.append("title")
+  .text(d => `${d.data.name}\n${format(d.value)}`);
+
+node.append("circle")
+  .attr("fill", d => d.children ? "#fff" : "#ddd")
+  .attr("stroke", d => d.children ? "#bbb" : null)
+  .attr("r", d => d.r);
+
+const text = node
+  .filter(d => !d.children && d.r > 10)
+  .append("text")
+    .attr("clip-path", d => `circle(${d.r})`);
+
+text.append("tspan")
+  .attr("x", 0)
+  .attr("y", "-0.2em")
+  .text(d => d.data.name);
+
+text.append("tspan")
+  .attr("x", 0)
+  .attr("y", "1.1em")
+  .attr("fill-opacity", 0.7)
+  .text(d => format(d.data.value));
+
+display(svg.node());
+
+//https://observablehq.com/notebook-kit/ex/d3/pack Just changed data for this
+```
