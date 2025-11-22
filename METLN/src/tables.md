@@ -52,6 +52,55 @@ function getTimeofDay(dateVal){
 ```
 
 ```js
+// Function for updating season of a transaction
+function getSeason(dateVal){
+  const month = dateVal.getMonth()
+  let season = null
+  if (month == 0 || month == 1 || month == 2){
+    season = "Winter"
+  }
+  else if (month == 2 || month == 3 || month == 4){
+    season = "Spring"
+  }
+  else if (month == 5 || month == 6 || month == 7){
+    season = "Summer"
+  }
+  else if (month == 8 || month == 9 || month == 10){
+    season = "Autumn"
+  }
+  return season
+}
+```
+
+```js
+
+// Used chat gpt to help get this data in aggregated form
+const aggregated = Array.from(
+  d3.rollup(
+    specificTransacts,
+    v => v.length,               // or sum a quantity field if you have one
+    d => d.Season,
+    d => d["Item Name"]
+  ),
+  ([Season, eventMap]) =>
+    Array.from(eventMap, ([Event, Tickets]) => ({
+      Season,
+      Event,
+      Tickets
+    }))
+).flat();
+/*
+Not currently using this version
+const seasonArray = [{Season : "Winter", Tickets : specificTransacts.filter(d => d["Season"] == "Winter").length},
+                      {Season: "Spring", Tickets : specificTransacts.filter(d => d["Season"] == "Spring").length},
+                      {Season : "Summer", Tickets: specificTransacts.filter(d => d["Season"] == "Summer").length},
+                      {Season: "Autumn", Tickets: specificTransacts.filter(d => d["Season"] == "Autumn").length}]
+*/
+
+```
+
+
+```js
 //Creates array from file attachment
 let customerArray = Array.from(customers)
 for (let i = 0; i < customerArray.length; i++){
@@ -83,11 +132,13 @@ for (let i = 0; i < transactionArray.length; i++){
     transactionArray[i]["Day_Of_Week"] = formatDay(transactionArray[i]["Date"])
     transactionArray[i]["timeOfDay"] = getTimeofDay(transactionArray[i]["Date"])
     transactionArray[i]["Gender"] = gender_guesser(transactionArray[i]["First Name"])
+    transactionArray[i]["Season"] = getSeason(transactionArray[i]["Event Date"])
 
 
 
 }
 ```
+
 
 
 
@@ -610,4 +661,22 @@ const total = d3.sum(tod_pie, p => p.value)
     ]
     })}
     </div>
+  <div class="card grid-rowspan-2 grid-colspan-2"><h1>Stacked Bar EDA</h1>
+  ${Plot.plot({
+    marks: [
+    Plot.barX(aggregated, {
+      y: "Season",
+      x: "Tickets",
+      fill: "Event",
+      tip: true
+    })]
+    })}
+  </div>
+  <div class="card grid-rowspan-1 grid-colspan-1"><h1>Season Details</h1>
+    Total Winter Events: ${aggregated.filter(d => d["Season"] == "Winter").length} <br>
+    Total Spring Events: ${aggregated.filter(d => d["Season"] == "Spring").length} <br>
+    Total Summer Events: ${aggregated.filter(d => d["Season"] == "Summer").length} <br>
+    Total Autumn Events: ${aggregated.filter(d => d["Season"] == "Autumn").length} <br>
+    
+  <div>
 </div>
