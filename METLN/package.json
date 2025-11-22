@@ -9,7 +9,8 @@
     "observable": "observable"
   },
   "dependencies": {
-    "@observablehq/framework": "^1.13.3"
+    "@observablehq/framework": "^1.13.3",
+    "gender-detection-from-name": "^1.11.4"
   },
   "devDependencies": {
     "rimraf": "^5.0.5"
