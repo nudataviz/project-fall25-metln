@@ -1,7 +1,18 @@
 ---
-title: Interactive Tables
+title: Tentative Dashboard
 ---
 
+```js
+/* Summary of variables
+transactionArray - basic transformation of data, 1 row per transaction with types converted and additional columns added
+chosenEvents - object with key : val pairs. key = event name, val = all rows from transactionArray for that event
+singleEventTable - array which is displayed in the interactive table, contains calculations for gender distribution, total tickets, total rev, and event date
+genderCounts - map of gender for all selected events
+pie_array - array for usage in gender pie chart
+iterable_array - interim array, contains a slice of the singleEventTable reactively based table selection
+specificTransacts - filtered version of transactionArray that reactively updates based on table selection, 1 row per transaction with all same fields
+*/
+```
 
 ```js
 let customers = await FileAttachment("/data/customer_summary_clean.csv").csv({typed: true})
@@ -16,6 +27,15 @@ const formatDay = d3.timeFormat("%A");
 
 ```
 
+```js
+// NPM library for detecting gender from a name
+import { getGender } from "gender-detection-from-name";
+const gender_guesser = getGender;
+```
+
+```js
+
+```
 ```js
 //Function for identifying time of day for transaction
 function getTimeofDay(dateVal){
@@ -62,12 +82,13 @@ for (let i = 0; i < transactionArray.length; i++){
     transactionArray[i]["Date"] = new Date(transactionArray[i]["Date"])
     transactionArray[i]["Day_Of_Week"] = formatDay(transactionArray[i]["Date"])
     transactionArray[i]["timeOfDay"] = getTimeofDay(transactionArray[i]["Date"])
+    transactionArray[i]["Gender"] = gender_guesser(transactionArray[i]["First Name"])
 
 
 
 }
-display(transactionArray)
 ```
+
 
 
 ```js
@@ -75,7 +96,7 @@ display(transactionArray)
 For both events and event types, the overarching type is an object with a series of key vals where the vals are events/event types
 Ideally, this would be an array for iteration, but the code does not function without.  Need to revisit to make sure nothing is being overlooked.
 When changing to an array, it sometimes works but the array is shown as having 0 items. May be a non-issues */
-//Creating separate array with details on each individual event
+//Below code creates an object with key : val pairs where each key is an event name, val = an array with each transaction for that event
 
 const chosenEvents = {}
 for (const row of transactionArray) {
@@ -88,10 +109,6 @@ for (const row of transactionArray) {
   chosenEvents[singleEvent].push(row)
 }
 
-```
-Chosen Events
-```js
-display(chosenEvents)
 ```
 
 
@@ -106,29 +123,40 @@ e.g. d3.count(val, d => d["Gender"] == "M") does not work
 const singleEventTable = []
 for (const [key, val] of Object.entries(chosenEvents)){
   singleEventTable.push({"Name" : key,
-                        "Total Tickets" : d3.count(val, d => d["Net Revenue"] > 0),
+                        "Tickets" : d3.count(val, d => d["Net Revenue"] > 0),
                         "Net Revenue" : d3.sum(val, d => d["Net Revenue"]),
-                        "Male Count" : d3.filter(val, d => d["Gender"] == "M").length,
-                        "Female Count" : d3.filter(val, d => d["Gender"] == "F").length,
-                        "Event Date" : val[0]["Event Date"]
+                        "Male Count" : d3.filter(val, d => d["Gender"] == "male").length,
+                        "Female Count" : d3.filter(val, d => d["Gender"] == "female").length,
+                        "Event Date" : val[0]["Event Date"],
   }
   )
 }
 
 ```
 
+```js
+//Next few code blocks are used for gender pie
+let data=specificTransacts
 
-```js
-// May need to revisit here for disallowing multiple row selections, talking point
-const search = view(Inputs.search(singleEventTable, {placeholder: "Search events"}));
-```
-```js
-const selection = view(Inputs.table(search, {sort: "Total Tickets", reverse: true}));
 ```
 
-Selection Array
 ```js
-display(selection)
+//Excludes unknown gender from selection
+const data_filter=data.filter(d => d.Gender === "male" || d.Gender === "female")
+```
+
+```js
+//Calculates count of each gender
+const genderCounts = d3.rollup(
+  data_filter,
+  v => v.length,
+  d => d.Gender
+)
+//Creates array from counts for plotting
+const pie_array = Array.from(genderCounts, ([gender, count]) => ({
+  name: gender,
+  value: count
+}));
 ```
 
 
@@ -138,18 +166,16 @@ display(selection)
 const iterableArray = selection.slice(0, selection.length)
 ```
 
-To-do for gender breakdown:
-1. Reactive title
-2. Change colors
-3. Add total revenue values to bars and maybe percentage
 ```js
-// Creating a small array to map the bar graph with
+/* Code creates an array for bar graph
+Believe not necessary because we are opting for pie chart
 const genderArray = [{Gender: "Male", Count: d3.sum(iterableArray, d => d["Male Count"])},
                      {Gender: "Female", Count: d3.sum(iterableArray, d => d["Female Count"])}]
+                     */
 ```
 
 ```js
-
+/* Commenting out bar chart, can revisit if we want it or remove before submitting to METLN
 Plot.plot({
   title: 'Gender Breakdown',
   marginLeft:150,
@@ -164,17 +190,12 @@ Plot.plot({
   ]
 
 })
+*/
 ```
 
 
-
-Shows scatterplot of purchases for selected event
-Still to-do:
-1. Add reactive title so that the event name is also displayed
-2. Add some type of markers indicating time of day (thinking maybe coloring the background lightly)
-3. Fix red dot to show time of event
-4. Change axis labels
 ```js
+/* Commenting out scatterplot in body of md, can likely remove
 // Weird indexing but you can see below how to get to specific event times
 // Chosen events is an object, selection["Name"] is an array of transactions all corresponding to one event
 Plot.plot({
@@ -185,10 +206,11 @@ Plot.plot({
         Plot.dot(specificTransacts, {
         x: d => new Date(d.Date),
         y: d => new Date(d.Date).getHours(),
-        stroke: "black",
+        stroke: "Item Name",
         tip: true}),
     ]
 })
+*/
 ```
 
 ```js
@@ -247,10 +269,9 @@ Plot.plot({
 
 
 
+
 ```js
-//I ADDED THE PIE GRAPH WE CAN GO BACK TO BAR
-```
-```js
+// Function for creating a pie chart
 // copied from observable
 function PieChart(data, {
   name = ([x]) => x,  // given d in data, returns the (ordinal) label
@@ -341,11 +362,6 @@ function PieChart(data, {
 }
 ```
 
-"chosenEvents[selection["Name"]]"
-```js
-
-display(chosenEvents[selection["Name"]])
-```
 
 ```js
 // Creating separate array just to log names of checkboxed items
@@ -363,20 +379,20 @@ for (const event of iterableArray){
 const specificTransacts = transactionArray.filter(d => selectedNames.includes(d["Item Name"]))
 ```
 
-Selected Names
-```js
-display(selectedNames)
-```
 
-Filtered for Selected Names
 ```js
-display(specificTransacts)
+// Calculating total revenue of each morning, afternoon, and evening for the selected events
+// Should be able to support differing ticket prices
+const morningRev = d3.sum(specificTransacts.filter(d => d.timeOfDay == "Morning"), rev => rev["Gross Revenue"])
+const afternoonRev = d3.sum(specificTransacts.filter(d => d.timeOfDay == "Afternoon"), rev => rev["Gross Revenue"])
+const eveningRev = d3.sum(specificTransacts.filter(d => d.timeOfDay == "Evening"), rev => rev["Gross Revenue"])
 ```
 
 ```js
 //THE NEXT 3 BLOCKS ARE THE TOD PIE CHART 
 const tod_pie = Array.from(
   d3.rollup(
+    //Updated data value to support multi select
     specificTransacts,
     //chosenEvents[selection["Name"]],  
     v => v.length,
@@ -395,7 +411,7 @@ const tod_pie_ordered = [
 ```
 
 ```js
-
+/* Commenting out pie chart directlt on the page.  Pie chart is added later to the dashboard
 PieChart(tod_pie_ordered, {
   name: d => d.name,
   value: d => d.value,
@@ -412,11 +428,13 @@ PieChart(tod_pie_ordered, {
     return `${d.name}\n${percentage}%\n${d.value}`;
   }
 })
-
+*/
 ```
 
 
 ```js
+// Cumulative graph for the weeks leading up to an event for all selected events
+// Does not use dates but instead uses a measure of how far out from the event the ticket purchase is
 const salesByWeek = d3.rollup(
   specificTransacts,
   v => v.length, // count tickets
@@ -431,6 +449,7 @@ const salesByWeek = d3.rollup(
 ```
 
 ```js
+// Array with weeks until event date, tickets sold that week, and total tickets sold
 const salesData = Array.from(salesByWeek, ([week, count]) => ({
   weeksUntil: week,
   ticketsSold: count
@@ -438,10 +457,7 @@ const salesData = Array.from(salesByWeek, ([week, count]) => ({
 ```
 
 ```js
-display(salesData)
-```
-
-```js
+// Updates salesData cumulative values to be cumululative
 let cumulative = 0;
 salesData.forEach(d => {
   cumulative += d.ticketsSold;
@@ -450,6 +466,7 @@ salesData.forEach(d => {
 ```
 
 ```js
+/* Commenting out cumulative ticketr graph that is outside dashboard
 Plot.plot({
   title: "Cumulative Tickets Sold By Week",
   height: 400,
@@ -458,7 +475,8 @@ Plot.plot({
       x: "weeksUntil",
       y: "cumulativeTickets",
       stroke: "steelblue",
-      strokeWidth: 2
+      strokeWidth: 2,
+      tip: true
     }),
     Plot.dot(salesData, {
       x: "weeksUntil",
@@ -469,4 +487,127 @@ Plot.plot({
   y: {label: "Tickets Sold"},
   x: {label: "Weeks Before Event", reverse: true}
 })
+*/
 ```
+
+```js
+// Attempting to create async inputs for formatting in css
+const userInput = Inputs.search(singleEventTable, {placeholder: "Search events"})
+const search = Generators.input(userInput)
+```
+```js
+const eventInput = Inputs.table(search, {sort: "Tickets", reverse: true, layout: "auto"})
+const selection = Generators.input(eventInput);
+```
+
+```js
+// Code for reactive title of all graphs
+let allChosenEvents = "Event Summary for "
+
+for (let i = 0; i < selectedNames.length; i++){
+  allChosenEvents += selectedNames[0]
+  
+}
+
+
+```
+
+```js
+const total = d3.sum(tod_pie, p => p.value)
+```
+
+
+<div class="grid grid-cols-3" style="grid-auto-rows: auto;">
+  <div class="card grid-colspan-3"><h1>Events</h1>
+    ${userInput}
+    ${eventInput} 
+  </div>
+  <div class="card grid-colspan-3 grid-rowspan-1"><h1>Event(s) Summary<h1> </div>
+  <div class="card grid-colspan-2 grid-rowspan-2"><h1>Gender of Ticket Buyers</h1>
+    ${PieChart(pie_array, {
+    name: d => d.name,
+    value: d => d.value,
+    width: 500,
+    height: 400,
+    colors: ["#89CFF0", "#FFB7CE"],
+    labelRadius: 90,
+    title: (d) => {
+      const total = d3.sum(pie_array, p => p.value);
+      const percentage = ((d.value / total) * 100).toFixed(1);
+      return `${d.name}\n${percentage}%\n${d.value}`;
+    }})}
+  </div>
+  <div class="card grid-colspan-1 grid-rowspan-1" style="background-color:#89CFF0"><h1>Male</h1>
+    Proof of concept
+    Can place total revenue for gender here but this leaves a lot of white space<br>
+    Still brainstorming other options
+  </div>
+  <div class="card grid-colspan-1" style="background-color:#FFB7CE"><h1>Female</h1>
+    Same as for male
+  </div>
+  <div class="card grid-colspan-2 grid-rowspan-3"><h1>Total Tickets Sold by Time of Day</h1>
+    ${PieChart(tod_pie_ordered, {
+    name: d => d.name,
+    value: d => d.value,
+    width: 500,
+    height: 400,
+    colors: ["#ffd725ff", "#e78a19ff", "#5955d3ff"],  
+    labelRadius: 90,
+    startAngle: -Math.PI / 2,  
+    endAngle: Math.PI / 2,
+    innerRadius: 0,
+    title: (d) => {
+      const total = d3.sum(tod_pie, p => p.value);
+      const percentage = ((d.value / total) * 100).toFixed(1);
+      return `${d.name}\n${percentage}%\n${d.value}`;}
+    })}
+  </div>
+  <div class="card grid-rowspan-1" style="background-color: #ffd725ff;"><h1>Morning</h1>
+    5 am - 12 pm<br>
+    $${morningRev} in net sales
+  </div>
+  <div class="card grid-rowspan-1" style="background-color: #e78a19ff;"><h1>Afternoon</h1>
+    12:01 pm - 5:59 pm<br>
+    $${afternoonRev} in net sales
+  </div>
+  <div class="card grid-rowspan-1" style="background-color: #5955d3ff;"><h1>Evening</h1>
+    6:00 pm - 4:59 am<br>
+    $${eveningRev} in net sales
+  </div>
+  <div class="card grid-rowspan-2 grid-colspan-3"><h1>Cumulative Tickets Sold by Week</h1>
+    ${Plot.plot({
+    height: 400,
+    marks: [
+      Plot.lineY(salesData, {
+        x: "weeksUntil",
+        y: "cumulativeTickets",
+        stroke: "steelblue",
+        strokeWidth: 2,
+        tip: true
+      }),
+      Plot.dot(salesData, {
+        x: "weeksUntil",
+        y: "cumulativeTickets",
+        fill: "steelblue"
+      })
+    ],
+    y: {label: "Tickets Sold"},
+    x: {label: "Weeks Before Event", reverse: true}
+    })
+    }
+  </div>
+  <div class ="card grid-rowspan-2 grid-colspan-3"><h1></h1>
+  ${Plot.plot({
+    title: "Time of Purchase",
+    y: {label: "Hour"},
+    x: {label: "Day"},
+    marks: [
+        Plot.dot(specificTransacts, {
+        x: d => new Date(d.Date),
+        y: d => new Date(d.Date).getHours(),
+        stroke: "Item Name",
+        tip: true}),
+    ]
+    })}
+    </div>
+</div>
