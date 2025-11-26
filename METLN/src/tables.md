@@ -613,7 +613,7 @@ const total = d3.sum(tod_pie, p => p.value)
       return `${d.name}\n${percentage}%\n${d.value}`;}
     })}
   </div>
-  <div class="card grid-rowspan-1" style="background-color: #ffd725ff;"><h1>Morning</h1>
+  <div class="card grid-rowspan-1" style="background-color: #ffd725ff; font-size: 20px; line-height: 1.4;"><h1>Morning</h1>
     5 am - 12 pm<br>
     $${morningRev} in net sales
   </div>
@@ -661,8 +661,9 @@ const total = d3.sum(tod_pie, p => p.value)
     ]
     })}
     </div>
-  <div class="card grid-rowspan-2 grid-colspan-2"><h1>Stacked Bar EDA</h1>
+  <div class="card grid-rowspan-2 grid-colspan-2"><h1>Tickets Sold by Season</h1>
   ${Plot.plot({
+    y: {label: ""},
     marks: [
     Plot.barX(aggregated, {
       y: "Season",
