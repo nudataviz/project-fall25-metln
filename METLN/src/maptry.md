@@ -26,8 +26,9 @@ for (let i = 0; i < customer_data.length; i++){
 ```
 
 ```js
-const us = fetch(import.meta.resolve("npm:us-atlas/counties-10m.json")).then((r) => r.json());
-
+const us = await fetch(
+  import.meta.resolve("npm:us-atlas/counties-10m.json")
+).then(r => r.json());
 ```
 ```js
 const new_england = {
@@ -63,11 +64,12 @@ const mapv1=Plot.plot({
   
 ```
 <div class="card">
-<h2>Regional Overview</h2>
+<h2 style="font-weight: bold;">Regional Overview</h2>
   ${mapv1}
 </div>
 
 <div class="card">
+
   <div id="mapv2" style="height: 400px; width: 100%;"></div> 
 </div>
 
@@ -163,7 +165,6 @@ const bubbleData = Array.from(categoryCount, ([preferred_main_category, count]) 
 ```
 
 
-
 ```js
 const data = { 
   name: "root", 
@@ -172,7 +173,9 @@ const data = {
     value: d.count
   }))
 };
-
+```
+```js
+const bubbleChart = (() => {
 const width = 928;
 const height = width;
 const margin = 1;
@@ -193,7 +196,7 @@ const svg = d3.create("svg")
   .attr("width", width)
   .attr("height", height)
   .attr("viewBox", [-margin, -margin, width, height])
-  .attr("style", "width: 100%; height: auto; font: 10px sans-serif;")
+  .attr("style", "width: 100%; height: auto; font-family: 'Segoe UI', Tahoma, sans-serif;")
   .attr("text-anchor", "middle");
 
 const node = svg.append("g")
@@ -213,20 +216,78 @@ node.append("circle")
 const text = node
   .filter(d => !d.children && d.r > 10)
   .append("text")
-    .attr("clip-path", d => `circle(${d.r})`);
+    .attr("clip-path", d => `circle(${d.r})`)
+    .style("font-size", d => `${Math.min(d.r / 3, 16)}px`)
+    .style("font-weight", "600");
 
-text.append("tspan")
-  .attr("x", 0)
-  .attr("y", "-0.2em")
-  .text(d => d.data.name);
+// Wrap text using foreignObject for automatic wrapping
+node
+  .filter(d => !d.children && d.r > 20)
+  .append("foreignObject")
+    .attr("x", d => -d.r)
+    .attr("y", d => -d.r)
+    .attr("width", d => d.r * 2)
+    .attr("height", d => d.r * 2)
+    .append("xhtml:div")
+      .style("display", "flex")
+      .style("flex-direction", "column")
+      .style("align-items", "center")
+      .style("justify-content", "center")
+      .style("height", "100%")
+      .style("text-align", "center")
+      .style("padding", "5px")
+      .style("font-family", "'Segoe UI', Tahoma, sans-serif")
+      .style("overflow", "hidden")
+      .html(d => {
+        const fontSize = Math.min(d.r / 3, 16);
+        const countSize = Math.min(d.r / 4, 12);
+        return `
+          <div style="font-size: ${fontSize}px; font-weight: 600; line-height: 1.2;">
+            ${d.data.name}
+          </div>
+          <div style="font-size: ${countSize}px; opacity: 0.7; margin-top: 4px;">
+            ${format(d.value)}
+          </div>
+        `;
+      });
 
-text.append("tspan")
-  .attr("x", 0)
-  .attr("y", "1.1em")
-  .attr("fill-opacity", 0.7)
-  .text(d => format(d.data.value));
-
-display(svg.node());
-
-//https://observablehq.com/notebook-kit/ex/d3/pack Just changed data for this
+return (svg.node());
+})()
 ```
+
+<div class="card" style="background-color: #e3f2fd;">
+<h2 style="font-weight: bold;">Preferred Main Category</h2> 
+ ${bubbleChart}
+</div>`
+
+```js
+const gettingCurrent_cat = customer_data
+  .filter(d => d.current_category != null && d.current_category !== "null" && d.current_category !== "")
+  .flatMap(d => {
+    const categories = d.current_category.split(/[,;|]+/); //
+    return categories
+      .map(cat => cat.trim())
+      .filter(cat => cat !== "" && cat !== "null" && cat.toLowerCase() !== "null")
+      .map(cat => ({
+        ...d,
+        current_category: cat
+      }));
+  });
+```
+```js
+// histogram
+const chart = Plot.plot({
+  title: "Hover over me to see the Current Category",
+  y: {grid: true},
+  x: {tickFormat: null},
+  marks: [
+    Plot.barY(gettingCurrent_cat, Plot.groupX({y: "count"}, 
+         {x: "current_category", fill: "steelblue", tip: true, sort: {x: "-y"}})),
+    Plot.ruleY([0])
+  ]
+});
+```
+
+<div class="card">
+  ${chart}
+</div>
