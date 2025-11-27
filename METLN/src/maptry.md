@@ -35,13 +35,13 @@ const new_england = {
   features: topojson
     .feature(us, us.objects.states)
     .features
-    .filter(d => ["23", "25", "33", '09', '44'].includes(d.id))
+    .filter(d => ["23", "25", "33", '09', '44','50','36'].includes(d.id))
 };
 ```
 
 ```js
-Plot.plot({
-
+const mapv1=Plot.plot({
+  height:400,
   projection: {
     type: "albers",
     domain: new_england
@@ -62,18 +62,23 @@ Plot.plot({
 })
   
 ```
+<div class="card">
+<h2>Regional Overview</h2>
+  ${mapv1}
+</div>
 
-
+<div class="card">
+  <div id="mapv2" style="height: 400px; width: 100%;"></div> 
+</div>
 
 ```js
 const mapv2 = (() => {
-  const container = html`<div style="height: 600; width: 100%;"></div>`;
-  
+
   const map = new maplibregl.Map({
-    container: container,
+    container: 'mapv2',
     style: 'https://tiles.openfreemap.org/styles/bright',
     center: [-70.2, 43.6], //portland
-    zoom: 7
+    zoom: 6
   });
   
   map.addControl(new maplibregl.NavigationControl());
@@ -103,7 +108,7 @@ const mapv2 = (() => {
       id: 'customers-heat',
       type: 'heatmap',
       source: 'customers',
-      maxzoom: 15,
+      maxzoom:15,
       paint: {
         'heatmap-weight': 1,
         'heatmap-intensity': 1,
@@ -128,7 +133,7 @@ const mapv2 = (() => {
       id: 'customers-point',
       type: 'circle',
       source: 'customers',
-      minzoom: 14,
+      minzoom: 1,
       paint: {
         'circle-radius': 5,
         'circle-color': 'rgb(178,24,43)',
@@ -138,16 +143,10 @@ const mapv2 = (() => {
     });
   });
   
-  return container;
+  //return container;
 })();
 //from heatmap documentation on maplibre
 ```
-
-
-
-  <div class="card">
-    ${mapv2}
-  </div>
 
 
 ```js
@@ -158,58 +157,12 @@ const categoryCount = d3.rollup(
 );
 
 const bubbleData = Array.from(categoryCount, ([preferred_main_category, count]) => ({
-  preferred_main_category,
+  preferred_main_category: preferred_main_category.charAt(0).toUpperCase() + preferred_main_category.slice(1).toLowerCase(),
   count
 }));
 ```
 
 
-
-
-```js
-Plot.plot({
-  axis: null,
-  width: 420,
-  height: 420,
-  marks: [
-    Plot.dot(bubbleData, {
-      x: d => d.preferred_main_category,
-      y: () => Math.random() * 0.2 + 0.4,     
-      r: "count",
-      fill: "preferred_main_category",
-      stroke: "black",
-      strokeWidth: 0.5,
-      title: "preferred_main_category"
-    })
-  ]
-})
-
-```
-```js
-bubbleData
-```
-
-
-<div class="card" style="grid-column: span 2; padding: 1rem 1rem; max-height: 420px; background-color: #0f0e0eff;">    
-<h2 style="color:white;">Preferred Main Categories</h2>
-    ${Plot.plot({
-  axis: null,
-  height: 420,
-  x: { domain: [0, 1] },
-  y: { domain: [0, 1] },
-  marks: [
-    Plot.dot(bubbleData, Plot.dodgeY("middle", {
-      x: () => 0.5 + (Math.random() - 0.5) * 0.4, 
-      y: () => 0.5 + (Math.random() - 0.5) * 0.4,
-      r: "count",
-      fill: "preferred_main_category",
-      stroke: "black",
-      strokeWidth: 0.5,
-      title: "preferred_main_category"
-    }))
-  ]
-})}
-</div>
 
 ```js
 const data = { 
