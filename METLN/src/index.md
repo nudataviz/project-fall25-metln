@@ -2,6 +2,18 @@
 ## A visualiztion of trends in local ticket sales</h2>
 
 This interactive dashboard was made using data provided by the Main Trust for Local News to look at trends from <a href="https://www.tickets207.com/" title="Tickets207">Tickets207</a>
+<br>
+<br>
+Our goal is to create a dashboard to offer insight into
+- Who is buying tickets?
+- When are they buying them?
+- What are they buying?
+
+<br>
+
+We also have some additional customer data which we have used to partially explore the "why" behind ticket purchases.
+
+
 
 
 <style>
@@ -79,3 +91,8 @@ This interactive dashboard was made using data provided by the Main Trust for Lo
   <a href="./totalevents" class="nav-button">All Events</a>
   <a href="./tables" class="nav-button">Individual Events</a>
 </div>
+
+<div class="nav-buttons">
+  <a href="./totalevents" class="nav-button">All Events (Who & When)</a>
+  <a href="./tables" class="nav-button">Individual Events (What)</a>
+  <a href="./maptry" class="nav-button">Customer Data (What & Why)</a>

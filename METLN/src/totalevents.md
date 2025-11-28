@@ -1,9 +1,9 @@
 ---
 title: All Event Overview
 ---
-# Demographics Across Events
+# Who & When: Demographics For All Events
 
-When taking all events into account we can see who is buying 
+Charts below use data from all events to report on demographic information and time of purchase.
 ```js
 //need to download npm i gender-detection-from-name
 ```
@@ -108,6 +108,7 @@ const tod_pie = Array.from(
   ([name, value]) => ({name, value}) 
 );
 ```
+
 ```js
 const transaction_array_dow = Array.from(
   d3.rollup(
@@ -285,14 +286,15 @@ const pie_dow = d3.pie()
 ```html
 <div class="grid grid-cols-2" style="grid-auto-rows: auto;">
   <div class="card">
-    <h2>Who is Buying?</h2>
-    <h3>Names are guessed using gender-detection-from-name — some room for error here</h3>
+    <h1>Who is Buying?</h1>
+    <h2>Gender distribution based on customer name.<br>Some error expected.</h2>
+    <br>
     ${PieChart(pie_array, {
       name: d => d.name,
       value: d => d.value,
       width: 500,
       height: 400,
-      colors: ["blue", "lavender"],
+      colors: ["#89CFF0", "#FFB7CE"],
       labelRadius: 90,
       title: (d) => {
         const total = d3.sum(pie_array, p => p.value);
@@ -303,8 +305,8 @@ const pie_dow = d3.pie()
   </div>
 
   <div class="card">
-    <h2>When Are they Buying</h2>
-    <h3>Morning: Before 12p; Afternoon: 12p-6p; Evening: After 6pm<h3>
+    <h1>What Time?</h1>
+    <h2>Morning: Before 12:00 pm<br> Afternoon: 12:00 pm - 6:00 pm<br> Evening: After 6:00 pm<h2>
     ${PieChart(tod_pie, {
   name: d => d.name,
   value: d => d.value,
@@ -324,9 +326,15 @@ const pie_dow = d3.pie()
   </div>
 
 <div class="card" style="grid-column: span 2; padding: 0 0.5rem; min-height: 0; max-height: 450px;">
-    <h2>What Day of the week are you most likely to get a response</h2>
+    <h1>What Day?</h1>
     ${chart_dow()}
 </div>
+
+<div class="card" style="grid-column: span 1">
+  <h1>What season?</h1>
+  
+
+
 ```
 ```js
 

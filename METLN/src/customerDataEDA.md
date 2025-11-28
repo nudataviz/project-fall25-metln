@@ -66,17 +66,12 @@ for (const row of cleanedData){
 
 
 
-Engagement Scores
 ```js
 const engagementScores = []
 for (const row of cleanedData){
     if (!(engagementScores.includes(row["engagement_score"])))
     engagementScores.push(row["engagement_score"])
 }
-```
-
-```js
-display(engagementScores)
 ```
 
 ```js
@@ -121,28 +116,22 @@ for (const row of cleanedData){
 ```
 
 
-
-
-Comparing Amount Spent on Events with Engagement Level
-```js
-display(d3.count(cleanedData, d => d["event_purchased_amount"]))
-```
 ```js
 // Setting this variable as the boxplot did not identify amounts sold above like 200 as outliers.
 const boxData = cleanedData.filter(d => d["event_purchased_amount"] < 200)
 ```
 
-Graph shows that mean expenditure is the same across engagement categories.
-May not be useful depending on definition for each category.
+Boxplot for showing spending distribution across engagement categories
+Currently filtered to only display rows which actually purchased tickets.
+Can see that there is no difference in ticket spending across engagement categories which may be a useful metric.
 ```js
 Plot.plot({
     marks:[
-        Plot.boxY(boxData, {x: "engagement", y:"event_purchased_amount", tip: true})
+        Plot.boxY(boxData.filter(d => !(d["event_purchased_amount"] === null) && d["event_purchased_amount"] > 0), {x: "engagement", y:"event_purchased_amount", tip: true})
     ]
 })
 ```
 
-Total Spending per Engagement Level
 ```js
 
 for (const row of cleanedData){
@@ -160,30 +149,12 @@ for (const cat of totalSpendingBar){
 
 ```
 
-
-```js
-display(cleanedData)
-```
-
 Bar Chart of total amount made off of different engagement groups
 May be useful depending on definition of "null" engagement vals.  May also be useful for fill options.  Had trouble with striations rather than the things appearing as a block
 ```js
 Plot.plot({
     marks:[
         Plot.barY(cleanedData, {x:"engagement", y: "event_purchased_amount", fill: "preferred_main_category", tip:true, order:"preferred_main_category"})
-    ]
-})
-```
-
-Add cell heatmap for some of the utm vals.
-```js
-display(cleanedData)
-```
-
-```js
-Plot.plot({
-    marks:[
-        Plot.cell(cleanedData, {x: "})
     ]
 })
 ```
