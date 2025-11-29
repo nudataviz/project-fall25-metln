@@ -69,6 +69,7 @@ const mapv1=Plot.plot({
 ```
 <div class="card">
 <h2 style="font-weight: bold;">Regional Overview</h2>
+<h3>Hover to see Location and Events Purchased </h3>
   ${mapv1}
 </div>
 
