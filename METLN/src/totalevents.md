@@ -20,6 +20,7 @@ const formatDay = d3.timeFormat("%A");
 
 ```
 
+
 ```js
 import { getGender } from "gender-detection-from-name";
 const gender_guesser = getGender;
@@ -140,6 +141,8 @@ const transaction_array_dow = Array.from(
   ([name, value]) => ({name, value}) 
 );
 ```
+
+
 ```js
 let data_dow=transaction_array_dow
 ```
@@ -154,6 +157,167 @@ const dataWithDay = transactionArray.map(d => ({
   ...d,
   day: days[d["Event Date"].getDay()]
 }));
+
+```
+
+```js
+// Separate rollup for the event DOW bubble chart
+//const eventDOW = Array.from(d3.rollup(dataWithDay, v => v.length, d=> d["Item Name"]), ([name, count]) => ({name, count}))
+```
+
+
+```js
+// data wrangling to 
+const dayEventCount = {Sunday : 0, Monday : 0, Tuesday: 0, Wednesday: 0, Thursday:0, Friday:0, Saturday:0}
+const setOfEvents = new Set()
+for (const row of dataWithDay){
+  if (!setOfEvents.has(row["Item Name"])){
+    setOfEvents.add(row["Item Name"])
+    dayEventCount[row["day"]] += 1
+  }
+}
+```
+
+```js
+// Used in bubblechart for event counts for each DOW
+const numEventsperDOW = Object.entries(dayEventCount).map(([day, count]) => ({
+  Name: day,
+  count: count
+}));
+```
+
+
+
+
+
+```js
+// Copyright 2021-2023 Observable, Inc.
+// Released under the ISC license.
+// https://observablehq.com/@d3/bubble-chart
+function BubbleChart(data, {
+  name = ([x]) => x, // alias for label
+  label = name, // given d in data, returns text to display on the bubble
+  value = ([, y]) => y, // given d in data, returns a quantitative size
+  group, // given d in data, returns a categorical value for color
+  title, // given d in data, returns text to show on hover
+  link, // given a node d, its link (if any)
+  linkTarget = "_blank", // the target attribute for links, if any
+  width = 640, // outer width, in pixels
+  height = width, // outer height, in pixels
+  padding = 3, // padding between circles
+  margin = 1, // default margins
+  marginTop = margin, // top margin, in pixels
+  marginRight = margin, // right margin, in pixels
+  marginBottom = margin, // bottom margin, in pixels
+  marginLeft = margin, // left margin, in pixels
+  groups, // array of group names (the domain of the color scale)
+  colors = d3.scaleOrdinal(d3.schemeAccent), // an array of colors (for groups), changed val to match dash
+  fill = "#ccc", // a static fill color, if no group channel is specified
+  fillOpacity = 0.7, // the fill opacity of the bubbles
+  stroke, // a static stroke around the bubbles
+  strokeWidth, // the stroke width around the bubbles, if any
+  strokeOpacity, // the stroke opacity around the bubbles, if any
+} = {}) {
+  // Compute the values.
+  const D = d3.map(data, d => d);
+  const V = d3.map(data, value);
+  const G = group == null ? null : d3.map(data, group);
+  const I = d3.range(V.length).filter(i => V[i] > 0);
+
+  // Unique the groups.
+  if (G && groups === undefined) groups = I.map(i => G[i]);
+  groups = G && new d3.InternSet(groups);
+
+  // Construct scales.
+  const color = G && d3.scaleOrdinal(groups, colors);
+
+  // Compute labels and titles.
+  const L = label == null ? null : d3.map(data, label);
+  const T = title === undefined ? L : title == null ? null : d3.map(data, title);
+
+  // Compute layout: create a 1-deep hierarchy, and pack it.
+  const root = d3.pack()
+      .size([width - marginLeft - marginRight, height - marginTop - marginBottom])
+      .padding(padding)
+    (d3.hierarchy({children: I})
+      .sum(i => V[i]));
+
+  const svg = d3.create("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("viewBox", [-marginLeft, -marginTop, width, height])
+      .attr("style", "max-width: 100%; height: auto; height: intrinsic;")
+      .attr("fill", "currentColor")
+      .attr("font-size", 30)
+      .attr("font-family", "sans-serif")
+      .attr("text-anchor", "middle");
+
+  const leaf = svg.selectAll("a")
+    .data(root.leaves())
+    .join("a")
+      .attr("xlink:href", link == null ? null : (d, i) => link(D[d.data], i, data))
+      .attr("target", link == null ? null : linkTarget)
+      .attr("transform", d => `translate(${d.x},${d.y})`);
+
+  leaf.append("circle")
+      .attr("stroke", stroke)
+      .attr("stroke-width", strokeWidth)
+      .attr("stroke-opacity", strokeOpacity)
+      .attr("fill", G ? d => color(G[d.data]) : fill == null ? "none" : fill)
+      .attr("fill-opacity", fillOpacity)
+      .attr("r", d => d.r);
+
+  if (T) leaf.append("title")
+      .text(d => T[d.data]);
+
+  if (L) {
+    // A unique identifier for clip paths (to avoid conflicts).
+    const uid = `O-${Math.random().toString(16).slice(2)}`;
+
+    leaf.append("clipPath")
+        .attr("id", d => `${uid}-clip-${d.data}`)
+      .append("circle")
+        .attr("r", d => d.r);
+
+    leaf.append("text")
+        .attr("clip-path", d => `url(${new URL(`#${uid}-clip-${d.data}`, location)})`)
+      .selectAll("tspan")
+      .data(d => `${L[d.data]}`.split(/\n/g))
+      .join("tspan")
+        .attr("x", 0)
+        .attr("y", (d, i, D) => `${i - D.length / 2 + 0.85}em`)
+        .attr("fill-opacity", (d, i, D) => i === D.length - 1 ? 0.7 : null)
+        .text(d => d);
+  }
+
+  return Object.assign(svg.node(), {scales: {color}});
+}
+```
+
+```js
+//Defining color map to match colors across DOW charts
+// Any changes to these colors should also be made to the pie chart call to make sure day colors align
+const colorMap = {
+  Sunday:  "#1f77b4",
+  Monday: "#ff7f0e",
+  Tuesday: "#2ca02c",
+  Wednesday: "#d62728",
+  Thursday: "#9467bd",
+  Friday: "#8c564b",
+  Saturday: "#e377c2"
+};
+```
+```js
+// Function call for bubblechart, uses same color
+const bubbles = BubbleChart(numEventsperDOW, {
+  label: d => `${d.Name}\n${d.count}`,
+  value: d => d.count,
+  group: d => d.Name,
+  
+  // Correct alignment:
+  groups: Object.keys(colorMap),
+  colors: Object.values(colorMap)
+});
 
 ```
 
@@ -248,6 +412,7 @@ function PieChart(data, {
   return Object.assign(svg.node(), {scales: {color}});
 }
 ```
+
 ```js
 function chart_dow() {
   const height = Math.min(width, 550);
@@ -262,7 +427,7 @@ function chart_dow() {
 
   const color = d3.scaleOrdinal()
       .domain(order)
-      .range(["#ffd725", "#e78a19", "#5955d3", "#ff6b6b", "#4ecdc4", "#95e1d3", "#f38181"]);
+      .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2"]);
 
   const svg = d3.create("svg")
       .attr("width", width)
@@ -324,7 +489,7 @@ const pie_dow = d3.pie()
 const aggregated = Array.from(
   d3.rollup(
     transactionArray,
-    v => v.length,               // or sum a quantity field if you have one
+    v => v.length, 
     d => d.Season,
     d => d["Item Name"]
   ),
@@ -384,11 +549,8 @@ const aggregated = Array.from(
 </div>
 <div class="card" style="grid-column: span 1">
   <h1> When are events occurring? </h1>
-${Plot.plot({
-  marks:[
-    Plot.barY(dataWithDay, Plot.groupX({y:"count"}, {x: "day"}))
-  ]
-})}
+  ${bubbles}
+
 </div>
 <div class="card" style="grid-column: span 1"><h1>Tickets Sold by Season</h1>
   ${Plot.plot({
@@ -429,4 +591,12 @@ Print/Save as PDF
     });
   }
 }
+```
+
+```js
+/*${Plot.plot({
+  marks:[
+    Plot.barY(dataWithDay, Plot.groupX({y:"count"}, {x: "day"}))
+  ]
+})}*/
 ```
