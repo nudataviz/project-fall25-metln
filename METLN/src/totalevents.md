@@ -142,7 +142,6 @@ const transaction_array_dow = Array.from(
 );
 ```
 
-
 ```js
 let data_dow=transaction_array_dow
 ```
@@ -413,6 +412,7 @@ function PieChart(data, {
 }
 ```
 
+
 ```js
 function chart_dow() {
   const height = Math.min(width, 550);
@@ -446,7 +446,7 @@ function chart_dow() {
 
   svg.append("g")
       .attr("font-family", "sans-serif")
-      .attr("font-size", 12)
+      .attr("font-size", 14)
       .attr("text-anchor", "middle")
     .selectAll()
     .data(pie_dow(data_dow))
@@ -501,6 +501,11 @@ const aggregated = Array.from(
     }))
 ).flat();
 ```
+
+```js
+
+```
+
 ```html
 <div class="grid grid-cols-2" style="grid-auto-rows: auto;">
   <div class="card">
@@ -543,35 +548,32 @@ const aggregated = Array.from(
 })}
   </div>
 
-<div class="card" style="grid-column: span 1; padding: 0 0.5rem; min-height: 0; max-height: 450px;">
+<div class="card" style="grid-column: span 2; height: 300">
     <h1>What Day?</h1>
+    <h2>Distribution of ticket sales by the day of week they were purchased.</h2>
     ${chart_dow()}
+
 </div>
 <div class="card" style="grid-column: span 1">
-  <h1> When are events occurring? </h1>
+  <h1> When are the events being held? </h1>
   ${bubbles}
 
 </div>
-<div class="card" style="grid-column: span 1"><h1>Tickets Sold by Season</h1>
+<div class="card"><h1>What season?</h1>
+<h2>${aggregated.filter(d => d["Season"] == "Winter").length} events in the Winter <br>
+    ${aggregated.filter(d => d["Season"] == "Spring").length} events in the Spring<br>
+    ${aggregated.filter(d => d["Season"] == "Summer").length} events in the Summer <br>
+    ${aggregated.filter(d => d["Season"] == "Autumn").length} events in the Autumn<br>
+    <br>
   ${Plot.plot({
-    y: {label: ""},
-    marks: [
-    Plot.barX(aggregated, {
-      y: "Season",
-      x: "Tickets",
-      fill: "Event",
-      tip: true
-    })]
-    })}
-  </div>
-<div class="card" style="grid-column: span 1">
-  <h1>What season?</h1>
-    Total Winter Events: ${aggregated.filter(d => d["Season"] == "Winter").length} <br>
-    Total Spring Events: ${aggregated.filter(d => d["Season"] == "Spring").length} <br>
-    Total Summer Events: ${aggregated.filter(d => d["Season"] == "Summer").length} <br>
-    Total Autumn Events: ${aggregated.filter(d => d["Season"] == "Autumn").length} <br>
-    
-  </div>
+    height: 500,
+  x:{label: ""},
+  marks: [
+  Plot.barY(aggregated, {x: "Season", y:"Tickets", fill: "Event", tip: true})]
+  })
+    }
+</div>
+
 
 
 ```
