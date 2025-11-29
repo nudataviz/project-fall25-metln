@@ -70,10 +70,31 @@ for (let i = 0; i < transactionArray.length; i++){
     transactionArray[i]["Day_Of_Week"] = formatDay(transactionArray[i]["Date"])
     transactionArray[i]["Gender"] = gender_guesser(transactionArray[i]["First Name"])
     transactionArray[i]["timeOfDay"] = getTimeofDay(transactionArray[i]["Date"])
+    transactionArray[i]["Season"] = getSeason(transactionArray[i]["Event Date"])
 
 
 }
 
+```
+
+```js
+function getSeason(dateVal){
+  const month = dateVal.getMonth()
+  let season = null
+  if (month == 0 || month == 1 || month == 2){
+    season = "Winter"
+  }
+  else if (month == 2 || month == 3 || month == 4){
+    season = "Spring"
+  }
+  else if (month == 5 || month == 6 || month == 7){
+    season = "Summer"
+  }
+  else if (month == 8 || month == 9 || month == 10){
+    season = "Autumn"
+  }
+  return season
+}
 ```
 
 ```js
@@ -122,6 +143,20 @@ const transaction_array_dow = Array.from(
 ```js
 let data_dow=transaction_array_dow
 ```
+
+
+```js
+// Adds the DOW the event occurs to the array
+// Used to show what day of week the events are occuring
+const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
+const dataWithDay = transactionArray.map(d => ({
+  ...d,
+  day: days[d["Event Date"].getDay()]
+}));
+
+```
+
 
 ```js
 // copied from observable
@@ -283,6 +318,24 @@ const pie_dow = d3.pie()
     .startAngle(-Math.PI / 2)
     .endAngle(Math.PI / 2);
 ```
+
+```js
+// Used for season chart
+const aggregated = Array.from(
+  d3.rollup(
+    transactionArray,
+    v => v.length,               // or sum a quantity field if you have one
+    d => d.Season,
+    d => d["Item Name"]
+  ),
+  ([Season, eventMap]) =>
+    Array.from(eventMap, ([Event, Tickets]) => ({
+      Season,
+      Event,
+      Tickets
+    }))
+).flat();
+```
 ```html
 <div class="grid grid-cols-2" style="grid-auto-rows: auto;">
   <div class="card">
@@ -325,14 +378,38 @@ const pie_dow = d3.pie()
 })}
   </div>
 
-<div class="card" style="grid-column: span 2; padding: 0 0.5rem; min-height: 0; max-height: 450px;">
+<div class="card" style="grid-column: span 1; padding: 0 0.5rem; min-height: 0; max-height: 450px;">
     <h1>What Day?</h1>
     ${chart_dow()}
 </div>
-
+<div class="card" style="grid-column: span 1">
+  <h1> When are events occurring? </h1>
+${Plot.plot({
+  marks:[
+    Plot.barY(dataWithDay, Plot.groupX({y:"count"}, {x: "day"}))
+  ]
+})}
+</div>
+<div class="card" style="grid-column: span 1"><h1>Tickets Sold by Season</h1>
+  ${Plot.plot({
+    y: {label: ""},
+    marks: [
+    Plot.barX(aggregated, {
+      y: "Season",
+      x: "Tickets",
+      fill: "Event",
+      tip: true
+    })]
+    })}
+  </div>
 <div class="card" style="grid-column: span 1">
   <h1>What season?</h1>
-  
+    Total Winter Events: ${aggregated.filter(d => d["Season"] == "Winter").length} <br>
+    Total Spring Events: ${aggregated.filter(d => d["Season"] == "Spring").length} <br>
+    Total Summer Events: ${aggregated.filter(d => d["Season"] == "Summer").length} <br>
+    Total Autumn Events: ${aggregated.filter(d => d["Season"] == "Autumn").length} <br>
+    
+  </div>
 
 
 ```
