@@ -57,7 +57,11 @@ const mapv1=Plot.plot({
       y: "latitude",
       fill: "red",
       r: 3,
-      fillOpacity: 0.5
+      fillOpacity: 0.5,
+      tip:true,
+      title: d => [d.mr_geo_city_name, d.event_purchased]
+  .filter(v => v != null)
+  .join('\n')
     })
   ]
 })
