@@ -57,7 +57,11 @@ const mapv1=Plot.plot({
       y: "latitude",
       fill: "red",
       r: 3,
-      fillOpacity: 0.5
+      fillOpacity: 0.5,
+      tip:true,
+      title: d => [d.mr_geo_city_name, d.event_purchased]
+  .filter(v => v != null)
+  .join('\n')
     })
   ]
 })
@@ -65,6 +69,7 @@ const mapv1=Plot.plot({
 ```
 <div class="card">
 <h2 style="font-weight: bold;">Regional Overview</h2>
+<h3>Hover to see Location and Events Purchased </h3>
   ${mapv1}
 </div>
 
