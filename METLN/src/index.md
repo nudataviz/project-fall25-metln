@@ -67,6 +67,7 @@ We also have some additional customer data which we have used to partially explo
   gap: 1rem;
   justify-content: center;
   margin: 2rem 0;
+  text-align: center;
 }
 
 .nav-button {
@@ -87,12 +88,6 @@ We also have some additional customer data which we have used to partially explo
 </style>
 
 <div class="nav-buttons">
-  <a href="./maptry" class="nav-button">Customer Overview?</a>
-  <a href="./totalevents" class="nav-button">All Events</a>
-  <a href="./tables" class="nav-button">Individual Events</a>
-</div>
-
-<div class="nav-buttons">
-  <a href="./totalevents" class="nav-button">All Events (Who & When)</a>
-  <a href="./tables" class="nav-button">Individual Events (What)</a>
-  <a href="./maptry" class="nav-button">Customer Data (What & Why)</a>
+  <a href="./totalevents" class="nav-button">All Events <br>(Who & When)</a>
+  <a href="./tables" class="nav-button">Individual Events <br>(What, Who, & When)</a>
+  <a href="./maptry" class="nav-button">Customer Data <br>(What & Why)</a>

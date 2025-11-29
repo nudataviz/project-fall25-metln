@@ -517,28 +517,12 @@ salesData.forEach(d => {
 ```
 
 ```js
-/* Commenting out cumulative ticketr graph that is outside dashboard
-Plot.plot({
-  title: "Cumulative Tickets Sold By Week",
-  height: 400,
-  marks: [
-    Plot.lineY(salesData, {
-      x: "weeksUntil",
-      y: "cumulativeTickets",
-      stroke: "steelblue",
-      strokeWidth: 2,
-      tip: true
-    }),
-    Plot.dot(salesData, {
-      x: "weeksUntil",
-      y: "cumulativeTickets",
-      fill: "steelblue"
-    })
-  ],
-  y: {label: "Tickets Sold"},
-  x: {label: "Weeks Before Event", reverse: true}
-})
-*/
+const reactiveSales = salesData.filter(d => d["weeksUntil"] <= userWeeks)
+```
+
+```js
+const salesDataInput = Inputs.range([1, d3.max(salesData, d => d.weeksUntil)], {step: 1, label: "Weeks Until Event", placeholder: 30})
+const userWeeks = Generators.input(salesDataInput)
 ```
 
 ```js
@@ -567,6 +551,102 @@ for (let i = 0; i < selectedNames.length; i++){
 const total = d3.sum(tod_pie, p => p.value)
 ```
 
+```js
+
+const weekStart = Array.from(
+  d3.timeWeek.range(
+    d3.min(specificTransacts, d => new Date(d.Date)),
+    d3.max(specificTransacts, d => new Date(d.Date))
+  )
+);
+
+```
+
+```js
+// Used for half pie
+const transaction_array_dow = Array.from(
+  d3.rollup(
+    specificTransacts,  
+    v => v.length,
+    d => d.Day_Of_Week
+  ),
+  ([name, value]) => ({name, value}) 
+);
+```
+```js
+const data_dow = transaction_array_dow
+```
+```js
+function chart_dow() {
+  const height = Math.min(width, 550);
+  const radius = Math.min(width, height) / 2;
+
+  const arc = d3.arc()
+      .innerRadius(radius * 0.67)
+      .outerRadius(radius - 1);
+
+  const order = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  data_dow.sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name));
+
+  const color = d3.scaleOrdinal()
+      .domain(order)
+      .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2"]);
+
+  const svg = d3.create("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("viewBox", [-width / 2, -height / 2, width, height / 2])
+      .attr("style", "max-width: 100%; height: auto;");
+
+  svg.append("g")
+    .selectAll()
+    .data(pie_dow(data_dow))
+    .join("path")
+      .attr("fill", d => color(d.data.name))
+      .attr("d", arc)
+    .append("title")
+      .text(d => `${d.data.name}: ${d.data.value.toLocaleString()}`);
+
+  svg.append("g")
+      .attr("font-family", "sans-serif")
+      .attr("font-size", 14)
+      .attr("text-anchor", "middle")
+    .selectAll()
+    .data(pie_dow(data_dow))
+    .join("text")
+      .attr("transform", d => `translate(${arc.centroid(d)})`)
+      .call(text => text.append("tspan")
+          .attr("y", "-0.4em")
+          .attr("font-weight", "bold")
+          .text(d => d.data.name))
+      
+      
+      .call(text => text.append("tspan")
+
+      //.call(text => text.filter(d => (d.endAngle - d.startAngle) > 0.25)
+          //.append("tspan")
+          .attr("x", 0)
+          .attr("y", "0.7em")
+          .attr("fill-opacity", 0.7)
+          .text(d => d.data.value.toLocaleString("en-US")));
+
+  return svg.node();
+}
+```
+
+```js
+
+const height = Math.min(width, 700);
+const radius = Math.min(width, height) / 2;
+
+const pie_dow = d3.pie()
+    .padAngle(1 / radius)
+    .sort(null)
+    .value(d => d.value)
+    .startAngle(-Math.PI / 2)
+    .endAngle(Math.PI / 2);
+
+```
 
 <div class="grid grid-cols-3" style="grid-auto-rows: auto;">
   <div class="card grid-colspan-3"><h1>Events</h1>
@@ -574,7 +654,8 @@ const total = d3.sum(tod_pie, p => p.value)
     ${eventInput} 
   </div>
   <div class="card grid-colspan-3 grid-rowspan-1"><h1>Event(s) Summary<h1> </div>
-  <div class="card grid-colspan-2 grid-rowspan-2"><h1>Gender of Ticket Buyers</h1>
+  <div class="card grid-colspan-2 grid-rowspan-2"><h1>Who is buying?</h1><h2>Gender distribution based on customer name.
+Some error expected.</h2>
     ${PieChart(pie_array, {
     name: d => d.name,
     value: d => d.value,
@@ -596,13 +677,14 @@ const total = d3.sum(tod_pie, p => p.value)
   <div class="card grid-colspan-1" style="background-color:#FFB7CE"><h1>Female</h1>
     Same as for male
   </div>
-  <div class="card grid-colspan-2 grid-rowspan-3"><h1>Total Tickets Sold by Time of Day</h1>
+  <div class="card grid-colspan-2 grid-rowspan-3"><h1>What time?</h1>
+  <h2>Percentage of tickets sold and total number per time of day. </h2>
     ${PieChart(tod_pie_ordered, {
     name: d => d.name,
     value: d => d.value,
     width: 500,
     height: 400,
-    colors: ["#ffd725ff", "#e78a19ff", "#5955d3ff"],  
+    colors: ["#FFE86A", "#E9A33A", "#9895C9 "],  
     labelRadius: 90,
     startAngle: -Math.PI / 2,  
     endAngle: Math.PI / 2,
@@ -613,30 +695,36 @@ const total = d3.sum(tod_pie, p => p.value)
       return `${d.name}\n${percentage}%\n${d.value}`;}
     })}
   </div>
-  <div class="card grid-rowspan-1" style="background-color: #ffd725ff; font-size: 20px; line-height: 1.4;"><h1>Morning</h1>
+  <div class="card grid-rowspan-1" style="background-color: #FFE86A; font-size: 20px; line-height: 1.4;"><h1>Morning</h1>
     5 am - 12 pm<br>
     $${morningRev} in net sales
   </div>
-  <div class="card grid-rowspan-1" style="background-color: #e78a19ff;"><h1>Afternoon</h1>
+  <div class="card grid-rowspan-1" style="background-color: #E9A33A; font-size: 20px; line-height: 1.4"><h1>Afternoon</h1>
     12:01 pm - 5:59 pm<br>
     $${afternoonRev} in net sales
   </div>
-  <div class="card grid-rowspan-1" style="background-color: #5955d3ff;"><h1>Evening</h1>
+  <div class="card grid-rowspan-1" style="background-color: #9895C9 ;font-size: 20px; line-height: 1.4"><h1>Evening</h1>
     6:00 pm - 4:59 am<br>
     $${eveningRev} in net sales
   </div>
-  <div class="card grid-rowspan-2 grid-colspan-3"><h1>Cumulative Tickets Sold by Week</h1>
+  <div class="card grid-rowspan-2 grid-colspan-3"><h1>What days?</h1>
+  <h2>Total ticket sales by day of week. </h2>
+  ${chart_dow()}
+  </div>
+  <div class="card grid-rowspan-2 grid-colspan-3"><h1>How far in advance?</h1>
+    <h2>Number of tickets sold by how many weeks ahead of the respective event</h2>
+    ${salesDataInput}
     ${Plot.plot({
     height: 400,
     marks: [
-      Plot.lineY(salesData, {
+      Plot.lineY(reactiveSales, {
         x: "weeksUntil",
         y: "cumulativeTickets",
         stroke: "steelblue",
         strokeWidth: 2,
         tip: true
       }),
-      Plot.dot(salesData, {
+      Plot.dot(reactiveSales, {
         x: "weeksUntil",
         y: "cumulativeTickets",
         fill: "steelblue"
@@ -658,26 +746,9 @@ const total = d3.sum(tod_pie, p => p.value)
         y: d => new Date(d.Date).getHours(),
         stroke: "Item Name",
         tip: true}),
+        Plot.ruleX(weekStart, {stroke: "gray", strokeWidth: 1, strokeDasharray: "4 2"})
     ]
     })}
     </div>
-  <div class="card grid-rowspan-2 grid-colspan-2"><h1>Tickets Sold by Season</h1>
-  ${Plot.plot({
-    y: {label: ""},
-    marks: [
-    Plot.barX(aggregated, {
-      y: "Season",
-      x: "Tickets",
-      fill: "Event",
-      tip: true
-    })]
-    })}
-  </div>
-  <div class="card grid-rowspan-1 grid-colspan-1"><h1>Season Details</h1>
-    Total Winter Events: ${aggregated.filter(d => d["Season"] == "Winter").length} <br>
-    Total Spring Events: ${aggregated.filter(d => d["Season"] == "Spring").length} <br>
-    Total Summer Events: ${aggregated.filter(d => d["Season"] == "Summer").length} <br>
-    Total Autumn Events: ${aggregated.filter(d => d["Season"] == "Autumn").length} <br>
-    
-  <div>
+  
 </div>
