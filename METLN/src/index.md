@@ -90,4 +90,4 @@ We also have some additional customer data which we have used to partially explo
 <div class="nav-buttons">
   <a href="./totalevents" class="nav-button">All Events <br>(Who & When)</a>
   <a href="./tables" class="nav-button">Individual Events <br>(What, Who, & When)</a>
-  <a href="./maptry" class="nav-button">Customer Data <br>(What & Why)</a>
+  <a href="./customerOverview" class="nav-button">Customer Data <br>(What & Why)</a>
