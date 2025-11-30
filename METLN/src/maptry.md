@@ -1,6 +1,9 @@
 ---
-title: Customer Overview
+title: Customer Data Exploration
 ---
+
+Graphs on this page utilize a distinct dataset from the rest of this application.
+Graphs below use customer location, spending, and engagement to explore correlated features.
 ```js
 import maplibregl from "npm:maplibre-gl";
 html`<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.13.0/dist/maplibre-gl.css" />`
