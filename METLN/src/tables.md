@@ -3,6 +3,12 @@ title: Individual Event Dashboard
 ---
 
 # What, Who, & When: Ticket Data by Individual Event
+
+
+Visualizations on this page use transaction data to report on individual or grouped events.
+
+All graphs are reactive to the events selected from the table.
+
 ```js
 /* Summary of variables
 transactionArray - basic transformation of data, 1 row per transaction with types converted and additional columns added
@@ -29,12 +35,10 @@ let transactions = await FileAttachment("/data/cleaned_transaction.csv").csv({ty
 const formatDay = d3.timeFormat("%A");
 
 ```
-```js
-//import { utcSunday, utcDay, utcWeek, utcMonth } from "d3-time@";
-```
 
 ```js
 // NPM library for detecting gender from a name
+// Requires installation via npm or other manager
 import { getGender } from "gender-detection-from-name";
 const gender_guesser = getGender;
 ```
@@ -77,7 +81,7 @@ function getSeason(dateVal){
 
 ```js
 
-// Used chat gpt to help get this data in aggregated form
+// Aggregates data for seasonal analysis
 const aggregated = Array.from(
   d3.rollup(
     specificTransacts,
@@ -92,13 +96,6 @@ const aggregated = Array.from(
       Tickets
     }))
 ).flat();
-/*
-Not currently using this version
-const seasonArray = [{Season : "Winter", Tickets : specificTransacts.filter(d => d["Season"] == "Winter").length},
-                      {Season: "Spring", Tickets : specificTransacts.filter(d => d["Season"] == "Spring").length},
-                      {Season : "Summer", Tickets: specificTransacts.filter(d => d["Season"] == "Summer").length},
-                      {Season: "Autumn", Tickets: specificTransacts.filter(d => d["Season"] == "Autumn").length}]
-*/
 
 ```
 
@@ -143,13 +140,7 @@ for (let i = 0; i < transactionArray.length; i++){
 ```
 
 
-
-
 ```js
-/* POTENTIAL ISSUE WITH CODE
-For both events and event types, the overarching type is an object with a series of key vals where the vals are events/event types
-Ideally, this would be an array for iteration, but the code does not function without.  Need to revisit to make sure nothing is being overlooked.
-When changing to an array, it sometimes works but the array is shown as having 0 items. May be a non-issues */
 //Below code creates an object with key : val pairs where each key is an event name, val = an array with each transaction for that event
 
 const chosenEvents = {}
@@ -666,7 +657,9 @@ const cumulativeTicketsSold = Plot.plot({
         x: "weeksUntil",
         y: "cumulativeTickets",
         fill: "steelblue"
-      })
+      }),
+      Plot.gridX({strokeDasharray: "5,3"}),
+      Plot.gridY({strokeDasharray: "5,3"})
     ],
     y: {label: "Tickets Sold"},
     x: {label: "Weeks Before Event", reverse: true}
@@ -737,16 +730,12 @@ Some error expected.</h2>
   <h2>Total ticket sales by day of week. </h2>
   ${chart_dow()}
   </div>
-  <div class="card grid-rowspan-2 grid-colspan-3"><h1>How far in advance?</h1>
-    <h2>Number of tickets sold by how many weeks ahead of the respective event</h2>
+  <div class="card grid-rowspan-2 grid-colspan-3"><h1>How early?</h1>
     ${salesDataInput}
     ${cumulativeTicketsSold}
   </div>
-  <div class ="card grid-rowspan-2 grid-colspan-3"><h1>How far in advance and what day?</h1>
-  <h2>Highlights trends on certain days across a series of time.
-  Columns correspond to days of week and rows are each an individual week.
-  Color of cell illustrates number of tickets purchased on that date.
-  </h2>
+  <div class ="card grid-rowspan-2 grid-colspan-3"><h1>Day by Day</h1>
+  <h2>Columns represent days of the week, rows represent weeks, and color shows the number of tickets purchased on each date.<br>Recommended to use with a small number of chronologically close events.</h2>
   ${cellHeatmap}
     </div>
   

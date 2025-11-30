@@ -3,7 +3,9 @@ title: All Event Overview
 ---
 # Who & When: Demographics For All Events
 
-Charts below use data from all events to report on demographic information and time of purchase.
+Visualizations on this page use transaction data to report on individual or grouped events.
+
+All graphs are reactive to the events selected from the table.
 ```js
 //need to download npm i gender-detection-from-name
 ```
@@ -531,7 +533,7 @@ const aggregated = Array.from(
   value: d => d.value,
   width: 500,
   height: 400,
-  colors: ["#ffd725ff", "#e78a19ff", "#5955d3ff"],
+  colors: ["#FFE86A",  "#9895C9", "#E9A33A"],
   labelRadius: 90,
   startAngle: -Math.PI / 2,
   endAngle: Math.PI / 2,
@@ -551,7 +553,7 @@ const aggregated = Array.from(
 
 </div>
 <div class="card" style="grid-column: span 1">
-  <h1> When are the events being held? </h1>
+  <h1> When are the events being held? </h1> <h2>Bubble size represents number of events held on that day.  Event counts included.</h2>
   ${bubbles}
 
 </div>
