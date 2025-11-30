@@ -40,5 +40,10 @@ This is made in Observable framework. For instructions on how to run that on you
 
 ONce you get the required data (this includes a csv for transactions as well as an Event_Purchaser csv) save the files to your local machine under in the [data folder](METLN/src/data)- this is located in the src file in the framework. 
 
+If the data is where it should be you can run the following command in your terminal to launch the interactivable framework
+
+```
+make Launch 
+```
 
 Then what? make sure theyre named what we named them and/or is there a way to not hardcode this? 
