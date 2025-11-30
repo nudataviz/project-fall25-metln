@@ -3,7 +3,7 @@ title: All Event Overview
 ---
 # Who & When: Demographics For All Events
 
-<!-- Charts below use data from all events to report on demographic information and time of purchase. -->
+Charts below use data from all events to report on demographic information and time of purchase.
 ```js
 //need to download npm i gender-detection-from-name
 ```
