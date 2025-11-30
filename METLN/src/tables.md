@@ -41,7 +41,7 @@ const formatDay = d3.timeFormat("%A");
 ```js
 // NPM library for detecting gender from a name
 // Requires installation via npm or other manager
-import { getGender } from "gender-detection-from-name";
+import { getGender } from "npm:gender-detection-from-name";
 const gender_guesser = getGender;
 ```
 

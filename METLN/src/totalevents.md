@@ -26,7 +26,7 @@ const formatDay = d3.timeFormat("%A");
 
 
 ```js
-import { getGender } from "gender-detection-from-name";
+import { getGender } from "npm:gender-detection-from-name";
 const gender_guesser = getGender;
 ```
 ```js
