@@ -1,7 +1,8 @@
 ---
-title: Tentative Dashboard
+title: Individual Event Dashboard
 ---
 
+# What, Who, & When: Ticket Data by Individual Event
 ```js
 /* Summary of variables
 transactionArray - basic transformation of data, 1 row per transaction with types converted and additional columns added
@@ -11,6 +12,8 @@ genderCounts - map of gender for all selected events
 pie_array - array for usage in gender pie chart
 iterable_array - interim array, contains a slice of the singleEventTable reactively based table selection
 specificTransacts - filtered version of transactionArray that reactively updates based on table selection, 1 row per transaction with all same fields
+
+IMPORTANT will need to install d3 to run some of these functions
 */
 ```
 
@@ -26,6 +29,9 @@ let transactions = await FileAttachment("/data/cleaned_transaction.csv").csv({ty
 const formatDay = d3.timeFormat("%A");
 
 ```
+```js
+//import { utcSunday, utcDay, utcWeek, utcMonth } from "d3-time@";
+```
 
 ```js
 // NPM library for detecting gender from a name
@@ -33,9 +39,6 @@ import { getGender } from "gender-detection-from-name";
 const gender_guesser = getGender;
 ```
 
-```js
-
-```
 ```js
 //Function for identifying time of day for transaction
 function getTimeofDay(dateVal){
@@ -78,7 +81,7 @@ function getSeason(dateVal){
 const aggregated = Array.from(
   d3.rollup(
     specificTransacts,
-    v => v.length,               // or sum a quantity field if you have one
+    v => v.length,              
     d => d.Season,
     d => d["Item Name"]
   ),
@@ -265,57 +268,77 @@ Plot.plot({
 ```
 
 ```js
-// data_filter will be the object containing individual transactions
-/*Plot.plot({
-  padding: 0,
-  x: {axis: null},
-  y: {tickFormat: Plot.formatMonth("en", "narrow"), tickSize: 0},
-  fy: {tickFormat: ""},
-  color: {scheme: "PiYG"},
-  marks: [
-    Plot.cell(chosenEvents[selection["Name"]], {
-      x: (d) => d3.utcWeek.count(d3.utcYear(d.Date), d.Date),
-      y: (d) => d.Date.getUTCDay(),
-      fy: (d) => d.Date.getUTCFullYear(),
-      fill: (d, i) => i > 0 ? (d.Close - dji[i - 1].Close) / dji[i - 1].Close : NaN,
-      title: (d, i) => i > 0 ? ((d.Close - dji[i - 1].Close) / dji[i - 1].Close * 100).toFixed(1) : NaN,
-      inset: 0.5
-    })
-  ]
-})
+// Used for heatmap
+const purchaseDates = d3.rollup(
+  specificTransacts,
+  v => v.length,
+  d => d3.utcDay.floor(d.Date)
+)
 
-display(transactionArray.filter(d => d["Item Name"] == "Maine Voices Live with Dr. Nirav Shah"))
-//const eventData = (chosenEvents[selection["Name"]])
-const eventData = transactionArray.filter(d => d["Item Name"] == "Maine Voices Live with James Beard Award winners Atsuko Fujimoto and Barak Olins")
-Plot.plot({
-  width: width,
-  x: {
-    axis: null
-  },
-  y: {
-    tickFormat: i => "SMTWTFS"[i],
-    tickSize: 0
-  },
-  color: {
-    scheme: "blues",
-    // type: "sqrt"
-  },
-  facet: {
-    data: eventData,
-    y: d => d["Date"].getUTCMonth(),
-  },
+```
+```js
+const dailyCounts = Array.from(
+  purchaseDates,
+  ([Date, count]) => ({ Date, count })
+);
+
+```
+
+
+```js
+
+// Formatter for dates
+const format = d3.timeFormat("%b %d"); // e.g., "Jul 14"
+
+// Compute week start for each data point
+const weeklyCounts = dailyCounts.map(d => {
+  const date = new Date(d.Date);
+  const weekStart = d3.utcWeek.floor(date);         // Sunday of the week
+  const weekEnd = new Date(weekStart.getTime() + 6*24*60*60*1000); // Saturday
+  const weekLabel = `${format(weekStart)}–${format(weekEnd)}`;
+  return {
+    ...d,
+    weekStart,
+    weekLabel,
+    dayOfWeek: date.getUTCDay()
+  };
+});
+
+// Get a sorted list of week labels for axis placement
+const weekLabels = Array.from(new Set(weeklyCounts.map(d => d.weekLabel))).sort(
+  (a,b) => d3.ascending(
+    weeklyCounts.find(d => d.weekLabel === a).weekStart,
+    weeklyCounts.find(d => d.weekLabel === b).weekStart
+  )
+);
+
+// Plot
+
+```
+
+```js
+
+const cellHeatmap = Plot.plot({
+  marginLeft: 80,
+  y: {tickFormat: Plot.formatWeekday("en", "narrow"), tickSize: 0},
   marks: [
-    Plot.frame({stroke: "#ccc"}),
-    Plot.cell(eventData, {
-      x: d => d3.utcDay.count(d3.utcYear(d["Date"]), d["Date"]),
-      y: d => d["Date"].getUTCDay(), 
+    Plot.cell(weeklyCounts, {
+      x: d => d.dayOfWeek,
+      y: d => d.weekLabel,
       fill: "count",
-      title: "Calendar",
-      inset: 0.5,
-    })
-  ]
-})
-*/
+      tip: true,
+      stroke: "black"
+    }),
+    Plot.axisX({ tickFormat: i => ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][i] }),
+    Plot.axisY({ label: "" })
+  ],
+  color: {type: "linear",
+    domain: [0, d3.max(weeklyCounts, d => d.count)],
+    range: ["#ffffff", "#b30000"],
+    legend: true
+  }}
+)
+
 ```
 
 
@@ -461,26 +484,6 @@ const tod_pie_ordered = [
 ].filter(d => d !== undefined);
 ```
 
-```js
-/* Commenting out pie chart directlt on the page.  Pie chart is added later to the dashboard
-PieChart(tod_pie_ordered, {
-  name: d => d.name,
-  value: d => d.value,
-  width: 500,
-  height: 400,
-  colors: ["#ffd725ff", "#e78a19ff", "#5955d3ff"],  
-  labelRadius: 90,
-  startAngle: -Math.PI / 2,  
-  endAngle: Math.PI / 2,
-  innerRadius: 0,
-  title: (d) => {
-    const total = d3.sum(tod_pie, p => p.value);
-    const percentage = ((d.value / total) * 100).toFixed(1);
-    return `${d.name}\n${percentage}%\n${d.value}`;
-  }
-})
-*/
-```
 
 
 ```js
@@ -648,6 +651,29 @@ const pie_dow = d3.pie()
 
 ```
 
+```js
+const cumulativeTicketsSold = Plot.plot({
+    height: 400,
+    marks: [
+      Plot.lineY(reactiveSales, {
+        x: "weeksUntil",
+        y: "cumulativeTickets",
+        stroke: "steelblue",
+        strokeWidth: 2,
+        tip: true
+      }),
+      Plot.dot(reactiveSales, {
+        x: "weeksUntil",
+        y: "cumulativeTickets",
+        fill: "steelblue"
+      })
+    ],
+    y: {label: "Tickets Sold"},
+    x: {label: "Weeks Before Event", reverse: true}
+    })
+    
+```
+
 <div class="grid grid-cols-3" style="grid-auto-rows: auto;">
   <div class="card grid-colspan-3"><h1>Events</h1>
     ${userInput}
@@ -714,41 +740,14 @@ Some error expected.</h2>
   <div class="card grid-rowspan-2 grid-colspan-3"><h1>How far in advance?</h1>
     <h2>Number of tickets sold by how many weeks ahead of the respective event</h2>
     ${salesDataInput}
-    ${Plot.plot({
-    height: 400,
-    marks: [
-      Plot.lineY(reactiveSales, {
-        x: "weeksUntil",
-        y: "cumulativeTickets",
-        stroke: "steelblue",
-        strokeWidth: 2,
-        tip: true
-      }),
-      Plot.dot(reactiveSales, {
-        x: "weeksUntil",
-        y: "cumulativeTickets",
-        fill: "steelblue"
-      })
-    ],
-    y: {label: "Tickets Sold"},
-    x: {label: "Weeks Before Event", reverse: true}
-    })
-    }
+    ${cumulativeTicketsSold}
   </div>
-  <div class ="card grid-rowspan-2 grid-colspan-3"><h1></h1>
-  ${Plot.plot({
-    title: "Time of Purchase",
-    y: {label: "Hour"},
-    x: {label: "Day"},
-    marks: [
-        Plot.dot(specificTransacts, {
-        x: d => new Date(d.Date),
-        y: d => new Date(d.Date).getHours(),
-        stroke: "Item Name",
-        tip: true}),
-        Plot.ruleX(weekStart, {stroke: "gray", strokeWidth: 1, strokeDasharray: "4 2"})
-    ]
-    })}
+  <div class ="card grid-rowspan-2 grid-colspan-3"><h1>How far in advance and what day?</h1>
+  <h2>Highlights trends on certain days across a series of time.
+  Columns correspond to days of week and rows are each an individual week.
+  Color of cell illustrates number of tickets purchased on that date.
+  </h2>
+  ${cellHeatmap}
     </div>
   
 </div>
