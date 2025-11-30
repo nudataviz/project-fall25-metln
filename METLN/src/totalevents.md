@@ -585,7 +585,22 @@ const seasonBar = Plot.plot({
 display(seasonBar)
 ```
 
+<style>
+@media print {
+  .grid {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
 
+  .card {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    -webkit-column-break-inside: avoid !important;
+    box-decoration-break: clone;
+    margin-bottom: 12px;
+  }
+}
+</style>
 
 <div class="grid grid-cols-2" style="grid-auto-rows: auto;">
   <div class="card">
