@@ -24,6 +24,7 @@ IMPORTANT will need to install d3 to run some of these functions
 ```
 
 ```js
+// Data ingestion
 let customers = await FileAttachment("/data/customer_summary_clean.csv").csv({typed: true})
 ```
 
@@ -82,6 +83,7 @@ function getSeason(dateVal){
 ```js
 
 // Aggregates data for seasonal analysis
+// Creates ticket counts by season and event
 const aggregated = Array.from(
   d3.rollup(
     specificTransacts,
@@ -141,7 +143,7 @@ for (let i = 0; i < transactionArray.length; i++){
 
 
 ```js
-//Below code creates an object with key : val pairs where each key is an event name, val = an array with each transaction for that event
+//Creates an object with key : val pairs where each key is an event name, val = an array with each transaction for that event
 
 const chosenEvents = {}
 for (const row of transactionArray) {
@@ -153,18 +155,11 @@ for (const row of transactionArray) {
 
   chosenEvents[singleEvent].push(row)
 }
-
 ```
 
 
-
 ```js
-// Code creates array of objects to use in interactive table
-/* A couple important choices
-1. Total tickets calculated by a count of rows where the net rev of the transaction was greater than 0
-2. Not really sure why the male and female counts are behaving weirdly, the currnet code appears to work, but the code I think should work
-e.g. d3.count(val, d => d["Gender"] == "M") does not work
-*/
+// Creates array for use in the interactive table
 const singleEventTable = []
 for (const [key, val] of Object.entries(chosenEvents)){
   singleEventTable.push({"Name" : key,
@@ -202,8 +197,26 @@ const pie_array = Array.from(genderCounts, ([gender, count]) => ({
   name: gender,
   value: count
 }));
-```
 
+// sorts data so colors dont flip in pie chart
+const genderOrder = ["male", "female"];
+pie_array.sort((a, b) => genderOrder.indexOf(a.name) - genderOrder.indexOf(b.name));
+```
+```js
+
+const genderPie = PieChart(pie_array, {
+    name: d => d.name,
+    value: d => d.value,
+    width: 500,
+    height: 400,
+    colors: ["#89CFF0", "#FFB7CE"],
+    labelRadius: 90,
+    title: (d) => {
+      const total = d3.sum(pie_array, p => p.value);
+      const percentage = ((d.value / total) * 100).toFixed(1);
+      return `${d.name}\n${percentage}%\n${d.value}`;
+    }})
+```
 
 ```js
 // Removing final object from array
@@ -211,52 +224,6 @@ const pie_array = Array.from(genderCounts, ([gender, count]) => ({
 const iterableArray = selection.slice(0, selection.length)
 ```
 
-```js
-/* Code creates an array for bar graph
-Believe not necessary because we are opting for pie chart
-const genderArray = [{Gender: "Male", Count: d3.sum(iterableArray, d => d["Male Count"])},
-                     {Gender: "Female", Count: d3.sum(iterableArray, d => d["Female Count"])}]
-                     */
-```
-
-```js
-/* Commenting out bar chart, can revisit if we want it or remove before submitting to METLN
-Plot.plot({
-  title: 'Gender Breakdown',
-  marginLeft:150,
-  color: {
-    range: ["pink", "blue"]},
-  marks: [
-    Plot.barY(genderArray, {
-              x: "Gender",
-              y: "Count",
-              fill: "Gender"
-    })
-  ]
-
-})
-*/
-```
-
-
-```js
-/* Commenting out scatterplot in body of md, can likely remove
-// Weird indexing but you can see below how to get to specific event times
-// Chosen events is an object, selection["Name"] is an array of transactions all corresponding to one event
-Plot.plot({
-    title: "Time of Purchase",
-    y: {label: "Hour"},
-    x: {label: "Day"},
-    marks: [
-        Plot.dot(specificTransacts, {
-        x: d => new Date(d.Date),
-        y: d => new Date(d.Date).getHours(),
-        stroke: "Item Name",
-        tip: true}),
-    ]
-})
-*/
-```
 
 ```js
 // Used for heatmap
@@ -268,6 +235,7 @@ const purchaseDates = d3.rollup(
 
 ```
 ```js
+// Also for heatmap
 const dailyCounts = Array.from(
   purchaseDates,
   ([Date, count]) => ({ Date, count })
@@ -278,16 +246,15 @@ const dailyCounts = Array.from(
 
 ```js
 
-// Formatter for dates
-const format = d3.timeFormat("%b %d"); // e.g., "Jul 14"
+// Formats dates
+const format = d3.timeFormat("%b %d");
 
-// Compute week start for each data point
 const weeklyCounts = dailyCounts.map(d => {
-  const date = new Date(d.Date);
-  const weekStart = d3.utcWeek.floor(date);         // Sunday of the week
-  const weekEnd = new Date(weekStart.getTime() + 6*24*60*60*1000); // Saturday
-  const weekLabel = `${format(weekStart)}–${format(weekEnd)}`;
-  return {
+  const date = new Date(d.Date); //convert input string to date object
+  const weekStart = d3.utcWeek.floor(date); // finds week start for the given value
+  const weekEnd = new Date(weekStart.getTime() + 6*24*60*60*1000); // finds week end for given value
+  const weekLabel = `${format(weekStart)}–${format(weekEnd)}`; //Creates label for week
+  return { //appends these values to the original
     ...d,
     weekStart,
     weekLabel,
@@ -303,12 +270,12 @@ const weekLabels = Array.from(new Set(weeklyCounts.map(d => d.weekLabel))).sort(
   )
 );
 
-// Plot
-
 ```
 
 ```js
-
+// Calendar heatmap 
+// Used a lot of sources https://observablehq.com/@observablehq/plot-simplified-calendar
+// https://observablehq.com/d/19a3553a052966b0
 const cellHeatmap = Plot.plot({
   marginLeft: 80,
   y: {tickFormat: Plot.formatWeekday("en", "narrow"), tickSize: 0},
@@ -329,11 +296,7 @@ const cellHeatmap = Plot.plot({
     legend: true
   }}
 )
-
 ```
-
-
-
 
 ```js
 // Function for creating a pie chart
@@ -520,6 +483,32 @@ const userWeeks = Generators.input(salesDataInput)
 ```
 
 ```js
+// Uses above inputs
+const cumulativeTicketsSold = Plot.plot({
+    height: 400,
+    marks: [
+      Plot.lineY(reactiveSales, {
+        x: "weeksUntil",
+        y: "cumulativeTickets",
+        stroke: "steelblue",
+        strokeWidth: 2,
+        tip: true
+      }),
+      Plot.dot(reactiveSales, {
+        x: "weeksUntil",
+        y: "cumulativeTickets",
+        fill: "steelblue"
+      }),
+      Plot.gridX({strokeDasharray: "5,3"}),
+      Plot.gridY({strokeDasharray: "5,3"})
+    ],
+    y: {label: "Tickets Sold"},
+    x: {label: "Weeks Before Event", reverse: true}
+    })
+    
+```
+
+```js
 // Attempting to create async inputs for formatting in css
 const userInput = Inputs.search(singleEventTable, {placeholder: "Search events"})
 const search = Generators.input(userInput)
@@ -529,17 +518,7 @@ const eventInput = Inputs.table(search, {sort: "Tickets", reverse: true, layout:
 const selection = Generators.input(eventInput);
 ```
 
-```js
-// Code for reactive title of all graphs
-let allChosenEvents = "Event Summary for "
 
-for (let i = 0; i < selectedNames.length; i++){
-  allChosenEvents += selectedNames[0]
-  
-}
-
-
-```
 
 ```js
 const total = d3.sum(tod_pie, p => p.value)
@@ -571,9 +550,10 @@ const transaction_array_dow = Array.from(
 const data_dow = transaction_array_dow
 ```
 ```js
+// Also used for half pie chart
 function chart_dow() {
   const height = Math.min(width, 550);
-  const radius = Math.min(width, height) / 2;
+  const radius = Math.min(width, height * 1.2) / 2;
 
   const arc = d3.arc()
       .innerRadius(radius * 0.67)
@@ -588,7 +568,7 @@ function chart_dow() {
 
   const svg = d3.create("svg")
       .attr("width", width)
-      .attr("height", height)
+      .attr("height", height / 1.5)
       .attr("viewBox", [-width / 2, -height / 2, width, height / 2])
       .attr("style", "max-width: 100%; height: auto;");
 
@@ -642,30 +622,7 @@ const pie_dow = d3.pie()
 
 ```
 
-```js
-const cumulativeTicketsSold = Plot.plot({
-    height: 400,
-    marks: [
-      Plot.lineY(reactiveSales, {
-        x: "weeksUntil",
-        y: "cumulativeTickets",
-        stroke: "steelblue",
-        strokeWidth: 2,
-        tip: true
-      }),
-      Plot.dot(reactiveSales, {
-        x: "weeksUntil",
-        y: "cumulativeTickets",
-        fill: "steelblue"
-      }),
-      Plot.gridX({strokeDasharray: "5,3"}),
-      Plot.gridY({strokeDasharray: "5,3"})
-    ],
-    y: {label: "Tickets Sold"},
-    x: {label: "Weeks Before Event", reverse: true}
-    })
-    
-```
+
 
 <div class="grid grid-cols-3" style="grid-auto-rows: auto;">
   <div class="card grid-colspan-3"><h1>Events</h1>
@@ -674,19 +631,8 @@ const cumulativeTicketsSold = Plot.plot({
   </div>
   <div class="card grid-colspan-3 grid-rowspan-1"><h1>Event(s) Summary<h1> </div>
   <div class="card grid-colspan-2 grid-rowspan-2"><h1>Who is buying?</h1><h2>Gender distribution based on customer name.
-Some error expected.</h2>
-    ${PieChart(pie_array, {
-    name: d => d.name,
-    value: d => d.value,
-    width: 500,
-    height: 400,
-    colors: ["#89CFF0", "#FFB7CE"],
-    labelRadius: 90,
-    title: (d) => {
-      const total = d3.sum(pie_array, p => p.value);
-      const percentage = ((d.value / total) * 100).toFixed(1);
-      return `${d.name}\n${percentage}%\n${d.value}`;
-    }})}
+  Some error expected.</h2>
+    ${genderPie}
   </div>
   <div class="card grid-colspan-1 grid-rowspan-1" style="background-color:#89CFF0"><h1>Male</h1>
     Proof of concept
