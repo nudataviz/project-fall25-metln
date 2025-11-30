@@ -1,8 +1,12 @@
 ---
 title: Total Event Overview
 ---
-# Who & When: Demographics For All Events
+# Who & When
+## Overview Across All Events
 
+Visualizations on this page draw from transaction data to highlight purchase dates, times, and client demographics.
+
+These charts are intended to provide a high-level overview, helping you quickly identify broad patterns and emerging trends across all events.
 
 ```js
 //need to download npm i gender-detection-from-name
@@ -565,8 +569,23 @@ const cumulativeTicketsSold = Plot.plot({
     })
     
 ```
+```js
+const seasonBar = Plot.plot({
+    height: 500,
+    style: {fontSize: "20px"},
+  x: {label: "", style: {size: 20}},
+  marks: [
+  Plot.barY(aggregated, {x: "Season", y:"Tickets", fill: "Event", tip: true}),
+  Plot.axisY({interval: 40})
+  ]
+  })
+```
 
-```html
+```js
+display(seasonBar)
+```
+
+
 
 <div class="grid grid-cols-2" style="grid-auto-rows: auto;">
   <div class="card">
@@ -620,28 +639,19 @@ const cumulativeTicketsSold = Plot.plot({
 
 </div>
 <div class="card"><h1>What season?</h1>
-<h2>${aggregated.filter(d => d["Season"] == "Winter").length} events in the Winter <br>
-    ${aggregated.filter(d => d["Season"] == "Spring").length} events in the Spring<br>
-    ${aggregated.filter(d => d["Season"] == "Summer").length} events in the Summer <br>
-    ${aggregated.filter(d => d["Season"] == "Autumn").length} events in the Autumn<br>
+<h2>Total number of events for each season.  Stacked bar further shows number of tickets per event.<br><br>
+  <b>Winter: ${aggregated.filter(d => d["Season"] == "Winter").length} events.</b><br>
+    <b>Spring: ${aggregated.filter(d => d["Season"] == "Spring").length} events.</b><br>
+    <b>Summer: ${aggregated.filter(d => d["Season"] == "Summer").length} events.<br>
+    Autumn: ${aggregated.filter(d => d["Season"] == "Autumn").length} events.</b><br>
     <br>
-  ${Plot.plot({
-    height: 500,
-  x:{label: ""},
-  marks: [
-  Plot.barY(aggregated, {x: "Season", y:"Tickets", fill: "Event", tip: true})]
-  })
-    }
+  ${seasonBar}
 </div>
 <div class="card grid-rowspan-2 grid-colspan-3"" style="grid-column: span 2">
   <h1>How far in advance?</h1>
   ${salesDataInput}
   ${cumulativeTicketsSold}
 </div>
-<div class="card"><h1>Testing</h1>
-</div>
-
-```
 
 ```js
 
