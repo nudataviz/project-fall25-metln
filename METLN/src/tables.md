@@ -2,7 +2,8 @@
 title: Individual Event Dashboard
 ---
 
-# What, Who, & When: Ticket Data by Individual Event
+# What, Who, & When
+## Ticket Data by Individual Event
 
 
 Visualizations on this page use transaction data to report on individual or grouped events.
@@ -417,6 +418,11 @@ const eveningRev = d3.sum(specificTransacts.filter(d => d.timeOfDay == "Evening"
 ```
 
 ```js
+const maleRev = d3.sum(specificTransacts.filter(d => d.Gender == "male"), rev => rev["Gross Revenue"])
+const femaleRev = d3.sum(specificTransacts.filter(d => d.Gender == "female"), rev => rev["Gross Revenue"])
+```
+
+```js
 //THE NEXT 3 BLOCKS ARE THE TOD PIE CHART 
 const tod_pie = Array.from(
   d3.rollup(
@@ -622,25 +628,48 @@ const pie_dow = d3.pie()
 
 ```
 
+```js
+const uniqueItemNames = Array.from(
+  d3.group(specificTransacts, d => d["Item Name"]).keys()
+);
+```
 
+<style>
+@media print {
+  .grid {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .card {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    -webkit-column-break-inside: avoid !important;
+    box-decoration-break: clone;
+    margin-bottom: 12px;
+  }
+}
+</style>
 
 <div class="grid grid-cols-3" style="grid-auto-rows: auto;">
-  <div class="card grid-colspan-3"><h1>Events</h1>
+  <div class="card grid-colspan-3"><h1>Event Selection</h1>
+    <h2>Pick the events you’re interested in using this table. The graphs will refresh to show only those events. If nothing is selected, they’ll show all events by default.</h2>
     ${userInput}
     ${eventInput} 
   </div>
-  <div class="card grid-colspan-3 grid-rowspan-1"><h1>Event(s) Summary<h1> </div>
+  <div class="card grid-colspan-3 grid-rowspan-1"><h1>Event(s) Summary<h1> <h2>Events Selected: ${uniqueItemNames.length}<br>
+  Total Number of Tickets Sold: ${specificTransacts.length}<br>
+  Net Revenue: ${d3.sum(specificTransacts, d => d["Net Revenue"]).toLocaleString('en-US', { style: 'currency', currency: 'USD',minimumFractionDigits: 0 })}</h2></div>
+  
   <div class="card grid-colspan-2 grid-rowspan-2"><h1>Who is buying?</h1><h2>Gender distribution based on customer name.
   Some error expected.</h2>
     ${genderPie}
   </div>
-  <div class="card grid-colspan-1 grid-rowspan-1" style="background-color:#89CFF0"><h1>Male</h1>
-    Proof of concept
-    Can place total revenue for gender here but this leaves a lot of white space<br>
-    Still brainstorming other options
+  <div class="card grid-colspan-1 grid-rowspan-1" style="background-color:#89CFF0; font-size: 20px; line-height: 1.4"><h1>Male</h1>
+    ${maleRev.toLocaleString('en-US', { style: 'currency', currency: 'USD',minimumFractionDigits: 0 })} in net sales
   </div>
-  <div class="card grid-colspan-1" style="background-color:#FFB7CE"><h1>Female</h1>
-    Same as for male
+  <div class="card grid-colspan-1" style="background-color:#FFB7CE; font-size: 20px; line-height: 1.4"><h1>Female</h1>
+    ${femaleRev.toLocaleString('en-US', { style: 'currency', currency: 'USD',minimumFractionDigits: 0 })} in net sales
   </div>
   <div class="card grid-colspan-2 grid-rowspan-3"><h1>What time?</h1>
   <h2>Percentage of tickets sold and total number per time of day. </h2>
@@ -662,21 +691,22 @@ const pie_dow = d3.pie()
   </div>
   <div class="card grid-rowspan-1" style="background-color: #FFE86A; font-size: 20px; line-height: 1.4;"><h1>Morning</h1>
     5 am - 12 pm<br>
-    $${morningRev} in net sales
+    ${morningRev.toLocaleString('en-US', { style: 'currency', currency: 'USD',minimumFractionDigits: 0 })} in net sales
   </div>
   <div class="card grid-rowspan-1" style="background-color: #E9A33A; font-size: 20px; line-height: 1.4"><h1>Afternoon</h1>
     12:01 pm - 5:59 pm<br>
-    $${afternoonRev} in net sales
+    ${afternoonRev.toLocaleString('en-US', { style: 'currency', currency: 'USD',minimumFractionDigits: 0 })} in net sales
   </div>
   <div class="card grid-rowspan-1" style="background-color: #9895C9 ;font-size: 20px; line-height: 1.4"><h1>Evening</h1>
     6:00 pm - 4:59 am<br>
-    $${eveningRev} in net sales
+    ${eveningRev.toLocaleString('en-US', { style: 'currency', currency: 'USD',minimumFractionDigits: 0 })} in net sales
   </div>
   <div class="card grid-rowspan-2 grid-colspan-3"><h1>What days?</h1>
   <h2>Total ticket sales by day of week. </h2>
   ${chart_dow()}
   </div>
   <div class="card grid-rowspan-2 grid-colspan-3"><h1>How early?</h1>
+  <h2>Examines the cumulative number of tickets based on number of weeks before event date.  Slider will update graph based on how maximum number of weeks away.</h2>
     ${salesDataInput}
     ${cumulativeTicketsSold}
   </div>
