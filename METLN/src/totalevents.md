@@ -1,11 +1,9 @@
 ---
-title: All Event Overview
+title: Total Event Overview
 ---
 # Who & When: Demographics For All Events
 
-Visualizations on this page use transaction data to report on individual or grouped events.
 
-All graphs are reactive to the events selected from the table.
 ```js
 //need to download npm i gender-detection-from-name
 ```
@@ -501,15 +499,79 @@ const aggregated = Array.from(
 ```
 
 ```js
+// Cumulative graph for the weeks leading up to an event for all selected events
+// Does not use dates but instead uses a measure of how far out from the event the ticket purchase is
+const salesByWeek = d3.rollup(
+  transactionArray,
+  v => v.length, // count tickets
+  d => {
+    const eventDate = new Date(d["Event Date"]);
+    const purchaseDate = new Date(d.Date);
+    const daysUntil = Math.floor((eventDate - purchaseDate) / (1000 * 60 * 60 * 24));
+    const weeksUntil = Math.floor(daysUntil / 7);
+    return weeksUntil;
+  }
+);
+```
 
+```js
+// Array with weeks until event date, tickets sold that week, and total tickets sold
+const salesData = Array.from(salesByWeek, ([week, count]) => ({
+  weeksUntil: week,
+  ticketsSold: count
+})).sort((a, b) => b.weeksUntil - a.weeksUntil);
+```
+
+```js
+// Updates salesData cumulative values to be cumululative
+let cumulative = 0;
+salesData.forEach(d => {
+  cumulative += d.ticketsSold;
+  d.cumulativeTickets = cumulative;
+});
+```
+
+```js
+const reactiveSales = salesData.filter(d => d["weeksUntil"] <= userWeeks)
+```
+
+```js
+const salesDataInput = Inputs.range([1, d3.max(salesData, d => d.weeksUntil)], {step: 1, label: "Weeks Until Event", placeholder: 30})
+const userWeeks = Generators.input(salesDataInput)
+```
+
+```js
+// Uses above inputs
+const cumulativeTicketsSold = Plot.plot({
+    height: 400,
+    marks: [
+      Plot.lineY(reactiveSales, {
+        x: "weeksUntil",
+        y: "cumulativeTickets",
+        stroke: "steelblue",
+        strokeWidth: 2,
+        tip: true
+      }),
+      Plot.dot(reactiveSales, {
+        x: "weeksUntil",
+        y: "cumulativeTickets",
+        fill: "steelblue"
+      }),
+      Plot.gridX({strokeDasharray: "5,3"}),
+      Plot.gridY({strokeDasharray: "5,3"})
+    ],
+    y: {label: "Tickets Sold"},
+    x: {label: "Weeks Before Event", reverse: true}
+    })
+    
 ```
 
 ```html
+
 <div class="grid grid-cols-2" style="grid-auto-rows: auto;">
   <div class="card">
     <h1>Who is Buying?</h1>
     <h2>Gender distribution based on customer name.<br>Some error expected.</h2>
-    <br>
     ${PieChart(pie_array, {
       name: d => d.name,
       value: d => d.value,
@@ -528,7 +590,7 @@ const aggregated = Array.from(
   <div class="card">
     <h1>What Time?</h1>
     <h2>Morning: Before 12:00 pm<br> Afternoon: 12:00 pm - 6:00 pm<br> Evening: After 6:00 pm<h2>
-    ${PieChart(tod_pie, {
+  ${PieChart(tod_pie, {
   name: d => d.name,
   value: d => d.value,
   width: 500,
@@ -571,10 +633,16 @@ const aggregated = Array.from(
   })
     }
 </div>
-
-
+<div class="card grid-rowspan-2 grid-colspan-3"" style="grid-column: span 2">
+  <h1>How far in advance?</h1>
+  ${salesDataInput}
+  ${cumulativeTicketsSold}
+</div>
+<div class="card"><h1>Testing</h1>
+</div>
 
 ```
+
 ```js
 
 htl.html`<button onclick="window.print()" style="padding: 10px 20px; background: #487eb7ff; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 20px 0;">
