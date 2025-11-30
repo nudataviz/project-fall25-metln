@@ -1,10 +1,11 @@
 ---
 title: Customer Overview
 ---
+
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.13.0/dist/maplibre-gl.css" />
+
 ```js
 import maplibregl from "npm:maplibre-gl";
-html`<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.13.0/dist/maplibre-gl.css" />`
-
 ```
 ```js
 let customers_full = await FileAttachment("/data/Event_Purchaser_2025-11-10T1531_CLEAN - Event_Purchaser_2025-11-10T1531.csv").csv({typed: true})
