@@ -3,7 +3,7 @@ title: All Event Overview
 ---
 # Who & When: Demographics For All Events
 
-Charts below use data from all events to report on demographic information and time of purchase.
+<!-- Charts below use data from all events to report on demographic information and time of purchase. -->
 ```js
 //need to download npm i gender-detection-from-name
 ```
@@ -415,8 +415,9 @@ function PieChart(data, {
 
 ```js
 function chart_dow() {
-  const height = Math.min(width, 550);
-  const radius = Math.min(width, height) / 2;
+  const chartHeight = 280; 
+  const chartWidth = Math.min(width, 700);
+  const radius = Math.min(chartWidth, chartHeight * 2) / 2;
 
   const arc = d3.arc()
       .innerRadius(radius * 0.67)
@@ -430,10 +431,10 @@ function chart_dow() {
       .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2"]);
 
   const svg = d3.create("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .attr("viewBox", [-width / 2, -height / 2, width, height / 2])
-      .attr("style", "max-width: 100%; height: auto;");
+      .attr("width", chartWidth)
+      .attr("height", chartHeight)
+      .attr("viewBox", [-chartWidth / 2, -radius, chartWidth, radius + 20]) //changed this to fit on a page
+      .attr("style", "max-width: 100%; height: auto; display: block;");
 
   svg.append("g")
     .selectAll()
@@ -456,12 +457,7 @@ function chart_dow() {
           .attr("y", "-0.4em")
           .attr("font-weight", "bold")
           .text(d => d.data.name))
-      
-      
       .call(text => text.append("tspan")
-
-      //.call(text => text.filter(d => (d.endAngle - d.startAngle) > 0.25)
-          //.append("tspan")
           .attr("x", 0)
           .attr("y", "0.7em")
           .attr("fill-opacity", 0.7)
@@ -548,7 +544,7 @@ const aggregated = Array.from(
 })}
   </div>
 
-<div class="card" style="grid-column: span 2; height: 300">
+<div class="card" style="grid-column: span 2">
     <h1>What Day?</h1>
     <h2>Distribution of ticket sales by the day of week they were purchased.</h2>
     ${chart_dow()}
