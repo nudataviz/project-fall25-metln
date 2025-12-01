@@ -2,6 +2,14 @@
 title: Customer Overview
 ---
 
+# What & Why
+## Supplemental Data
+
+Analyses on this page use a distinct dataset.
+
+This was a large set of data with a variety of dimensions.  Explanation of column names is included in graphs, but we don't have details on 
+data definitions.
+
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.13.0/dist/maplibre-gl.css" />
  
 ```js
@@ -42,6 +50,7 @@ const new_england = {
 ```
 
 ```js
+// Plot of lat/long and 
 const mapv1=Plot.plot({
   height:400,
   projection: {
@@ -70,13 +79,14 @@ const mapv1=Plot.plot({
 ```
 <div class="card">
 <h1>Regional Overview</h1>
-<h2>Hover to see Location and Events Purchased </h2>
+<h2>Hover to see Location and Events Purchased<br>Graph displays rows which had latitude and longitude points and places dots labeled with the corresponding event purchase.</h2>
   ${mapv1}
 </div>
 
-<div class="card">
+<div class="card"><h1>Regional Heatmap</h1><h2>Uses same data as above map.  Higher intensity color indicates more data present for that location.</h2>
 
   <div id="mapv2" style="height: 400px; width: 100%;"></div> 
+
 </div>
 
 ```js
@@ -262,7 +272,7 @@ return (svg.node());
 ```
 
 <div class="card" style="background-color: #e3f2fd;">
-<h1>Preferred Main Category</h1> 
+<h1>Preferred Main Category</h1><h2>Bubble size changes with count of preferred category.  Each customer can have multiple main categories and so can appear in multiple bubbles, thus the bubbles are not numbered.</h2>
  ${bubbleChart}
 </div>`
 
@@ -283,7 +293,6 @@ const gettingCurrent_cat = customer_data
 ```js
 // histogram
 const chart = Plot.plot({
-  title: "Hover over me to see the Current Category",
   y: {grid: true},
   x: {tickFormat: null},
   marks: [
@@ -295,7 +304,7 @@ const chart = Plot.plot({
 ```
 
 <div class="card">
-<h1>Current Category</h1>
+<h1>Current Category</h1><h2>Shows counts of each current category from the customer data.  Hover each bar to see the applicable category.</h2>
   ${chart}
 </div>
 
@@ -315,7 +324,6 @@ const RegistrationArray = Array.from(
 
 ```js
 const registration_bar = Plot.plot({
-  title:"Registration Status",
   marks: [
     Plot.barY(customers_full.filter(d => d.registration_status != null), 
       Plot.groupX(
@@ -331,7 +339,7 @@ const registration_bar = Plot.plot({
 })
 ```
 <div class="card">
-<h1>Registration Status</h1>
+<h1>Registration Status</h1><h2>Percentage and total number of customers at each registration status.</h2>
   ${registration_pie}
 </div>
 
@@ -368,7 +376,7 @@ const time_of_visit = Plot.plot({
 ```
 
 <div class="card">
-<h1>Time of Visit</h1>
+<h1>Visit time</h1></h2>Likely indicates a time the user visited the website.  Each bar shows total number of visits per time period.  Hover each bar with your mouse for more detail.</h2>
   ${time_of_visit}
 </div>
 
