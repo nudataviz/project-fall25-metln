@@ -273,23 +273,35 @@ const weekLabels = Array.from(new Set(weeklyCounts.map(d => d.weekLabel))).sort(
 
 ```
 
+```js echo
+display(weeklyCounts)
+```
+
 ```js
 // Calendar heatmap 
 // Used a lot of sources https://observablehq.com/@observablehq/plot-simplified-calendar
 // https://observablehq.com/d/19a3553a052966b0
+function formatTick(d) {
+  let end = new Date(d);
+  end.setDate(end.getDate() + 6);
+  const f = d3.timeFormat("%_d %b")
+  return f(d) + " - " + f(end);
+}
+
 const cellHeatmap = Plot.plot({
   marginLeft: 80,
-  y: {tickFormat: Plot.formatWeekday("en", "narrow"), tickSize: 0},
+//  y: {tickFormat: Plot.formatWeekday("en", "narrow"), tickSize: 0},
+//  y: {tickFormat: d => d.weekLabel},
   marks: [
     Plot.cell(weeklyCounts, {
       x: d => d.dayOfWeek,
-      y: d => d.weekLabel,
+      y: d => d.weekStart,
       fill: "count",
       tip: true,
       stroke: "black"
     }),
     Plot.axisX({ tickFormat: i => ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][i] }),
-    Plot.axisY({ label: "" })
+    Plot.axisY({ label: "", tickFormat: formatTick  })
   ],
   color: {type: "linear",
     domain: [0, d3.max(weeklyCounts, d => d.count)],
@@ -701,7 +713,6 @@ const uniqueItemNames = Array.from(
   </div>
   <div class="card grid-rowspan-2 grid-colspan-3"><h1>How early?</h1>
   <h2>Examines the cumulative number of tickets based on number of weeks before event date.  Slider will update graph based on how maximum number of weeks away.</h2>
-    ${salesDataInput}
     ${cumulativeTicketsSold}
   </div>
   <div class ="card grid-rowspan-2 grid-colspan-3"><h1>Day by Day</h1>
