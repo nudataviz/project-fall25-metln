@@ -95,8 +95,8 @@ const mapv2 = (() => {
   const map = new maplibregl.Map({
     container: 'mapv2',
     style: 'https://tiles.openfreemap.org/styles/bright',
-    center: [-70.2, 43.6], //portland
-    zoom: 6
+    center: [-96, 37], //center on US 
+    zoom: 3 //zoomed out 
   });
   
   map.addControl(new maplibregl.NavigationControl());
