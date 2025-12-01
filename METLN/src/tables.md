@@ -515,12 +515,7 @@ const cumulativeTicketsSold = Plot.plot({
 ```
 
 ```js
-// Attempting to create async inputs for formatting in css
-const userInput = Inputs.search(singleEventTable, {placeholder: "Search events"})
-const search = Generators.input(userInput)
-```
-```js
-const eventInput = Inputs.table(search, {sort: "Tickets", reverse: true, layout: "auto"})
+const eventInput = Inputs.table(singleEventTable, {sort: "Tickets", reverse: true, layout: "auto", rows:20})
 const selection = Generators.input(eventInput);
 ```
 
@@ -654,7 +649,6 @@ const uniqueItemNames = Array.from(
 <div class="grid grid-cols-3" style="grid-auto-rows: auto;">
   <div class="card grid-colspan-3"><h1>Event Selection</h1>
     <h2>Pick the events you’re interested in using this table. The graphs will refresh to show only those events. If nothing is selected, they’ll show all events by default.</h2>
-    ${userInput}
     ${eventInput} 
   </div>
   <div class="card grid-colspan-3 grid-rowspan-1"><h1>Event(s) Summary<h1> <h2>Events Selected: ${uniqueItemNames.length}<br>
