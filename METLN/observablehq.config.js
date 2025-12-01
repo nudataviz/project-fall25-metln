@@ -9,10 +9,11 @@ export default {
   // pages: [
   //   {
   //     name: "Examples",
-  //     pages: [
-  //       {name: "Dashboard", path: "/example-dashboard"},
-  //       {name: "Report", path: "/example-report"}
-  //     ]
+    pages: [
+         {name: "All  Events", path: "/totalevents"},
+         {name: "Selected Events", path: "/tables"},
+         {name: "Customer Database", path: "/customerOverview"},
+       ],
   //   }
   // ],
 
