@@ -520,7 +520,7 @@ const userInput = Inputs.search(singleEventTable, {placeholder: "Search events"}
 const search = Generators.input(userInput)
 ```
 ```js
-const eventInput = Inputs.table(search, {sort: "Tickets", reverse: true, layout: "auto"})
+const eventInput = Inputs.table(search, {sort: "Tickets", reverse: true, layout: "auto", rows:16})
 const selection = Generators.input(eventInput);
 ```
 
