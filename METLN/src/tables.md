@@ -501,16 +501,18 @@ const userWeeks = Generators.input(salesDataInput)
 // Uses above inputs
 const cumulativeTicketsSold = Plot.plot({
     height: 400,
-    
+    x: {label: "Weeks Before Event", 
+      reverse: true,
+      domain: salesData.slice(-10).map(d => d.weeksUntil)},
     marks: [
-      Plot.lineY(salesData, {
+      Plot.lineY(salesData.slice(-10), {
         x: "weeksUntil",
         y: "cumulativeTickets",
         stroke: "steelblue",
         strokeWidth: 2,
         tip: true
       }),
-      Plot.dot(salesData, {
+      Plot.dot(salesData.slice(-10), {
         x: "weeksUntil",
         y: "cumulativeTickets",
         fill: "steelblue"
