@@ -288,6 +288,7 @@ function formatTick(d) {
 const cellHeatmap = Plot.plot({
   marginLeft: 80,
   y: {type: "band"}, //this forces the error to go away thanks inspect! 
+  //y: {tickFormat: Plot.formatWeekday("en", "narrow"), tickSize: 0},
   marks: [
     Plot.rect(weeklyCounts, {
       x: d => d.dayOfWeek,
@@ -667,6 +668,7 @@ const uniqueItemNames = Array.from(
 <div class="grid grid-cols-3" style="grid-auto-rows: auto;">
   <div class="card grid-colspan-3"><h1>Event Selection</h1>
     <h2>Pick the events you’re interested in using this table. The graphs will refresh to show only those events. If nothing is selected, they’ll show all events by default.</h2>
+    ${userInput}
     ${eventInput} 
   </div>
   <div class="card grid-colspan-3 grid-rowspan-1"><h1>Event(s) Summary<h1> <h2>Events Selected: ${uniqueItemNames.length}<br>
