@@ -111,7 +111,7 @@ for (let i = 0; i < customerArray.length; i++){
     for (var property in customerArray[i]){
         let value = customerArray[i][property]
         if (typeof value === 'string' && value.includes("$")){
-            //Used Chat GPT, W3 schools, MDN docs to get regEx help and troubleshoot
+            //Regex formats dates properly
             customerArray[i][property] = parseFloat(value.replace(/[^0-9.-]+/g, '')) 
         }
     }
@@ -124,7 +124,7 @@ for (let i = 0; i < transactionArray.length; i++){
     for (var property in transactionArray[i]){
         let value = transactionArray[i][property]
         if (typeof value === 'string' && value.includes("$")){
-            //Used Chat GPT, W3 schools, MDN docs to get regEx help and troubleshoot
+            //Regex formats dates properly
             transactionArray[i][property] = parseFloat(value.replace(/[^0-9.-]+/g, '')) 
         }
     }
@@ -183,8 +183,9 @@ let data=specificTransacts
 
 ```js
 //Excludes unknown gender from selection
-const data_filter=data.filter(d => d.Gender === "male" || d.Gender === "female")
+const data_filter=data.filter(d => d.Gender === "male" || d.Gender === "female" && d["Net Revenue"] > 0)
 ```
+
 
 ```js
 //Calculates count of each gender
@@ -426,8 +427,8 @@ const eveningRev = d3.sum(specificTransacts.filter(d => d.timeOfDay == "Evening"
 ```
 
 ```js
-const maleRev = d3.sum(specificTransacts.filter(d => d.Gender == "male"), rev => rev["Gross Revenue"])
-const femaleRev = d3.sum(specificTransacts.filter(d => d.Gender == "female"), rev => rev["Gross Revenue"])
+const maleRev = d3.sum(data_filter.filter(d => d.Gender == "male"), rev => rev["Net Revenue"])
+const femaleRev = d3.sum(data_filter.filter(d => d.Gender == "female"), rev => rev["Net Revenue"])
 ```
 
 ```js
@@ -500,9 +501,7 @@ const userWeeks = Generators.input(salesDataInput)
 ```js
 // Uses above inputs
 const cumulativeTicketsSold = Plot.plot({
-    height: 400,
     width: 860,
-    
     x: {label: "Weeks Before Event", 
       reverse: true,
       domain: salesData.slice(-10).map(d => d.weeksUntil)},
@@ -529,7 +528,7 @@ const cumulativeTicketsSold = Plot.plot({
 ```
 
 ```js
-// Attempting to create async inputs for formatting in css
+// Async generators necessary for html formatting
 const userInput = Inputs.search(singleEventTable, {placeholder: "Search events"})
 const search = Generators.input(userInput)
 ```
