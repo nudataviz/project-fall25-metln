@@ -500,6 +500,7 @@ const userWeeks = Generators.input(salesDataInput)
 // Uses above inputs
 const cumulativeTicketsSold = Plot.plot({
     height: 400,
+    width: 860,
     
     marks: [
       Plot.lineY(salesData, {
@@ -579,7 +580,8 @@ function chart_dow() {
 
   const color = d3.scaleOrdinal()
       .domain(order)
-      .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2"]);
+      .range(["#4CBF70", "#FF6F61", "#7FCECC", "#C985FF", "#B4D96A", "#FF9F4A", "#6E89FF"]
+);
 
   const svg = d3.create("svg")
       .attr("width", width)
