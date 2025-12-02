@@ -264,7 +264,7 @@ const weeklyCounts = dailyCounts.map(d => {
 });
 
 // Get a sorted list of week labels for axis placement
-const weekLabels = Array.from(new Set(weeklyCounts.map(d => d.weekLabel))).sort(
+const _weekLabels = Array.from(new Set(weeklyCounts.map(d => d.weekLabel))).sort(
   (a,b) => d3.ascending(
     weeklyCounts.find(d => d.weekLabel === a).weekStart,
     weeklyCounts.find(d => d.weekLabel === b).weekStart
@@ -286,9 +286,10 @@ function formatTick(d) {
 
 const cellHeatmap = Plot.plot({
   marginLeft: 80,
+  y: {type: "band"}, //this forces the error to go away thanks inspect! 
   //y: {tickFormat: Plot.formatWeekday("en", "narrow"), tickSize: 0},
   marks: [
-    Plot.cell(weeklyCounts, {
+    Plot.rect(weeklyCounts, {
       x: d => d.dayOfWeek,
       y: d => d.weekStart,
       fill: "count",
