@@ -517,16 +517,13 @@ const salesByWeek = d3.rollup(
   }
 );
 ```
-
 ```js
 // Array with weeks until event date, tickets sold that week, and total tickets sold
 const salesData = Array.from(salesByWeek, ([week, count]) => ({
   weeksUntil: week,
   ticketsSold: count
 })).sort((a, b) => b.weeksUntil - a.weeksUntil);
-```
 
-```js
 // Updates salesData cumulative values to be cumululative
 let cumulative = 0;
 salesData.forEach(d => {
