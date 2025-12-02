@@ -10,9 +10,9 @@ export default {
   //   {
   //     name: "Examples",
        pages: [
-         {name: "Total Events", path: "/totalevents"},
+         {name: "All  Events", path: "/totalevents"},
          {name: "Selected Events", path: "/tables"},
-         {name: "Maps", path: "/customerOverview"},
+         {name: "Customer Database", path: "/customerOverview"},
        ],
   //   }
   // ],
