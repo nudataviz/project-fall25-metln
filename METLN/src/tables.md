@@ -274,10 +274,6 @@ const _weekLabels = Array.from(new Set(weeklyCounts.map(d => d.weekLabel))).sort
 
 ```
 
-```js echo
-display(weeklyCounts)
-```
-
 ```js
 // Calendar heatmap 
 // Used a lot of sources https://observablehq.com/@observablehq/plot-simplified-calendar
