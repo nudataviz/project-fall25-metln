@@ -301,13 +301,13 @@ function BubbleChart(data, {
 //Defining color map to match colors across DOW charts
 // Any changes to these colors should also be made to the pie chart call to make sure day colors align
 const colorMap = {
-  Sunday:  "#1f77b4",
-  Monday: "#ff7f0e",
-  Tuesday: "#2ca02c",
-  Wednesday: "#d62728",
-  Thursday: "#9467bd",
-  Friday: "#8c564b",
-  Saturday: "#e377c2"
+  Sunday:  "#4CBF70",
+  Monday: "#FF6F61",
+  Tuesday: "#7FCECC",
+  Wednesday: "#C985FF",
+  Thursday: "#B4D96A",
+  Friday: "#FF9F4A",
+  Saturday: "#6E89FF"
 };
 ```
 ```js
@@ -432,7 +432,7 @@ function chart_dow() {
 
   const color = d3.scaleOrdinal()
       .domain(order)
-      .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2"]);
+      .range(["#4CBF70", "#FF6F61", "#7FCECC", "#C985FF", "#B4D96A", "#FF9F4A", "#6E89FF"]);
 
   const svg = d3.create("svg")
       .attr("width", chartWidth)
@@ -545,6 +545,7 @@ const userWeeks = Generators.input(salesDataInput)
 // Uses above inputs
 const cumulativeTicketsSold = Plot.plot({
     height: 400,
+    width: 860,
     x: {label: "Weeks Before Event", 
       reverse: true,
       domain: salesData.slice(-10).map(d => d.weeksUntil)},
@@ -574,6 +575,7 @@ const seasonBar = Plot.plot({
     height: 500,
     style: {fontSize: "20px"},
   x: {label: "", style: {size: 20}},
+  color :{scheme: "set3"},
   marks: [
   Plot.barY(aggregated, {x: "Season", y:"Tickets", fill: "Event", tip: true}),
   Plot.axisY({interval: 40})
