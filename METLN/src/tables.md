@@ -111,7 +111,7 @@ for (let i = 0; i < customerArray.length; i++){
     for (var property in customerArray[i]){
         let value = customerArray[i][property]
         if (typeof value === 'string' && value.includes("$")){
-            //Used Chat GPT, W3 schools, MDN docs to get regEx help and troubleshoot
+            //Regex formats dates properly
             customerArray[i][property] = parseFloat(value.replace(/[^0-9.-]+/g, '')) 
         }
     }
@@ -124,7 +124,7 @@ for (let i = 0; i < transactionArray.length; i++){
     for (var property in transactionArray[i]){
         let value = transactionArray[i][property]
         if (typeof value === 'string' && value.includes("$")){
-            //Used Chat GPT, W3 schools, MDN docs to get regEx help and troubleshoot
+            //Regex formats dates properly
             transactionArray[i][property] = parseFloat(value.replace(/[^0-9.-]+/g, '')) 
         }
     }
@@ -183,8 +183,9 @@ let data=specificTransacts
 
 ```js
 //Excludes unknown gender from selection
-const data_filter=data.filter(d => d.Gender === "male" || d.Gender === "female")
+const data_filter=data.filter(d => d.Gender === "male" || d.Gender === "female" && d["Net Revenue"] > 0)
 ```
+
 
 ```js
 //Calculates count of each gender
@@ -264,7 +265,7 @@ const weeklyCounts = dailyCounts.map(d => {
 });
 
 // Get a sorted list of week labels for axis placement
-const weekLabels = Array.from(new Set(weeklyCounts.map(d => d.weekLabel))).sort(
+const _weekLabels = Array.from(new Set(weeklyCounts.map(d => d.weekLabel))).sort(
   (a,b) => d3.ascending(
     weeklyCounts.find(d => d.weekLabel === a).weekStart,
     weeklyCounts.find(d => d.weekLabel === b).weekStart
@@ -290,10 +291,9 @@ function formatTick(d) {
 
 const cellHeatmap = Plot.plot({
   marginLeft: 80,
-//  y: {tickFormat: Plot.formatWeekday("en", "narrow"), tickSize: 0},
-//  y: {tickFormat: d => d.weekLabel},
+  y: {type: "band"}, //this forces the error to go away thanks inspect! 
   marks: [
-    Plot.cell(weeklyCounts, {
+    Plot.rect(weeklyCounts, {
       x: d => d.dayOfWeek,
       y: d => d.weekStart,
       fill: "count",
@@ -301,7 +301,7 @@ const cellHeatmap = Plot.plot({
       stroke: "black"
     }),
     Plot.axisX({ tickFormat: i => ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][i] }),
-    Plot.axisY({ label: "", tickFormat: formatTick  })
+    Plot.axisY({ label: "" , tickFormat: formatTick})
   ],
   color: {type: "linear",
     domain: [0, d3.max(weeklyCounts, d => d.count)],
@@ -430,8 +430,8 @@ const eveningRev = d3.sum(specificTransacts.filter(d => d.timeOfDay == "Evening"
 ```
 
 ```js
-const maleRev = d3.sum(specificTransacts.filter(d => d.Gender == "male"), rev => rev["Gross Revenue"])
-const femaleRev = d3.sum(specificTransacts.filter(d => d.Gender == "female"), rev => rev["Gross Revenue"])
+const maleRev = d3.sum(data_filter.filter(d => d.Gender == "male"), rev => rev["Net Revenue"])
+const femaleRev = d3.sum(data_filter.filter(d => d.Gender == "female"), rev => rev["Net Revenue"])
 ```
 
 ```js
@@ -476,43 +476,47 @@ const salesByWeek = d3.rollup(
 
 ```js
 // Array with weeks until event date, tickets sold that week, and total tickets sold
-const salesData = Array.from(salesByWeek, ([week, count]) => ({
-  weeksUntil: week,
-  ticketsSold: count
-})).sort((a, b) => b.weeksUntil - a.weeksUntil);
+const salesData = (() => {
+  const data = Array.from(salesByWeek, ([week, count]) => ({
+    weeksUntil: week,
+    ticketsSold: count
+  })).sort((a, b) => b.weeksUntil - a.weeksUntil);
+  
+  let cumulative = 0;
+  data.forEach(d => {
+    cumulative += d.ticketsSold;
+    d.cumulativeTickets = cumulative;
+  });
+  
+  return data;
+})();
 ```
 
-```js
-// Updates salesData cumulative values to be cumululative
-let cumulative = 0;
-salesData.forEach(d => {
-  cumulative += d.ticketsSold;
-  d.cumulativeTickets = cumulative;
-});
-```
-
-```js
+<!-- ```js
 const reactiveSales = salesData.filter(d => d["weeksUntil"] <= userWeeks)
 ```
 
 ```js
 const salesDataInput = Inputs.range([1, d3.max(salesData, d => d.weeksUntil)], {step: 1, label: "Weeks Until Event", placeholder: 30})
 const userWeeks = Generators.input(salesDataInput)
-```
+``` -->
 
 ```js
 // Uses above inputs
 const cumulativeTicketsSold = Plot.plot({
-    height: 400,
+    width: 860,
+    x: {label: "Weeks Before Event", 
+      reverse: true,
+      domain: salesData.slice(-10).map(d => d.weeksUntil)},
     marks: [
-      Plot.lineY(reactiveSales, {
+      Plot.lineY(salesData.slice(-10), {
         x: "weeksUntil",
         y: "cumulativeTickets",
         stroke: "steelblue",
         strokeWidth: 2,
         tip: true
       }),
-      Plot.dot(reactiveSales, {
+      Plot.dot(salesData.slice(-10), {
         x: "weeksUntil",
         y: "cumulativeTickets",
         fill: "steelblue"
@@ -521,13 +525,18 @@ const cumulativeTicketsSold = Plot.plot({
       Plot.gridY({strokeDasharray: "5,3"})
     ],
     y: {label: "Tickets Sold"},
-    x: {label: "Weeks Before Event", reverse: true}
+    x: {label: "Weeks Before Event", reverse: true,interval: 1}
     })
     
 ```
 
 ```js
-const eventInput = Inputs.table(singleEventTable, {sort: "Tickets", reverse: true, layout: "auto", rows:20})
+// Async generators necessary for html formatting
+const userInput = Inputs.search(singleEventTable, {placeholder: "Search events"})
+const search = Generators.input(userInput)
+```
+```js
+const eventInput = Inputs.table(search, {sort: "Tickets", reverse: true, layout: "auto", rows:16})
 const selection = Generators.input(eventInput);
 ```
 
@@ -577,7 +586,8 @@ function chart_dow() {
 
   const color = d3.scaleOrdinal()
       .domain(order)
-      .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2"]);
+      .range(["#4CBF70", "#FF6F61", "#7FCECC", "#C985FF", "#B4D96A", "#FF9F4A", "#6E89FF"]
+);
 
   const svg = d3.create("svg")
       .attr("width", width)
@@ -712,7 +722,7 @@ const uniqueItemNames = Array.from(
   ${chart_dow()}
   </div>
   <div class="card grid-rowspan-2 grid-colspan-3"><h1>How early?</h1>
-  <h2>Examines the cumulative number of tickets based on number of weeks before event date.  Slider will update graph based on how maximum number of weeks away.</h2>
+  <h2>Examines the cumulative number of tickets based on number of weeks before event date. </h2>
     ${cumulativeTicketsSold}
   </div>
   <div class ="card grid-rowspan-2 grid-colspan-3"><h1>Day by Day</h1>

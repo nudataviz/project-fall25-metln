@@ -3,6 +3,9 @@
 This project took data supplied by the [Maine Trust for Local News](https://www.metln.org/) to look at both information from indiviual events, common trends across all events as well as a customer overview. 
 Many of these graphs are dynamic in nature so we recommend launching the obvservable webpage on your local machine by following the [instructions on how to run](#how-to-run) if you have the proper data.
 
+## Methodology
+The Main Trust for Local News supplied all the data from their internal records. For the purpose of these visualizations we filtered out any null or empty data cells as those were overwhelming the data sets. We also used [gender-detection-from-name](https://www.npmjs.com/package/gender-detection-from-name).  This detects gender by first name and there is room for error, especially with more neutral names (Sam, Pat etc).  
+
 ## All Customers Trends 
 
 To get a general sense of who is buying interacting with the webpages we can look at the entire customer database. That will give us a sense of the reach of who is attending events.
@@ -39,6 +42,10 @@ From there you can get information for the event or events that you care about i
 
 We do not have the data as to when campaigns for certain events were used but a future project may want to compare when email campaigns were sent vs ticket purchases from them. 
 
+## Going Forward 
+METLN has discussed data collection when they sell tickets. If that is something they implement reworking the gender pie graphs with actual data will give a more accurate picture.  Also gathering data as to where customers bought tickets (ie from email, the newspaper or Facebook campaigns) will also help with targeting techniques.  
+
+This is a result of 2 iterations with METLN and is a working prototype based on those discussions.  The Customer Overview database was a recent addition in the final iteration and is a working prototype to add a more hollistic view to the customer profile.  We made visualizations based on what we were told could be interesting but someone from METLN who has a better understanding on the data pulled may be able to lend some insight. 
 ## How to Run 
 
 This is made in Observable framework. For instructions on how to run that on your machine you can visit the documenation [here](METLN/README.md)

@@ -4,7 +4,7 @@ title: Total Event Overview
 # Who & When
 ## Overview Across All Events
 
-Visualizations on this page draw from transaction data to highlight purchase dates, times, and client demographics.
+Visualizations on this page draw from transaction data to highlight purchase dates, times, and client demographics. To see this data for indiviudal events please head to the event table in <a href="./tables">Selected Events</a>
 
 These charts are intended to provide a high-level overview, helping you quickly identify broad patterns and emerging trends across all events.
 
@@ -51,7 +51,7 @@ for (let i = 0; i < customerArray.length; i++){
     for (var property in customerArray[i]){
         let value = customerArray[i][property]
         if (typeof value === 'string' && value.includes("$")){
-            //Used Chat GPT, W3 schools, MDN docs to get regEx help and troubleshoot
+            // Regex for removing unwanted string vals
             customerArray[i][property] = parseFloat(value.replace(/[^0-9.-]+/g, '')) 
         }
     }
@@ -64,7 +64,7 @@ for (let i = 0; i < transactionArray.length; i++){
     for (var property in transactionArray[i]){
         let value = transactionArray[i][property]
         if (typeof value === 'string' && value.includes("$")){
-            //Used Chat GPT, W3 schools, MDN docs to get regEx help and troubleshoot
+            // Regex for removing unwanted string vals
             transactionArray[i][property] = parseFloat(value.replace(/[^0-9.-]+/g, '')) 
         }
     }
@@ -163,14 +163,10 @@ const dataWithDay = transactionArray.map(d => ({
 
 ```
 
-```js
-// Separate rollup for the event DOW bubble chart
-//const eventDOW = Array.from(d3.rollup(dataWithDay, v => v.length, d=> d["Item Name"]), ([name, count]) => ({name, count}))
-```
 
 
 ```js
-// data wrangling to 
+// data wrangling for bubble graph
 const dayEventCount = {Sunday : 0, Monday : 0, Tuesday: 0, Wednesday: 0, Thursday:0, Friday:0, Saturday:0}
 const setOfEvents = new Set()
 for (const row of dataWithDay){
@@ -301,23 +297,23 @@ function BubbleChart(data, {
 //Defining color map to match colors across DOW charts
 // Any changes to these colors should also be made to the pie chart call to make sure day colors align
 const colorMap = {
-  Sunday:  "#1f77b4",
-  Monday: "#ff7f0e",
-  Tuesday: "#2ca02c",
-  Wednesday: "#d62728",
-  Thursday: "#9467bd",
-  Friday: "#8c564b",
-  Saturday: "#e377c2"
+  Sunday:  "#4CBF70",
+  Monday: "#FF6F61",
+  Tuesday: "#7FCECC",
+  Wednesday: "#C985FF",
+  Thursday: "#B4D96A",
+  Friday: "#FF9F4A",
+  Saturday: "#6E89FF"
 };
 ```
 ```js
-// Function call for bubblechart, uses same color
+// Function call for bubblechart, uses same colors
 const bubbles = BubbleChart(numEventsperDOW, {
   label: d => `${d.Name}\n${d.count}`,
   value: d => d.count,
   group: d => d.Name,
   
-  // Correct alignment:
+
   groups: Object.keys(colorMap),
   colors: Object.values(colorMap)
 });
@@ -432,7 +428,7 @@ function chart_dow() {
 
   const color = d3.scaleOrdinal()
       .domain(order)
-      .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2"]);
+      .range(["#4CBF70", "#FF6F61", "#7FCECC", "#C985FF", "#B4D96A", "#FF9F4A", "#6E89FF"]);
 
   const svg = d3.create("svg")
       .attr("width", chartWidth)
@@ -517,16 +513,13 @@ const salesByWeek = d3.rollup(
   }
 );
 ```
-
 ```js
 // Array with weeks until event date, tickets sold that week, and total tickets sold
 const salesData = Array.from(salesByWeek, ([week, count]) => ({
   weeksUntil: week,
   ticketsSold: count
 })).sort((a, b) => b.weeksUntil - a.weeksUntil);
-```
 
-```js
 // Updates salesData cumulative values to be cumululative
 let cumulative = 0;
 salesData.forEach(d => {
@@ -535,28 +528,31 @@ salesData.forEach(d => {
 });
 ```
 
-```js
+<!-- ```js
 const reactiveSales = salesData.filter(d => d["weeksUntil"] <= userWeeks)
 ```
 
 ```js
 const salesDataInput = Inputs.range([1, d3.max(salesData, d => d.weeksUntil)], {step: 1, label: "Weeks Until Event", placeholder: 30})
 const userWeeks = Generators.input(salesDataInput)
-```
+``` -->
 
 ```js
 // Uses above inputs
 const cumulativeTicketsSold = Plot.plot({
-    height: 400,
+    height: 300,
+    x: {label: "Weeks Before Event", 
+      reverse: true,
+      domain: salesData.slice(-10).map(d => d.weeksUntil)},
     marks: [
-      Plot.lineY(reactiveSales, {
+      Plot.lineY(salesData.slice(-10), {
         x: "weeksUntil",
         y: "cumulativeTickets",
         stroke: "steelblue",
         strokeWidth: 2,
         tip: true
       }),
-      Plot.dot(reactiveSales, {
+      Plot.dot(salesData.slice(-10), {
         x: "weeksUntil",
         y: "cumulativeTickets",
         fill: "steelblue"
@@ -564,7 +560,7 @@ const cumulativeTicketsSold = Plot.plot({
       Plot.gridX({strokeDasharray: "5,3"}),
       Plot.gridY({strokeDasharray: "5,3"})
     ],
-    y: {label: "Tickets Sold"},
+    y: {label: "Tickets Sold", labelAnchor: "top"},
     x: {label: "Weeks Before Event", reverse: true}
     })
     
@@ -574,6 +570,7 @@ const seasonBar = Plot.plot({
     height: 500,
     style: {fontSize: "20px"},
   x: {label: "", style: {size: 20}},
+  color :{scheme: "set3"},
   marks: [
   Plot.barY(aggregated, {x: "Season", y:"Tickets", fill: "Event", tip: true}),
   Plot.axisY({interval: 40})
@@ -664,8 +661,10 @@ display(seasonBar)
 </div>
 <div class="card grid-rowspan-2 grid-colspan-3"" style="grid-column: span 2">
   <h1>How far in advance?</h1>
-  ${salesDataInput}
-  ${cumulativeTicketsSold}
+  <h2>This shows how many weeks in advance tickets are purchased</h2>
+  <div class="graph" style="display: flex; justify-content: center; align-items: center; text-align: center;">
+    ${cumulativeTicketsSold}
+  </div>
 </div>
 
 ```js
@@ -684,12 +683,4 @@ Print/Save as PDF
     });
   }
 }
-```
-
-```js
-/*${Plot.plot({
-  marks:[
-    Plot.barY(dataWithDay, Plot.groupX({y:"count"}, {x: "day"}))
-  ]
-})}*/
 ```

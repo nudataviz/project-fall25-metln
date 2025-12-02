@@ -95,8 +95,8 @@ const mapv2 = (() => {
   const map = new maplibregl.Map({
     container: 'mapv2',
     style: 'https://tiles.openfreemap.org/styles/bright',
-    center: [-70.2, 43.6], //portland
-    zoom: 6
+    center: [-96, 37], //center on US 
+    zoom: 3 //zoomed out 
   });
   
   map.addControl(new maplibregl.NavigationControl());
@@ -376,7 +376,7 @@ const time_of_visit = Plot.plot({
 ```
 
 <div class="card">
-<h1>Visit time</h1></h2>Likely indicates a time the user visited the website.  Each bar shows total number of visits per time period.  Hover each bar with your mouse for more detail.</h2>
+<h1>Visit Time</h1></h2>Likely indicates a time the user visited the website.  Each bar shows total number of visits per time period.  Hover each bar with your mouse for more detail.</h2>
   ${time_of_visit}
 </div>
 
