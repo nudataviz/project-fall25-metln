@@ -277,19 +277,26 @@ const weekLabels = Array.from(new Set(weeklyCounts.map(d => d.weekLabel))).sort(
 // Calendar heatmap 
 // Used a lot of sources https://observablehq.com/@observablehq/plot-simplified-calendar
 // https://observablehq.com/d/19a3553a052966b0
+function formatTick(d) {
+  let end = new Date(d);
+  end.setDate(end.getDate() + 6);
+  const f = d3.timeFormat("%_d %b")
+  return f(d) + " - " + f(end);
+}
+
 const cellHeatmap = Plot.plot({
   marginLeft: 80,
-  y: {tickFormat: Plot.formatWeekday("en", "narrow"), tickSize: 0},
+  //y: {tickFormat: Plot.formatWeekday("en", "narrow"), tickSize: 0},
   marks: [
     Plot.cell(weeklyCounts, {
       x: d => d.dayOfWeek,
-      y: d => d.weekLabel,
+      y: d => d.weekStart,
       fill: "count",
       tip: true,
       stroke: "black"
     }),
     Plot.axisX({ tickFormat: i => ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][i] }),
-    Plot.axisY({ label: "" })
+    Plot.axisY({ label: "" , tickFormat: formatTick})
   ],
   color: {type: "linear",
     domain: [0, d3.max(weeklyCounts, d => d.count)],
@@ -464,43 +471,45 @@ const salesByWeek = d3.rollup(
 
 ```js
 // Array with weeks until event date, tickets sold that week, and total tickets sold
-const salesData = Array.from(salesByWeek, ([week, count]) => ({
-  weeksUntil: week,
-  ticketsSold: count
-})).sort((a, b) => b.weeksUntil - a.weeksUntil);
+const salesData = (() => {
+  const data = Array.from(salesByWeek, ([week, count]) => ({
+    weeksUntil: week,
+    ticketsSold: count
+  })).sort((a, b) => b.weeksUntil - a.weeksUntil);
+  
+  let cumulative = 0;
+  data.forEach(d => {
+    cumulative += d.ticketsSold;
+    d.cumulativeTickets = cumulative;
+  });
+  
+  return data;
+})();
 ```
 
-```js
-// Updates salesData cumulative values to be cumululative
-let cumulative = 0;
-salesData.forEach(d => {
-  cumulative += d.ticketsSold;
-  d.cumulativeTickets = cumulative;
-});
-```
-
-```js
+<!-- ```js
 const reactiveSales = salesData.filter(d => d["weeksUntil"] <= userWeeks)
 ```
 
 ```js
 const salesDataInput = Inputs.range([1, d3.max(salesData, d => d.weeksUntil)], {step: 1, label: "Weeks Until Event", placeholder: 30})
 const userWeeks = Generators.input(salesDataInput)
-```
+``` -->
 
 ```js
 // Uses above inputs
 const cumulativeTicketsSold = Plot.plot({
     height: 400,
+    
     marks: [
-      Plot.lineY(reactiveSales, {
+      Plot.lineY(salesData, {
         x: "weeksUntil",
         y: "cumulativeTickets",
         stroke: "steelblue",
         strokeWidth: 2,
         tip: true
       }),
-      Plot.dot(reactiveSales, {
+      Plot.dot(salesData, {
         x: "weeksUntil",
         y: "cumulativeTickets",
         fill: "steelblue"
@@ -509,7 +518,7 @@ const cumulativeTicketsSold = Plot.plot({
       Plot.gridY({strokeDasharray: "5,3"})
     ],
     y: {label: "Tickets Sold"},
-    x: {label: "Weeks Before Event", reverse: true}
+    x: {label: "Weeks Before Event", reverse: true,interval: 1}
     })
     
 ```
@@ -706,8 +715,7 @@ const uniqueItemNames = Array.from(
   ${chart_dow()}
   </div>
   <div class="card grid-rowspan-2 grid-colspan-3"><h1>How early?</h1>
-  <h2>Examines the cumulative number of tickets based on number of weeks before event date.  Slider will update graph based on how maximum number of weeks away.</h2>
-    ${salesDataInput}
+  <h2>Examines the cumulative number of tickets based on number of weeks before event date. </h2>
     ${cumulativeTicketsSold}
   </div>
   <div class ="card grid-rowspan-2 grid-colspan-3"><h1>Day by Day</h1>

@@ -4,7 +4,7 @@ title: Total Event Overview
 # Who & When
 ## Overview Across All Events
 
-Visualizations on this page draw from transaction data to highlight purchase dates, times, and client demographics.
+Visualizations on this page draw from transaction data to highlight purchase dates, times, and client demographics. To see this data for indiviudal events please head to the event table in <a href="./tables">Selected Events</a>
 
 These charts are intended to provide a high-level overview, helping you quickly identify broad patterns and emerging trends across all events.
 
@@ -535,28 +535,31 @@ salesData.forEach(d => {
 });
 ```
 
-```js
+<!-- ```js
 const reactiveSales = salesData.filter(d => d["weeksUntil"] <= userWeeks)
 ```
 
 ```js
 const salesDataInput = Inputs.range([1, d3.max(salesData, d => d.weeksUntil)], {step: 1, label: "Weeks Until Event", placeholder: 30})
 const userWeeks = Generators.input(salesDataInput)
-```
+``` -->
 
 ```js
 // Uses above inputs
 const cumulativeTicketsSold = Plot.plot({
     height: 400,
+    x: {label: "Weeks Before Event", 
+      reverse: true,
+      domain: salesData.slice(-10).map(d => d.weeksUntil)},
     marks: [
-      Plot.lineY(reactiveSales, {
+      Plot.lineY(salesData.slice(-10), {
         x: "weeksUntil",
         y: "cumulativeTickets",
         stroke: "steelblue",
         strokeWidth: 2,
         tip: true
       }),
-      Plot.dot(reactiveSales, {
+      Plot.dot(salesData.slice(-10), {
         x: "weeksUntil",
         y: "cumulativeTickets",
         fill: "steelblue"
@@ -664,7 +667,8 @@ display(seasonBar)
 </div>
 <div class="card grid-rowspan-2 grid-colspan-3"" style="grid-column: span 2">
   <h1>How far in advance?</h1>
-  ${salesDataInput}
+  <h2>This shows how many weeks in advance tickets are purchased</h2>
+ 
   ${cumulativeTicketsSold}
 </div>
 
