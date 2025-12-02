@@ -4,7 +4,7 @@ title: Total Event Overview
 # Who & When
 ## Overview Across All Events
 
-Visualizations on this page draw from transaction data to highlight purchase dates, times, and client demographics.
+Visualizations on this page draw from transaction data to highlight purchase dates, times, and client demographics. To see this data for indiviudal events please head to the event table in <a href="./tables">Selected Events</a>
 
 These charts are intended to provide a high-level overview, helping you quickly identify broad patterns and emerging trends across all events.
 
