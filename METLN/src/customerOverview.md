@@ -227,7 +227,11 @@ node.append("title")
 node.append("circle")
   .attr("fill", d => d.children ? "#fff" : "#ddd")
   .attr("stroke", d => d.children ? "#bbb" : null)
-  .attr("r", d => d.r);
+  .attr("r", d => d.r)
+  .on("click", e => {
+    const d = d3.select(e.target).data()[0];
+    display(`You just clicked ${d.data.name}`)
+  });
 
 const text = node
   .filter(d => !d.children && d.r > 10)
@@ -240,6 +244,7 @@ const text = node
 node
   .filter(d => !d.children && d.r > 20)
   .append("foreignObject")
+    .style("pointer-events", "none")
     .attr("x", d => -d.r)
     .attr("y", d => -d.r)
     .attr("width", d => d.r * 2)
