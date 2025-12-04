@@ -130,7 +130,8 @@ const mapv2 = (() => {
             coordinates: [d.longitude, d.latitude]
           },
           properties: {
-            name: d.mr_geo_city_name || 'Unknown Town',         
+            name: d.mr_geo_city_name || 'Unknown Town', 
+            event:d.event_purchased||'Unknown',        
             category: d.preferred_main_category || 'Unknown', // add preferred 
             status:d.registration_status|| 'Unknown',
             time:d.visit_time|| 'Unknown'
@@ -191,11 +192,11 @@ const mapv2 = (() => {
       if (!features.length) return;
 
       const feature = features[0];
-      const { name,category,status,time } = feature.properties;
+      const { name,event, category,status,time } = feature.properties;
 
       new maplibregl.Popup()
         .setLngLat(feature.geometry.coordinates)
-        .setHTML(`<strong>${name}</strong><br>Category: ${category}<br>Status:${status}<br>Visit Time: ${time}`)
+        .setHTML(`<strong>${name}</strong><br>Event Purchased:${event}<br>Category: ${category}<br>Status:${status}<br>Visit Time: ${time}`)
         .addTo(map);
     });
 
