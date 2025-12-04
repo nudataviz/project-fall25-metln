@@ -26,14 +26,24 @@ let customers_full = await FileAttachment("/data/Event_Purchaser_2025-11-10T1531
 ```js
 //is this the correct Column? The correct number for that column?! I do not know. 
 let customer_data = Array.from(customers_full)
-for (let i = 0; i < customer_data.length; i++){
-    if (customer_data[i]["mr_geo_latlong"]) {  // a few null categories
+for (let i = 0; i < customer_data.length; i++) {
+    if (customer_data[i]["mr_geo_latlong"]) {  // some entries may be null
         const [lat, lon] = customer_data[i]["mr_geo_latlong"].split(";")[0].split(",").map(Number);
         customer_data[i]["latitude"] = lat;
         customer_data[i]["longitude"] = lon;
     } else {
         customer_data[i]["latitude"] = null;
         customer_data[i]["longitude"] = null;
+    }
+}
+
+// Extract city name
+for (let i = 0; i < customer_data.length; i++) {
+    if (customer_data[i]["geo_city_name"]) {  
+        const city_name = customer_data[i]["geo_city_name"].split(";")[0];
+        customer_data[i]["City"] = city_name;
+    } else {
+        customer_data[i]["City"] = null;
     }
 }
 ```
@@ -96,6 +106,115 @@ const mapv1=Plot.plot({
 </div>
 
 ```js
+const mapv2 = (() => {
+
+  const map = new maplibregl.Map({
+    container: 'mapv2',
+    style: 'https://tiles.openfreemap.org/styles/bright',
+    center: [-96, 37], // center on US 
+    zoom: 3
+  });
+  
+  map.addControl(new maplibregl.NavigationControl());
+  
+  map.on('load', () => {
+    // Prepare GeoJSON data
+    const geojson = {
+      type: 'FeatureCollection',
+      features: customer_data
+        .filter(d => d.latitude && d.longitude)
+        .map(d => ({
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [d.longitude, d.latitude]
+          },
+          properties: {
+            name: d.mr_geo_city_name || 'Unknown Town',         
+            category: d.preferred_main_category || 'Unknown', // add preferred 
+            status:d.registration_status|| 'Unknown',
+            time:d.visit_time|| 'Unknown'
+          }
+        }))
+    };
+    
+    // Add source
+    map.addSource('customers', {
+      type: 'geojson',
+      data: geojson
+    });
+    
+    // Heatmap layer
+    map.addLayer({
+      id: 'customers-heat',
+      type: 'heatmap',
+      source: 'customers',
+      maxzoom: 15,
+      paint: {
+        'heatmap-weight': 1,
+        'heatmap-intensity': 1,
+        'heatmap-color': [
+          'interpolate',
+          ['linear'],
+          ['heatmap-density'],
+          0, 'rgba(33,102,172,0)',
+          0.2, 'rgb(103,169,207)',
+          0.4, 'rgb(209,229,240)',
+          0.6, 'rgb(253,219,199)',
+          0.8, 'rgb(239,138,98)',
+          1, 'rgb(178,24,43)'
+        ],
+        'heatmap-radius': 30,
+        'heatmap-opacity': 0.8
+      }
+    });
+    
+    // Circle layer
+    map.addLayer({
+      id: 'customers-point',
+      type: 'circle',
+      source: 'customers',
+      minzoom: 1,
+      paint: {
+        'circle-radius': 5,
+        'circle-color': 'rgb(178,24,43)',
+        'circle-stroke-width': 1,
+        'circle-stroke-color': '#fff'
+      }
+    });
+
+    
+    map.on('click', 'customers-point', (e) => {
+      const features = map.queryRenderedFeatures(e.point, {
+        layers: ['customers-point']
+      });
+      if (!features.length) return;
+
+      const feature = features[0];
+      const { name,category,status,time } = feature.properties;
+
+      new maplibregl.Popup()
+        .setLngLat(feature.geometry.coordinates)
+        .setHTML(`<strong>${name}</strong><br>Category: ${category}<br>Status:${status}<br>Visit Time: ${time}`)
+        .addTo(map);
+    });
+
+
+    map.on('mouseenter', 'customers-point', () => {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', 'customers-point', () => {
+      map.getCanvas().style.cursor = '';  //asked claude "How to format a mouse click on maplibre using geojson" 
+    });
+
+  });
+
+})();
+
+//https://maplibre.org/maplibre-gl-js/docs/API/classes/Popup/
+```
+
+<!-- ```js
 const mapv2 = (() => {
 
   const map = new maplibregl.Map({
@@ -170,7 +289,7 @@ const mapv2 = (() => {
   //return container;
 })();
 //from heatmap documentation on maplibre
-```
+``` -->
 
 
 ```js
