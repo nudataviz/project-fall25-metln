@@ -47,13 +47,19 @@ We do not have the data as to when campaigns for certain events were used but a 
 METLN has discussed data collection when they sell tickets. If that is something they implement reworking the gender pie graphs with actual data will give a more accurate picture.  Also gathering data as to where customers bought tickets (ie from email, the newspaper or Facebook campaigns) will also help with targeting techniques.  
 
 This is a result of 2 iterations with METLN and is a working prototype based on those discussions.  The Customer Overview database was a recent addition in the final iteration and is a working prototype to add a more hollistic view to the customer profile.  We made visualizations based on what we were told could be interesting but someone from METLN who has a better understanding on the data pulled may be able to lend some insight. 
+
+We started making the graphs more interactive on the customer data page however due to time constraints left this as a draft. This could be an interesting area for exploration. 
 ## How to Run 
 
 This is made in Observable framework. For instructions on how to run that on your machine you can visit the documenation [here](METLN/README.md)
 
-Once you get the required data (this includes a csv for transactions as well as an Event_Purchaser csv for the customer overview) save the files to your local machine under in the [data folder](METLN/src/data)- this is located in the src file in the framework. 
+Once you get the required data (this includes a csv for transactions as well as an Event_Purchaser csv for the customer overview) save the files to your local machine under in the [data folder](METLN/src/data)- this is located in the src file in the framework.  These either need to mirror the name of the files or the files need to be updated in the first code block. 
 
 If the data is where it should be you can run the following command from the src file to run the interactive framework 
+
+```
+npm install
+```
 
 ```
 npm run dev 
