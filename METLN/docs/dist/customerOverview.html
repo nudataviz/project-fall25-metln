@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="generator" content="Observable Framework v1.13.3">
+<title>Customer Overview | METLN</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;display=swap" crossorigin>
+<link rel="preload" as="style" href="./_observablehq/theme-air,near-midnight.dcdbf18e.css">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;display=swap" crossorigin>
+<link rel="stylesheet" type="text/css" href="./_observablehq/theme-air,near-midnight.dcdbf18e.css">
+<link rel="modulepreload" href="./_observablehq/client.00fa72d3.js">
+<link rel="modulepreload" href="./_observablehq/runtime.e080113b.js">
+<link rel="modulepreload" href="./_observablehq/stdlib.73a8ec5a.js">
+<link rel="modulepreload" href="./_npm/maplibre-gl@5.14.0/bf489a1e.js">
+<link rel="modulepreload" href="./_npm/d3@7.9.0/e780feca.js">
+<link rel="modulepreload" href="./_npm/@observablehq/plot@0.6.17/d761ef9b.js">
+<link rel="modulepreload" href="./_npm/topojson-client@3.1.0/edd9ee95.js">
+<link rel="modulepreload" href="./_npm/d3-dsv@3.0.1/9cffc2bd.js">
+<link rel="modulepreload" href="./_npm/d3-array@3.2.4/e93ca09f.js">
+<link rel="modulepreload" href="./_npm/d3-axis@3.0.0/0f2de24d.js">
+<link rel="modulepreload" href="./_npm/d3-brush@3.0.0/65eb105b.js">
+<link rel="modulepreload" href="./_npm/d3-chord@3.0.1/7ef8fb2e.js">
+<link rel="modulepreload" href="./_npm/d3-color@3.1.0/aeb57b94.js">
+<link rel="modulepreload" href="./_npm/d3-contour@4.0.2/1d2aed74.js">
+<link rel="modulepreload" href="./_npm/d3-delaunay@6.0.4/5ced1d52.js">
+<link rel="modulepreload" href="./_npm/d3-dispatch@3.0.1/9ba9c7f3.js">
+<link rel="modulepreload" href="./_npm/d3-drag@3.0.0/4202580c.js">
+<link rel="modulepreload" href="./_npm/d3-ease@3.0.1/cdd7e898.js">
+<link rel="modulepreload" href="./_npm/d3-fetch@3.0.1/b4e2ad9a.js">
+<link rel="modulepreload" href="./_npm/d3-force@3.0.0/5e804d15.js">
+<link rel="modulepreload" href="./_npm/d3-format@3.1.0/86074ef6.js">
+<link rel="modulepreload" href="./_npm/d3-geo@3.1.1/40599fb3.js">
+<link rel="modulepreload" href="./_npm/d3-hierarchy@3.1.2/e49e792c.js">
+<link rel="modulepreload" href="./_npm/d3-interpolate@3.0.1/8d1e5425.js">
+<link rel="modulepreload" href="./_npm/d3-path@3.1.0/20d3f133.js">
+<link rel="modulepreload" href="./_npm/d3-polygon@3.0.1/7553081f.js">
+<link rel="modulepreload" href="./_npm/d3-quadtree@3.0.1/0dfd751c.js">
+<link rel="modulepreload" href="./_npm/d3-random@3.0.1/3c90ee06.js">
+<link rel="modulepreload" href="./_npm/d3-scale@4.0.2/843b6a76.js">
+<link rel="modulepreload" href="./_npm/d3-scale-chromatic@3.1.0/ba24c2e7.js">
+<link rel="modulepreload" href="./_npm/d3-selection@3.0.0/4d94e5b7.js">
+<link rel="modulepreload" href="./_npm/d3-shape@3.2.0/6d3a6726.js">
+<link rel="modulepreload" href="./_npm/d3-time@3.1.0/9f03c579.js">
+<link rel="modulepreload" href="./_npm/d3-time-format@4.1.0/07c9626f.js">
+<link rel="modulepreload" href="./_npm/d3-timer@3.0.1/b58a267d.js">
+<link rel="modulepreload" href="./_npm/d3-transition@3.0.1/004da2ac.js">
+<link rel="modulepreload" href="./_npm/d3-zoom@3.0.0/b5786b3f.js">
+<link rel="modulepreload" href="./_npm/isoformat@0.2.1/18cbf477.js">
+<link rel="modulepreload" href="./_npm/interval-tree-1d@1.0.4/53fe8176.js">
+<link rel="modulepreload" href="./_npm/internmap@2.0.3/e08981d9.js">
+<link rel="modulepreload" href="./_npm/delaunator@5.0.1/02d43215.js">
+<link rel="modulepreload" href="./_npm/binary-search-bounds@2.0.5/cbf6ba23.js">
+<link rel="modulepreload" href="./_npm/robust-predicates@3.0.2/aa00730b.js">
+<link rel="icon" href="./_file/observable.1af93621.png" type="image/png" sizes="32x32">
+<script type="module">
+
+import {define} from "./_observablehq/client.00fa72d3.js";
+import {registerFile} from "./_observablehq/stdlib.73a8ec5a.js";
+
+registerFile("./data/Event_Purchaser_2025-11-10T1531_CLEAN - Event_Purchaser_2025-11-10T1531.csv", {"name":"./data/Event_Purchaser_2025-11-10T1531_CLEAN - Event_Purchaser_2025-11-10T1531.csv","mimeType":"text/csv","path":"./_file/data/Event_Purchaser_2025-11-10T1531_CLEAN - Event_Purchaser_2025-11-10T1531.076b1e51.csv","lastModified":1764944834113,"size":8279624});
+
+define({id: "7d181a31", outputs: ["maplibregl"], body: async () => {
+const {default: maplibregl} = await import("./_npm/maplibre-gl@5.14.0/bf489a1e.js");
+
+return {maplibregl};
+}});
+
+define({id: "7f086426", inputs: ["FileAttachment"], outputs: ["customers_full"], body: async (FileAttachment) => {
+let customers_full = await FileAttachment("./data/Event_Purchaser_2025-11-10T1531_CLEAN - Event_Purchaser_2025-11-10T1531.csv").csv({typed: true})
+return {customers_full};
+}});
+
+define({id: "de615b34", inputs: ["customers_full"], outputs: ["customer_data"], body: (customers_full) => {
+//is this the correct Column? The correct number for that column?! I do not know. 
+let customer_data = Array.from(customers_full)
+for (let i = 0; i < customer_data.length; i++){
+    if (customer_data[i]["mr_geo_latlong"]) {  // a few null categories
+        const [lat, lon] = customer_data[i]["mr_geo_latlong"].split(";")[0].split(",").map(Number);
+        customer_data[i]["latitude"] = lat;
+        customer_data[i]["longitude"] = lon;
+    } else {
+        customer_data[i]["latitude"] = null;
+        customer_data[i]["longitude"] = null;
+    }
+}
+return {customer_data};
+}});
+
+define({id: "1d7276b0", outputs: ["us"], body: async () => {
+const us = await fetch(
+  new URL("./_npm/us-atlas@3.0.1/counties-10m.json", location).href
+).then(r => r.json());
+return {us};
+}});
+
+define({id: "0b0e9779", inputs: ["topojson","us"], outputs: ["new_england"], body: (topojson,us) => {
+const new_england = {
+  type: "FeatureCollection",
+  features: topojson
+    .feature(us, us.objects.states)
+    .features
+    .filter(d => ["23", "25", "33", '09', '44','50','36'].includes(d.id))
+};
+return {new_england};
+}});
+
+define({id: "0a38b784", inputs: ["Plot","new_england","customer_data"], outputs: ["mapv1"], body: (Plot,new_england,customer_data) => {
+// Plot of lat/long and 
+const mapv1=Plot.plot({
+  height:400,
+  projection: {
+    type: "albers",
+    domain: new_england
+  },
+  marks: [
+    Plot.geo(new_england, {
+      stroke: "black",
+      fill: "white"
+    }),
+    Plot.dot(customer_data.filter(d => d.latitude && d.longitude), {
+      x: "longitude",
+      y: "latitude",
+      fill: "red",
+      r: 3,
+      fillOpacity: 0.5,
+      tip:true,
+      title: d => [d.mr_geo_city_name, d.event_purchased]
+  .filter(v => v != null)
+  .join('\n')
+    })
+  ]
+})
+  
+return {mapv1};
+}});
+
+define({id: "bdd6467f", mode: "inline", inputs: ["mapv1","display"], body: async (mapv1,display) => {
+display(await(
+mapv1
+))
+}});
+
+define({id: "470ce2f4", inputs: ["maplibregl","customer_data"], outputs: ["mapv2"], body: (maplibregl,customer_data) => {
+const mapv2 = (() => {
+
+  const map = new maplibregl.Map({
+    container: 'mapv2',
+    style: 'https://tiles.openfreemap.org/styles/bright',
+    center: [-96, 37], // center on US 
+    zoom: 3
+  });
+  
+  map.addControl(new maplibregl.NavigationControl());
+  
+  map.on('load', () => {
+    // Prepare GeoJSON data
+    const geojson = {
+      type: 'FeatureCollection',
+      features: customer_data
+        .filter(d => d.latitude && d.longitude)
+        .map(d => ({
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [d.longitude, d.latitude]
+          },
+          properties: {
+            name: d.mr_geo_city_name || 'Unknown Town', 
+            event:d.event_purchased||'Unknown',        
+            category: d.preferred_main_category || 'Unknown', // add preferred 
+            status:d.registration_status|| 'Unknown',
+            time:d.visit_time|| 'Unknown'
+          }
+        }))
+    };
+    
+    // Add source
+    map.addSource('customers', {
+      type: 'geojson',
+      data: geojson
+    });
+    
+    // Heatmap layer
+    map.addLayer({
+      id: 'customers-heat',
+      type: 'heatmap',
+      source: 'customers',
+      maxzoom: 15,
+      paint: {
+        'heatmap-weight': 1,
+        'heatmap-intensity': 1,
+        'heatmap-color': [
+          'interpolate',
+          ['linear'],
+          ['heatmap-density'],
+          0, 'rgba(33,102,172,0)',
+          0.2, 'rgb(103,169,207)',
+          0.4, 'rgb(209,229,240)',
+          0.6, 'rgb(253,219,199)',
+          0.8, 'rgb(239,138,98)',
+          1, 'rgb(178,24,43)'
+        ],
+        'heatmap-radius': 30,
+        'heatmap-opacity': 0.8
+      }
+    });
+    
+    // Circle layer
+    map.addLayer({
+      id: 'customers-point',
+      type: 'circle',
+      source: 'customers',
+      minzoom: 1,
+      paint: {
+        'circle-radius': 5,
+        'circle-color': 'rgb(178,24,43)',
+        'circle-stroke-width': 1,
+        'circle-stroke-color': '#fff'
+      }
+    });
+
+    
+    map.on('click', 'customers-point', (e) => {
+      const features = map.queryRenderedFeatures(e.point, {
+        layers: ['customers-point']
+      });
+      if (!features.length) return;
+
+      const feature = features[0];
+      const { name,event, category,status,time } = feature.properties;
+
+      new maplibregl.Popup()
+        .setLngLat(feature.geometry.coordinates)
+        .setHTML(`<strong>${name}</strong><br>Event Purchased:${event}<br>Category: ${category}<br>Status:${status}<br>Visit Time: ${time}`)
+        .addTo(map);
+    });
+
+
+    map.on('mouseenter', 'customers-point', () => {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', 'customers-point', () => {
+      map.getCanvas().style.cursor = '';  //asked claude "How to format a mouse click on maplibre using geojson" 
+    });
+
+  });
+
+})();
+
+//https://maplibre.org/maplibre-gl-js/docs/API/classes/Popup/
+return {mapv2};
+}});
+
+define({id: "6ee3090c", inputs: ["d3","customers_full"], outputs: ["categoryCount","bubbleData"], body: (d3,customers_full) => {
+const categoryCount = d3.rollup(
+  customers_full.filter(d => d.preferred_main_category != null),
+  v => v.length,
+  d => d.preferred_main_category
+);
+
+const bubbleData = Array.from(categoryCount, ([preferred_main_category, count]) => ({
+  preferred_main_category: preferred_main_category.charAt(0).toUpperCase() + preferred_main_category.slice(1).toLowerCase(),
+  count
+}));
+return {categoryCount,bubbleData};
+}});
+
+define({id: "592600b6", inputs: ["bubbleData"], outputs: ["data"], body: (bubbleData) => {
+const data = { 
+  name: "root", 
+  children: bubbleData.map(d => ({
+    name: d.preferred_main_category,
+    value: d.count
+  }))
+};
+return {data};
+}});
+
+define({id: "110e3de3", inputs: ["d3","data"], outputs: ["bubbleChart"], body: (d3,data) => {
+const bubbleChart = (() => {
+const width = 928;
+const height = width;
+const margin = 1;
+
+const format = d3.format(",d");
+
+const pack = d3.pack()
+  .size([width - margin * 2, height - margin * 2])
+  .padding(3);
+
+const root = pack(
+  d3.hierarchy(data)
+    .sum(d => d.value)
+    .sort((a, b) => b.value - a.value)
+);
+
+const svg = d3.create("svg")
+  .attr("width", width)
+  .attr("height", height)
+  .attr("viewBox", [-margin, -margin, width, height])
+  .attr("style", "width: 100%; height: auto; font-family: 'Segoe UI', Tahoma, sans-serif;")
+  .attr("text-anchor", "middle");
+
+const node = svg.append("g")
+  .selectAll("g")
+  .data(root.descendants())
+  .join("g")
+    .attr("transform", d => `translate(${d.x},${d.y})`);
+
+node.append("title")
+  .text(d => `${d.data.name}\n${format(d.value)}`);
+
+node.append("circle")
+  .attr("fill", d => d.children ? "#fff" : "#ddd")
+  .attr("stroke", d => d.children ? "#bbb" : null)
+  .attr("r", d => d.r);
+
+const text = node
+  .filter(d => !d.children && d.r > 10)
+  .append("text")
+    .attr("clip-path", d => `circle(${d.r})`)
+    .style("font-size", d => `${Math.min(d.r / 3, 16)}px`)
+    .style("font-weight", "600");
+
+// Wrap text using foreignObject for automatic wrapping
+node
+  .filter(d => !d.children && d.r > 20)
+  .append("foreignObject")
+    .attr("x", d => -d.r)
+    .attr("y", d => -d.r)
+    .attr("width", d => d.r * 2)
+    .attr("height", d => d.r * 2)
+    .append("xhtml:div")
+      .style("display", "flex")
+      .style("flex-direction", "column")
+      .style("align-items", "center")
+      .style("justify-content", "center")
+      .style("height", "100%")
+      .style("text-align", "center")
+      .style("padding", "5px")
+      .style("font-family", "'Segoe UI', Tahoma, sans-serif")
+      .style("overflow", "hidden")
+      .html(d => {
+        const fontSize = Math.min(d.r / 3, 16);
+        const countSize = Math.min(d.r / 4, 12);
+        return `
+          <div style="font-size: ${fontSize}px; font-weight: 600; line-height: 1.2;">
+            ${d.data.name}
+          </div>
+          <div style="font-size: ${countSize}px; opacity: 0.7; margin-top: 4px;">
+            ${format(d.value)}
+          </div>
+        `;
+      });
+
+return (svg.node());
+})()
+return {bubbleChart};
+}});
+
+define({id: "011ba8dc", mode: "inline", inputs: ["bubbleChart","display"], body: async (bubbleChart,display) => {
+display(await(
+bubbleChart
+))
+}});
+
+define({id: "d5c7069e", inputs: ["customer_data"], outputs: ["gettingCurrent_cat"], body: (customer_data) => {
+const gettingCurrent_cat = customer_data
+  .filter(d => d.current_category != null && d.current_category !== "null" && d.current_category !== "")
+  .flatMap(d => {
+    const categories = d.current_category.split(/[,;|]+/); //
+    return categories
+      .map(cat => cat.trim())
+      .filter(cat => cat !== "" && cat !== "null" && cat.toLowerCase() !== "null")
+      .map(cat => ({
+        ...d,
+        current_category: cat
+      }));
+  });
+return {gettingCurrent_cat};
+}});
+
+define({id: "b4bdfc71", inputs: ["Plot","gettingCurrent_cat"], outputs: ["chart"], body: (Plot,gettingCurrent_cat) => {
+// histogram
+const chart = Plot.plot({
+  y: {grid: true},
+  x: {tickFormat: null},
+  marks: [
+    Plot.barY(gettingCurrent_cat, Plot.groupX({y: "count"}, 
+         {x: "current_category", fill: "steelblue", tip: true, sort: {x: "-y"}})),
+    Plot.ruleY([0])
+  ]
+});
+return {chart};
+}});
+
+define({id: "cc57fc19", mode: "inline", inputs: ["chart","display"], body: async (chart,display) => {
+display(await(
+chart
+))
+}});
+
+define({id: "cae9b2df", inputs: ["d3","customers_full"], outputs: ["RegistrationArray"], body: (d3,customers_full) => {
+const RegistrationArray = Array.from(
+  d3.rollup(
+    customers_full.filter(d => d.registration_status != null),  
+    v => v.length,
+    d => d.registration_status
+  ),
+  ([name, value]) => ({name, value}) 
+);
+return {RegistrationArray};
+}});
+
+define({id: "90f0c64d", inputs: ["Plot","customers_full"], outputs: ["registration_bar"], body: (Plot,customers_full) => {
+const registration_bar = Plot.plot({
+  marks: [
+    Plot.barY(customers_full.filter(d => d.registration_status != null), 
+      Plot.groupX(
+        {y: "count"}, 
+        {x: "registration_status", fill: "registration_status", tip: true}
+      )
+    ),
+    Plot.ruleY([0])
+  ],
+  x: {label: "registration_status"},
+  y: {label: "Count"},
+  //color: {legend: true}
+})
+return {registration_bar};
+}});
+
+define({id: "b0e7d2c7", mode: "inline", inputs: ["registration_pie","display"], body: async (registration_pie,display) => {
+display(await(
+registration_pie
+))
+}});
+
+define({id: "ed7051bf", inputs: ["customers_full"], outputs: ["timeOrder"], body: (customers_full) => {
+const timeOrder = [
+  "4 AM - 5 AM", "5 AM - 6 AM", "6 AM - 7 AM", "7 AM - 8 AM", "8 AM - 9 AM",
+  "9 AM - 10 AM", "10 AM - 11 AM", "11 AM - 12 PM",
+  "12 PM - 1 PM", "1 PM - 2 PM", "2 PM - 3 PM", "3 PM - 4 PM",
+  "4 PM - 5 PM", "5 PM - 6 PM", "6 PM - 7 PM", "7 PM - 8 PM",
+  "8 PM - 9 PM", "9 PM - 10 PM", "10 PM - 11 PM", "11 PM - 12 AM", "1 AM - 2 AM", "2 AM - 3 AM", "3 AM - 4 AM",
+];
+
+customers_full.sort((a, b) => 
+  timeOrder.indexOf(a.visit_time) - timeOrder.indexOf(b.visit_time)
+);
+return {timeOrder};
+}});
+
+define({id: "298a1972", inputs: ["Plot","timeOrder","customers_full"], outputs: ["time_of_visit"], body: (Plot,timeOrder,customers_full) => {
+const time_of_visit = Plot.plot({
+  //title:"Time Visited",
+  marginLeft: 100,
+  y: {
+    domain: timeOrder, label: "Time of Visit"},
+  marks: [
+    Plot.barX(customers_full.filter(d => d.visit_time != null), 
+      Plot.groupY(
+        {x: "count"}, 
+        {y: "visit_time", fill: "visit_time", tip: true}
+      )
+    ),
+    Plot.ruleX([0])
+  ],
+})
+return {time_of_visit};
+}});
+
+define({id: "1327f8bf", mode: "inline", inputs: ["time_of_visit","display"], body: async (time_of_visit,display) => {
+display(await(
+time_of_visit
+))
+}});
+
+define({id: "3df9d3f0", inputs: ["d3"], outputs: ["PieChart"], body: (d3) => {
+// copied from observable
+function PieChart(data, {
+  name = ([x]) => x,  // given d in data, returns the (ordinal) label
+  value = ([, y]) => y, // given d in data, returns the (quantitative) value
+  title, // given d in data, returns the title text
+  width = 640, // outer width, in pixels
+  height = 400, // outer height, in pixels
+  innerRadius = 0, // inner radius of pie, in pixels (non-zero for donut)
+  outerRadius = Math.min(width, height) / 2, // outer radius of pie, in pixels
+  labelRadius = (innerRadius * 0.2 + outerRadius * 0.8), // center radius of labels
+  format = ",", // a format specifier for values (in the label)
+  names, // array of names (the domain of the color scale)
+  colors, // array of colors for names
+  stroke = innerRadius > 0 ? "none" : "white", // stroke separating widths
+  strokeWidth = 1, // width of stroke separating wedges
+  strokeLinejoin = "round", // line join of stroke separating wedges
+  padAngle = stroke === "none" ? 1 / outerRadius : 0, // angular separation between wedges, in radians
+} = {}) {
+  // Compute values.
+  const N = d3.map(data, name);
+  const V = d3.map(data, value);
+  const I = d3.range(N.length).filter(i => !isNaN(V[i]));
+
+  // Unique the names.
+  if (names === undefined) names = N;
+  names = new d3.InternSet(names);
+
+  // Chose a default color scheme based on cardinality.
+  if (colors === undefined) colors = d3.schemeSpectral[names.size];
+  if (colors === undefined) colors = d3.quantize(t => d3.interpolateSpectral(t * 0.8 + 0.1), names.size);
+
+  // Construct scales.
+  const color = d3.scaleOrdinal(names, colors);
+
+  // Compute titles.
+  if (title === undefined) {
+    const formatValue = d3.format(format);
+    title = i => `${N[i]}\n${formatValue(V[i])}`;
+  } else {
+    const O = d3.map(data, d => d);
+    const T = title;
+    title = i => T(O[i], i, data);
+  }
+
+  // Construct arcs.
+  const arcs = d3.pie().padAngle(padAngle).sort(null).value(i => V[i])(I);
+  const arc = d3.arc().innerRadius(innerRadius).outerRadius(outerRadius);
+  const arcLabel = d3.arc().innerRadius(labelRadius).outerRadius(labelRadius);
+  
+  const svg = d3.create("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("viewBox", [-width / 2, -height / 2, width, height])
+      .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
+
+  svg.append("g")
+      .attr("stroke", stroke)
+      .attr("stroke-width", strokeWidth)
+      .attr("stroke-linejoin", strokeLinejoin)
+    .selectAll("path")
+    .data(arcs)
+    .join("path")
+      .attr("fill", d => color(N[d.data]))
+      .attr("d", arc)
+    .append("title")
+      .text(d => title(d.data));
+
+  svg.append("g")
+      .attr("font-family", "sans-serif")
+      .attr("font-size", 20)
+      .attr("text-anchor", "middle")
+    .selectAll("text")
+    .data(arcs)
+    .join("text")
+      .attr("transform", d => `translate(${arcLabel.centroid(d)})`)
+    .selectAll("tspan")
+    .data(d => {
+      if ((d.endAngle - d.startAngle) < 0.1) return [];
+      const lines = `${title(d.data)}`.split(/\n/);
+      return (d.endAngle - d.startAngle) > 0.25 ? lines : lines.slice(0, 1);
+    })
+    .join("tspan")
+      .attr("x", 0)
+      .attr("y", (_, i) => `${i * 1.1}em`)
+      .attr("font-weight", (_, i) => i ? null : "bold")
+      .text(d => d);
+
+  return Object.assign(svg.node(), {scales: {color}});
+}
+return {PieChart};
+}});
+
+define({id: "8da66fbc", inputs: ["PieChart","RegistrationArray","d3"], outputs: ["registration_pie"], body: (PieChart,RegistrationArray,d3) => {
+const registration_pie=PieChart(RegistrationArray, {
+      name: d => d.name,
+      value: d => d.value,
+      width: 500,
+      height: 400,
+      //colors: ["#89CFF0", "#FFB7CE"],
+      labelRadius: 90,
+      title: (d) => {
+        const total = d3.sum(RegistrationArray, p => p.value);
+        const percentage = ((d.value / total) * 100).toFixed(1);
+        return `${d.name}\n${percentage}%\n${d.value}`;
+      }
+    })
+return {registration_pie};
+}});
+
+</script>
+</head>
+<body>
+<input id="observablehq-sidebar-toggle" type="checkbox" title="Toggle sidebar">
+<label id="observablehq-sidebar-backdrop" for="observablehq-sidebar-toggle"></label>
+<nav id="observablehq-sidebar">
+  <ol>
+    <label id="observablehq-sidebar-close" for="observablehq-sidebar-toggle"></label>
+    <li class="observablehq-link"><a href="./">METLN</a></li>
+  </ol>
+  <ol>
+    <li class="observablehq-link"><a href="./totalevents">All  Events</a></li>
+    <li class="observablehq-link"><a href="./tables">Selected Events</a></li>
+    <li class="observablehq-link observablehq-link-active"><a href="./customerOverview">Customer Database</a></li>
+  </ol>
+</nav>
+<script>{const e=document.querySelector("#observablehq-sidebar"),o=document.querySelector("#observablehq-sidebar-toggle"),r=sessionStorage.getItem("observablehq-sidebar");r?o.checked=r==="true":o.indeterminate=!0;for(const t of document.querySelectorAll("#observablehq-sidebar summary")){const s=t.parentElement;switch(sessionStorage.getItem(`observablehq-sidebar:${t.textContent}`)){case"true":s.open=!0;break;case"false":s.classList.contains("observablehq-section-active")||(s.open=!1);break}}addEventListener("beforeunload",()=>sessionStorage.setItem("observablehq-sidebar-scrolly",`${e.scrollTop}`));const a=sessionStorage.getItem("observablehq-sidebar-scrolly");a!=null&&(e.style.cssText="overflow: hidden;",e.scrollTop=+a,e.style.cssText="");}</script>
+<div id="observablehq-center">
+<aside id="observablehq-toc" data-selector="h1:not(:first-of-type)[id], h2:first-child[id], :not(h1) + h2[id]">
+<nav>
+</nav>
+</aside>
+<main id="observablehq-main" class="observablehq">
+<h1 id="what-and-why" tabindex="-1"><a class="observablehq-header-anchor" href="#what-and-why">What &amp; Why</a></h1>
+<h2 id="supplemental-data" tabindex="-1"><a class="observablehq-header-anchor" href="#supplemental-data">Supplemental Data</a></h2>
+<p>Analyses on this page use a distinct dataset.</p>
+<p>This was a large set of data with a variety of dimensions.  Explanation of column names is included in graphs, but we don't have details on
+data definitions.</p>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.13.0/dist/maplibre-gl.css">
+<div class="observablehq observablehq--block"><!--:7d181a31:--></div>
+<div class="observablehq observablehq--block"><!--:7f086426:--></div>
+<div class="observablehq observablehq--block"><!--:de615b34:--></div>
+<div class="observablehq observablehq--block"><!--:1d7276b0:--></div>
+<div class="observablehq observablehq--block"><!--:0b0e9779:--></div>
+<div class="observablehq observablehq--block"><!--:0a38b784:--></div>
+<div class="card">
+<h1>Regional Overview</h1>
+<h2>Hover to see Location and Events Purchased<br>Graph displays rows which had latitude and longitude points and places dots labeled with the corresponding event purchase.</h2>
+  <observablehq-loading></observablehq-loading><!--:bdd6467f:-->
+</div>
+<div class="card"><h1>Regional Heatmap</h1><h2>Uses same data as above map.  Higher intensity color indicates more data present for that location.</h2>
+  <div id="mapv2" style="height: 400px; width: 100%;"></div> 
+</div>
+<div class="observablehq observablehq--block"><!--:470ce2f4:--></div>
+<div class="observablehq observablehq--block"><!--:6ee3090c:--></div>
+<div class="observablehq observablehq--block"><!--:592600b6:--></div>
+<div class="observablehq observablehq--block"><!--:110e3de3:--></div>
+<div class="card" style="background-color: #e3f2fd;">
+<h1>Preferred Main Category</h1><h2>Bubble size changes with count of preferred category.  Each customer can have multiple main categories and so can appear in multiple bubbles, thus the bubbles are not numbered.</h2>
+ <observablehq-loading></observablehq-loading><!--:011ba8dc:-->
+</div>`
+<div class="observablehq observablehq--block"><!--:d5c7069e:--></div>
+<div class="observablehq observablehq--block"><!--:b4bdfc71:--></div>
+<div class="card">
+<h1>Current Category</h1><h2>Shows counts of each current category from the customer data.  Hover each bar to see the applicable category.</h2>
+  <observablehq-loading></observablehq-loading><!--:cc57fc19:-->
+</div>
+<div class="observablehq observablehq--block"><!--:cae9b2df:--></div>
+<div class="observablehq observablehq--block"><!--:90f0c64d:--></div>
+<div class="card">
+<h1>Registration Status</h1><h2>Percentage and total number of customers at each registration status.</h2>
+  <observablehq-loading></observablehq-loading><!--:b0e7d2c7:-->
+</div>
+<div class="observablehq observablehq--block"><!--:ed7051bf:--></div>
+<div class="observablehq observablehq--block"><!--:298a1972:--></div>
+<div class="card">
+<h1>Visit Time</h1>Likely indicates a time the user visited the website.  Each bar shows total number of visits per time period.  Hover each bar with your mouse for more detail.
+  <observablehq-loading></observablehq-loading><!--:1327f8bf:-->
+</div>
+<div class="observablehq observablehq--block"><!--:3df9d3f0:--></div>
+<div class="observablehq observablehq--block"><!--:8da66fbc:--></div>
+</main>
+<footer id="observablehq-footer">
+<nav><a rel="prev" href="./tables"><span>Selected Events</span></a></nav>
+<div>Built with <a href="https://observablehq.com/" target="_blank" rel="noopener noreferrer">Observable</a> on <a title="2025-12-05T09:28:02">Dec 5, 2025</a>.</div>
+</footer>
+</div>
+</body>
+</html>

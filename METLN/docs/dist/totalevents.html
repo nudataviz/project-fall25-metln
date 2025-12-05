@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="generator" content="Observable Framework v1.13.3">
+<title>Total Event Overview | METLN</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;display=swap" crossorigin>
+<link rel="preload" as="style" href="./_observablehq/theme-air,near-midnight.dcdbf18e.css">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;display=swap" crossorigin>
+<link rel="stylesheet" type="text/css" href="./_observablehq/theme-air,near-midnight.dcdbf18e.css">
+<link rel="modulepreload" href="./_observablehq/client.00fa72d3.js">
+<link rel="modulepreload" href="./_observablehq/runtime.e080113b.js">
+<link rel="modulepreload" href="./_observablehq/stdlib.73a8ec5a.js">
+<link rel="modulepreload" href="./_npm/gender-detection-from-name@1.11.4/2d9e6ef3.js">
+<link rel="modulepreload" href="./_npm/d3@7.9.0/e780feca.js">
+<link rel="modulepreload" href="./_npm/htl@0.3.1/72f4716c.js">
+<link rel="modulepreload" href="./_npm/@observablehq/plot@0.6.17/d761ef9b.js">
+<link rel="modulepreload" href="./_npm/d3-dsv@3.0.1/9cffc2bd.js">
+<link rel="modulepreload" href="./_npm/d3-array@3.2.4/e93ca09f.js">
+<link rel="modulepreload" href="./_npm/d3-axis@3.0.0/0f2de24d.js">
+<link rel="modulepreload" href="./_npm/d3-brush@3.0.0/65eb105b.js">
+<link rel="modulepreload" href="./_npm/d3-chord@3.0.1/7ef8fb2e.js">
+<link rel="modulepreload" href="./_npm/d3-color@3.1.0/aeb57b94.js">
+<link rel="modulepreload" href="./_npm/d3-contour@4.0.2/1d2aed74.js">
+<link rel="modulepreload" href="./_npm/d3-delaunay@6.0.4/5ced1d52.js">
+<link rel="modulepreload" href="./_npm/d3-dispatch@3.0.1/9ba9c7f3.js">
+<link rel="modulepreload" href="./_npm/d3-drag@3.0.0/4202580c.js">
+<link rel="modulepreload" href="./_npm/d3-ease@3.0.1/cdd7e898.js">
+<link rel="modulepreload" href="./_npm/d3-fetch@3.0.1/b4e2ad9a.js">
+<link rel="modulepreload" href="./_npm/d3-force@3.0.0/5e804d15.js">
+<link rel="modulepreload" href="./_npm/d3-format@3.1.0/86074ef6.js">
+<link rel="modulepreload" href="./_npm/d3-geo@3.1.1/40599fb3.js">
+<link rel="modulepreload" href="./_npm/d3-hierarchy@3.1.2/e49e792c.js">
+<link rel="modulepreload" href="./_npm/d3-interpolate@3.0.1/8d1e5425.js">
+<link rel="modulepreload" href="./_npm/d3-path@3.1.0/20d3f133.js">
+<link rel="modulepreload" href="./_npm/d3-polygon@3.0.1/7553081f.js">
+<link rel="modulepreload" href="./_npm/d3-quadtree@3.0.1/0dfd751c.js">
+<link rel="modulepreload" href="./_npm/d3-random@3.0.1/3c90ee06.js">
+<link rel="modulepreload" href="./_npm/d3-scale@4.0.2/843b6a76.js">
+<link rel="modulepreload" href="./_npm/d3-scale-chromatic@3.1.0/ba24c2e7.js">
+<link rel="modulepreload" href="./_npm/d3-selection@3.0.0/4d94e5b7.js">
+<link rel="modulepreload" href="./_npm/d3-shape@3.2.0/6d3a6726.js">
+<link rel="modulepreload" href="./_npm/d3-time@3.1.0/9f03c579.js">
+<link rel="modulepreload" href="./_npm/d3-time-format@4.1.0/07c9626f.js">
+<link rel="modulepreload" href="./_npm/d3-timer@3.0.1/b58a267d.js">
+<link rel="modulepreload" href="./_npm/d3-transition@3.0.1/004da2ac.js">
+<link rel="modulepreload" href="./_npm/d3-zoom@3.0.0/b5786b3f.js">
+<link rel="modulepreload" href="./_npm/isoformat@0.2.1/18cbf477.js">
+<link rel="modulepreload" href="./_npm/interval-tree-1d@1.0.4/53fe8176.js">
+<link rel="modulepreload" href="./_npm/internmap@2.0.3/e08981d9.js">
+<link rel="modulepreload" href="./_npm/delaunator@5.0.1/02d43215.js">
+<link rel="modulepreload" href="./_npm/binary-search-bounds@2.0.5/cbf6ba23.js">
+<link rel="modulepreload" href="./_npm/robust-predicates@3.0.2/aa00730b.js">
+<link rel="icon" href="./_file/observable.1af93621.png" type="image/png" sizes="32x32">
+<script type="module">
+
+import {define} from "./_observablehq/client.00fa72d3.js";
+import {registerFile} from "./_observablehq/stdlib.73a8ec5a.js";
+
+registerFile("./data/cleaned_transaction.csv", {"name":"./data/cleaned_transaction.csv","mimeType":"text/csv","path":"./_file/data/cleaned_transaction.4db8f713.csv","lastModified":1764944834114,"size":138283});
+registerFile("./data/customer_summary_clean.csv", {"name":"./data/customer_summary_clean.csv","mimeType":"text/csv","path":"./_file/data/customer_summary_clean.f238f44a.csv","lastModified":1764944834115,"size":141960});
+
+define({id: "7e74136e", body: () => {
+//need to download npm i gender-detection-from-name
+}});
+
+define({id: "2dd96a3b", inputs: ["FileAttachment"], outputs: ["customers"], body: async (FileAttachment) => {
+let customers = await FileAttachment("./data/customer_summary_clean.csv").csv({typed: true})
+return {customers};
+}});
+
+define({id: "77bb462c", inputs: ["FileAttachment"], outputs: ["transactions"], body: async (FileAttachment) => {
+let transactions = await FileAttachment("./data/cleaned_transaction.csv").csv({typed: true})
+return {transactions};
+}});
+
+define({id: "49f1930f", inputs: ["d3"], outputs: ["formatDay"], body: (d3) => {
+const formatDay = d3.timeFormat("%A");
+
+return {formatDay};
+}});
+
+define({id: "295bacbb", outputs: ["getGender","gender_guesser"], body: async () => {
+const {getGender} = await import("./_npm/gender-detection-from-name@1.11.4/2d9e6ef3.js");
+const gender_guesser = getGender;
+return {getGender,gender_guesser};
+}});
+
+define({id: "bfb4bbff", outputs: ["getTimeofDay"], body: () => {
+//Function for identifying time of day for transaction
+function getTimeofDay(dateVal){
+    let hour = dateVal.getHours()
+    
+    if (hour <= 12){
+        return "Morning"
+    }
+    if (hour > 12 && hour < 18){
+        return "Afternoon"
+    }
+    return "Evening"
+}
+return {getTimeofDay};
+}});
+
+define({id: "049f08e4", inputs: ["customers","transactions","formatDay","gender_guesser","getTimeofDay","getSeason"], outputs: ["customerArray","transactionArray"], body: (customers,transactions,formatDay,gender_guesser,getTimeofDay,getSeason) => {
+//Creates array from file attachment
+let customerArray = Array.from(customers)
+for (let i = 0; i < customerArray.length; i++){
+    //Iterates through each object and converts dollar amount strings to numbers
+    for (var property in customerArray[i]){
+        let value = customerArray[i][property]
+        if (typeof value === 'string' && value.includes("$")){
+            // Regex for removing unwanted string vals
+            customerArray[i][property] = parseFloat(value.replace(/[^0-9.-]+/g, '')) 
+        }
+    }
+
+}
+
+let transactionArray = Array.from(transactions)
+for (let i = 0; i < transactionArray.length; i++){
+    //Iterates through each object and converts dollar amount strings to numbers
+    for (var property in transactionArray[i]){
+        let value = transactionArray[i][property]
+        if (typeof value === 'string' && value.includes("$")){
+            // Regex for removing unwanted string vals
+            transactionArray[i][property] = parseFloat(value.replace(/[^0-9.-]+/g, '')) 
+        }
+    }
+
+    //Updates date strings to date values
+    transactionArray[i]["Event Date"] = new Date(transactionArray[i]["Event Date"])
+    transactionArray[i]["Date"] = new Date(transactionArray[i]["Date"])
+    transactionArray[i]["Day_Of_Week"] = formatDay(transactionArray[i]["Date"])
+    transactionArray[i]["Gender"] = gender_guesser(transactionArray[i]["First Name"])
+    transactionArray[i]["timeOfDay"] = getTimeofDay(transactionArray[i]["Date"])
+    transactionArray[i]["Season"] = getSeason(transactionArray[i]["Event Date"])
+
+
+}
+
+return {customerArray,transactionArray};
+}});
+
+define({id: "58d4751e", outputs: ["getSeason"], body: () => {
+function getSeason(dateVal){
+  const month = dateVal.getMonth()
+  let season = null
+  if (month == 0 || month == 1 || month == 2){
+    season = "Winter"
+  }
+  else if (month == 2 || month == 3 || month == 4){
+    season = "Spring"
+  }
+  else if (month == 5 || month == 6 || month == 7){
+    season = "Summer"
+  }
+  else if (month == 8 || month == 9 || month == 10){
+    season = "Autumn"
+  }
+  return season
+}
+return {getSeason};
+}});
+
+define({id: "4f4e1091", inputs: ["transactionArray"], outputs: ["data"], body: (transactionArray) => {
+let data=transactionArray
+
+return {data};
+}});
+
+define({id: "21b49ecf", inputs: ["data"], outputs: ["data_filter"], body: (data) => {
+const data_filter=data.filter(d => d.Gender === "male" || d.Gender === "female")
+return {data_filter};
+}});
+
+define({id: "36a79f61", inputs: ["d3","data_filter"], outputs: ["genderCounts","pie_array"], body: (d3,data_filter) => {
+const genderCounts = d3.rollup(
+  data_filter,
+  v => v.length,
+  d => d.Gender
+);
+
+const pie_array = Array.from(genderCounts, ([gender, count]) => ({
+  name: gender,
+  value: count
+}));
+return {genderCounts,pie_array};
+}});
+
+define({id: "4a4681b2", inputs: ["d3","data"], outputs: ["tod_pie"], body: (d3,data) => {
+const tod_pie = Array.from(
+  d3.rollup(
+    data,  
+    v => v.length,
+    d => d.timeOfDay
+  ),
+  ([name, value]) => ({name, value}) 
+);
+return {tod_pie};
+}});
+
+define({id: "4f81349a", inputs: ["d3","transactionArray"], outputs: ["transaction_array_dow"], body: (d3,transactionArray) => {
+const transaction_array_dow = Array.from(
+  d3.rollup(
+    transactionArray,  
+    v => v.length,
+    d => d.Day_Of_Week
+  ),
+  ([name, value]) => ({name, value}) 
+);
+return {transaction_array_dow};
+}});
+
+define({id: "ccb2a5f8", inputs: ["transaction_array_dow"], outputs: ["data_dow"], body: (transaction_array_dow) => {
+let data_dow=transaction_array_dow
+return {data_dow};
+}});
+
+define({id: "9edfbc66", inputs: ["transactionArray"], outputs: ["days","dataWithDay"], body: (transactionArray) => {
+// Adds the DOW the event occurs to the array
+// Used to show what day of week the events are occuring
+const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
+const dataWithDay = transactionArray.map(d => ({
+  ...d,
+  day: days[d["Event Date"].getDay()]
+}));
+
+return {days,dataWithDay};
+}});
+
+define({id: "bf499d73", inputs: ["dataWithDay"], outputs: ["dayEventCount","setOfEvents"], body: (dataWithDay) => {
+// data wrangling for bubble graph
+const dayEventCount = {Sunday : 0, Monday : 0, Tuesday: 0, Wednesday: 0, Thursday:0, Friday:0, Saturday:0}
+const setOfEvents = new Set()
+for (const row of dataWithDay){
+  if (!setOfEvents.has(row["Item Name"])){
+    setOfEvents.add(row["Item Name"])
+    dayEventCount[row["day"]] += 1
+  }
+}
+return {dayEventCount,setOfEvents};
+}});
+
+define({id: "55911f78", inputs: ["dayEventCount"], outputs: ["numEventsperDOW"], body: (dayEventCount) => {
+// Used in bubblechart for event counts for each DOW
+const numEventsperDOW = Object.entries(dayEventCount).map(([day, count]) => ({
+  Name: day,
+  count: count
+}));
+return {numEventsperDOW};
+}});
+
+define({id: "f31b68c4", inputs: ["d3","location"], outputs: ["BubbleChart"], body: (d3,location) => {
+// Copyright 2021-2023 Observable, Inc.
+// Released under the ISC license.
+// https://observablehq.com/@d3/bubble-chart
+function BubbleChart(data, {
+  name = ([x]) => x, // alias for label
+  label = name, // given d in data, returns text to display on the bubble
+  value = ([, y]) => y, // given d in data, returns a quantitative size
+  group, // given d in data, returns a categorical value for color
+  title, // given d in data, returns text to show on hover
+  link, // given a node d, its link (if any)
+  linkTarget = "_blank", // the target attribute for links, if any
+  width = 640, // outer width, in pixels
+  height = width, // outer height, in pixels
+  padding = 3, // padding between circles
+  margin = 1, // default margins
+  marginTop = margin, // top margin, in pixels
+  marginRight = margin, // right margin, in pixels
+  marginBottom = margin, // bottom margin, in pixels
+  marginLeft = margin, // left margin, in pixels
+  groups, // array of group names (the domain of the color scale)
+  colors = d3.scaleOrdinal(d3.schemeAccent), // an array of colors (for groups), changed val to match dash
+  fill = "#ccc", // a static fill color, if no group channel is specified
+  fillOpacity = 0.7, // the fill opacity of the bubbles
+  stroke, // a static stroke around the bubbles
+  strokeWidth, // the stroke width around the bubbles, if any
+  strokeOpacity, // the stroke opacity around the bubbles, if any
+} = {}) {
+  // Compute the values.
+  const D = d3.map(data, d => d);
+  const V = d3.map(data, value);
+  const G = group == null ? null : d3.map(data, group);
+  const I = d3.range(V.length).filter(i => V[i] > 0);
+
+  // Unique the groups.
+  if (G && groups === undefined) groups = I.map(i => G[i]);
+  groups = G && new d3.InternSet(groups);
+
+  // Construct scales.
+  const color = G && d3.scaleOrdinal(groups, colors);
+
+  // Compute labels and titles.
+  const L = label == null ? null : d3.map(data, label);
+  const T = title === undefined ? L : title == null ? null : d3.map(data, title);
+
+  // Compute layout: create a 1-deep hierarchy, and pack it.
+  const root = d3.pack()
+      .size([width - marginLeft - marginRight, height - marginTop - marginBottom])
+      .padding(padding)
+    (d3.hierarchy({children: I})
+      .sum(i => V[i]));
+
+  const svg = d3.create("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("viewBox", [-marginLeft, -marginTop, width, height])
+      .attr("style", "max-width: 100%; height: auto; height: intrinsic;")
+      .attr("fill", "currentColor")
+      .attr("font-size", 30)
+      .attr("font-family", "sans-serif")
+      .attr("text-anchor", "middle");
+
+  const leaf = svg.selectAll("a")
+    .data(root.leaves())
+    .join("a")
+      .attr("xlink:href", link == null ? null : (d, i) => link(D[d.data], i, data))
+      .attr("target", link == null ? null : linkTarget)
+      .attr("transform", d => `translate(${d.x},${d.y})`);
+
+  leaf.append("circle")
+      .attr("stroke", stroke)
+      .attr("stroke-width", strokeWidth)
+      .attr("stroke-opacity", strokeOpacity)
+      .attr("fill", G ? d => color(G[d.data]) : fill == null ? "none" : fill)
+      .attr("fill-opacity", fillOpacity)
+      .attr("r", d => d.r);
+
+  if (T) leaf.append("title")
+      .text(d => T[d.data]);
+
+  if (L) {
+    // A unique identifier for clip paths (to avoid conflicts).
+    const uid = `O-${Math.random().toString(16).slice(2)}`;
+
+    leaf.append("clipPath")
+        .attr("id", d => `${uid}-clip-${d.data}`)
+      .append("circle")
+        .attr("r", d => d.r);
+
+    leaf.append("text")
+        .attr("clip-path", d => `url(${new URL(`#${uid}-clip-${d.data}`, location)})`)
+      .selectAll("tspan")
+      .data(d => `${L[d.data]}`.split(/\n/g))
+      .join("tspan")
+        .attr("x", 0)
+        .attr("y", (d, i, D) => `${i - D.length / 2 + 0.85}em`)
+        .attr("fill-opacity", (d, i, D) => i === D.length - 1 ? 0.7 : null)
+        .text(d => d);
+  }
+
+  return Object.assign(svg.node(), {scales: {color}});
+}
+return {BubbleChart};
+}});
+
+define({id: "4414f4ac", outputs: ["colorMap"], body: () => {
+//Defining color map to match colors across DOW charts
+// Any changes to these colors should also be made to the pie chart call to make sure day colors align
+const colorMap = {
+  Sunday:  "#4CBF70",
+  Monday: "#FF6F61",
+  Tuesday: "#7FCECC",
+  Wednesday: "#C985FF",
+  Thursday: "#B4D96A",
+  Friday: "#FF9F4A",
+  Saturday: "#6E89FF"
+};
+return {colorMap};
+}});
+
+define({id: "9680abc1", inputs: ["BubbleChart","numEventsperDOW","colorMap"], outputs: ["bubbles"], body: (BubbleChart,numEventsperDOW,colorMap) => {
+// Function call for bubblechart, uses same colors
+const bubbles = BubbleChart(numEventsperDOW, {
+  label: d => `${d.Name}\n${d.count}`,
+  value: d => d.count,
+  group: d => d.Name,
+  
+
+  groups: Object.keys(colorMap),
+  colors: Object.values(colorMap)
+});
+
+return {bubbles};
+}});
+
+define({id: "4ee73a30", inputs: ["d3"], outputs: ["PieChart"], body: (d3) => {
+// copied from observable
+function PieChart(data, {
+  name = ([x]) => x,  // given d in data, returns the (ordinal) label
+  value = ([, y]) => y, // given d in data, returns the (quantitative) value
+  title, // given d in data, returns the title text
+  width = 640, // outer width, in pixels
+  height = 400, // outer height, in pixels
+  innerRadius = 0, // inner radius of pie, in pixels (non-zero for donut)
+  outerRadius = Math.min(width, height) / 2, // outer radius of pie, in pixels
+  labelRadius = (innerRadius * 0.2 + outerRadius * 0.8), // center radius of labels
+  format = ",", // a format specifier for values (in the label)
+  names, // array of names (the domain of the color scale)
+  colors, // array of colors for names
+  stroke = innerRadius > 0 ? "none" : "white", // stroke separating widths
+  strokeWidth = 1, // width of stroke separating wedges
+  strokeLinejoin = "round", // line join of stroke separating wedges
+  padAngle = stroke === "none" ? 1 / outerRadius : 0, // angular separation between wedges, in radians
+} = {}) {
+  // Compute values.
+  const N = d3.map(data, name);
+  const V = d3.map(data, value);
+  const I = d3.range(N.length).filter(i => !isNaN(V[i]));
+
+  // Unique the names.
+  if (names === undefined) names = N;
+  names = new d3.InternSet(names);
+
+  // Chose a default color scheme based on cardinality.
+  if (colors === undefined) colors = d3.schemeSpectral[names.size];
+  if (colors === undefined) colors = d3.quantize(t => d3.interpolateSpectral(t * 0.8 + 0.1), names.size);
+
+  // Construct scales.
+  const color = d3.scaleOrdinal(names, colors);
+
+  // Compute titles.
+  if (title === undefined) {
+    const formatValue = d3.format(format);
+    title = i => `${N[i]}\n${formatValue(V[i])}`;
+  } else {
+    const O = d3.map(data, d => d);
+    const T = title;
+    title = i => T(O[i], i, data);
+  }
+
+  // Construct arcs.
+  const arcs = d3.pie().padAngle(padAngle).sort(null).value(i => V[i])(I);
+  const arc = d3.arc().innerRadius(innerRadius).outerRadius(outerRadius);
+  const arcLabel = d3.arc().innerRadius(labelRadius).outerRadius(labelRadius);
+  
+  const svg = d3.create("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("viewBox", [-width / 2, -height / 2, width, height])
+      .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
+
+  svg.append("g")
+      .attr("stroke", stroke)
+      .attr("stroke-width", strokeWidth)
+      .attr("stroke-linejoin", strokeLinejoin)
+    .selectAll("path")
+    .data(arcs)
+    .join("path")
+      .attr("fill", d => color(N[d.data]))
+      .attr("d", arc)
+    .append("title")
+      .text(d => title(d.data));
+
+  svg.append("g")
+      .attr("font-family", "sans-serif")
+      .attr("font-size", 20)
+      .attr("text-anchor", "middle")
+    .selectAll("text")
+    .data(arcs)
+    .join("text")
+      .attr("transform", d => `translate(${arcLabel.centroid(d)})`)
+    .selectAll("tspan")
+    .data(d => {
+      const lines = `${title(d.data)}`.split(/\n/);
+      return (d.endAngle - d.startAngle) > 0.25 ? lines : lines.slice(0, 1);
+    })
+    .join("tspan")
+      .attr("x", 0)
+      .attr("y", (_, i) => `${i * 1.1}em`)
+      .attr("font-weight", (_, i) => i ? null : "bold")
+      .text(d => d);
+
+  return Object.assign(svg.node(), {scales: {color}});
+}
+return {PieChart};
+}});
+
+define({id: "3e516748", inputs: ["width","d3","data_dow","pie_dow"], outputs: ["chart_dow"], body: (width,d3,data_dow,pie_dow) => {
+function chart_dow() {
+  const chartHeight = 280; 
+  const chartWidth = Math.min(width, 700);
+  const radius = Math.min(chartWidth, chartHeight * 2) / 2;
+
+  const arc = d3.arc()
+      .innerRadius(radius * 0.67)
+      .outerRadius(radius - 1);
+
+  const order = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  data_dow.sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name));
+
+  const color = d3.scaleOrdinal()
+      .domain(order)
+      .range(["#4CBF70", "#FF6F61", "#7FCECC", "#C985FF", "#B4D96A", "#FF9F4A", "#6E89FF"]);
+
+  const svg = d3.create("svg")
+      .attr("width", chartWidth)
+      .attr("height", chartHeight)
+      .attr("viewBox", [-chartWidth / 2, -radius, chartWidth, radius + 20]) //changed this to fit on a page
+      .attr("style", "max-width: 100%; height: auto; display: block;");
+
+  svg.append("g")
+    .selectAll()
+    .data(pie_dow(data_dow))
+    .join("path")
+      .attr("fill", d => color(d.data.name))
+      .attr("d", arc)
+    .append("title")
+      .text(d => `${d.data.name}: ${d.data.value.toLocaleString()}`);
+
+  svg.append("g")
+      .attr("font-family", "sans-serif")
+      .attr("font-size", 14)
+      .attr("text-anchor", "middle")
+    .selectAll()
+    .data(pie_dow(data_dow))
+    .join("text")
+      .attr("transform", d => `translate(${arc.centroid(d)})`)
+      .call(text => text.append("tspan")
+          .attr("y", "-0.4em")
+          .attr("font-weight", "bold")
+          .text(d => d.data.name))
+      .call(text => text.append("tspan")
+          .attr("x", 0)
+          .attr("y", "0.7em")
+          .attr("fill-opacity", 0.7)
+          .text(d => d.data.value.toLocaleString("en-US")));
+
+  return svg.node();
+}
+return {chart_dow};
+}});
+
+define({id: "bd56e404", inputs: ["width","d3"], outputs: ["height","radius","pie_dow"], body: (width,d3) => {
+const height = Math.min(width, 700);
+const radius = Math.min(width, height) / 2;
+
+const pie_dow = d3.pie()
+    .padAngle(1 / radius)
+    .sort(null)
+    .value(d => d.value)
+    .startAngle(-Math.PI / 2)
+    .endAngle(Math.PI / 2);
+return {height,radius,pie_dow};
+}});
+
+define({id: "7f67ed02", inputs: ["d3","transactionArray"], outputs: ["aggregated"], body: (d3,transactionArray) => {
+// Used for season chart
+const aggregated = Array.from(
+  d3.rollup(
+    transactionArray,
+    v => v.length, 
+    d => d.Season,
+    d => d["Item Name"]
+  ),
+  ([Season, eventMap]) =>
+    Array.from(eventMap, ([Event, Tickets]) => ({
+      Season,
+      Event,
+      Tickets
+    }))
+).flat();
+return {aggregated};
+}});
+
+define({id: "e4c9d559", inputs: ["d3","transactionArray"], outputs: ["salesByWeek"], body: (d3,transactionArray) => {
+// Cumulative graph for the weeks leading up to an event for all selected events
+// Does not use dates but instead uses a measure of how far out from the event the ticket purchase is
+const salesByWeek = d3.rollup(
+  transactionArray,
+  v => v.length, // count tickets
+  d => {
+    const eventDate = new Date(d["Event Date"]);
+    const purchaseDate = new Date(d.Date);
+    const daysUntil = Math.floor((eventDate - purchaseDate) / (1000 * 60 * 60 * 24));
+    const weeksUntil = Math.floor(daysUntil / 7);
+    return weeksUntil;
+  }
+);
+return {salesByWeek};
+}});
+
+define({id: "1fc5bcd8", inputs: ["salesByWeek"], outputs: ["salesData","cumulative"], body: (salesByWeek) => {
+// Array with weeks until event date, tickets sold that week, and total tickets sold
+const salesData = Array.from(salesByWeek, ([week, count]) => ({
+  weeksUntil: week,
+  ticketsSold: count
+})).sort((a, b) => b.weeksUntil - a.weeksUntil);
+
+// Updates salesData cumulative values to be cumululative
+let cumulative = 0;
+salesData.forEach(d => {
+  cumulative += d.ticketsSold;
+  d.cumulativeTickets = cumulative;
+});
+return {salesData,cumulative};
+}});
+
+define({id: "64c17e2a", inputs: ["Plot","salesData"], outputs: ["cumulativeTicketsSold"], body: (Plot,salesData) => {
+// Uses above inputs
+const cumulativeTicketsSold = Plot.plot({
+    height: 300,
+    x: {label: "Weeks Before Event", 
+      reverse: true,
+      domain: salesData.slice(-10).map(d => d.weeksUntil)},
+    marks: [
+      Plot.lineY(salesData.slice(-10), {
+        x: "weeksUntil",
+        y: "cumulativeTickets",
+        stroke: "steelblue",
+        strokeWidth: 2,
+        tip: true
+      }),
+      Plot.dot(salesData.slice(-10), {
+        x: "weeksUntil",
+        y: "cumulativeTickets",
+        fill: "steelblue"
+      }),
+      Plot.gridX({strokeDasharray: "5,3"}),
+      Plot.gridY({strokeDasharray: "5,3"})
+    ],
+    y: {label: "Tickets Sold", labelAnchor: "top"},
+    x: {label: "Weeks Before Event", reverse: true}
+    })
+    
+return {cumulativeTicketsSold};
+}});
+
+define({id: "745d15a2", inputs: ["Plot","aggregated"], outputs: ["seasonBar"], body: (Plot,aggregated) => {
+const seasonBar = Plot.plot({
+    height: 500,
+    style: {fontSize: "20px"},
+  x: {label: "", style: {size: 20}},
+  color :{scheme: "set3"},
+  marks: [
+  Plot.barY(aggregated, {x: "Season", y:"Tickets", fill: "Event", tip: true}),
+  Plot.axisY({interval: 40})
+  ]
+  })
+return {seasonBar};
+}});
+
+define({id: "7c5fd617", inputs: ["display","seasonBar"], body: (display,seasonBar) => {
+display(seasonBar)
+}});
+
+define({id: "a672a679", mode: "inline", inputs: ["PieChart","pie_array","d3","display"], body: async (PieChart,pie_array,d3,display) => {
+display(await(
+PieChart(pie_array, {
+      name: d => d.name,
+      value: d => d.value,
+      width: 500,
+      height: 400,
+      colors: ["#89CFF0", "#FFB7CE"],
+      labelRadius: 90,
+      title: (d) => {
+        const total = d3.sum(pie_array, p => p.value);
+        const percentage = ((d.value / total) * 100).toFixed(1);
+        return `${d.name}\n${percentage}%\n${d.value}`;
+      }
+    })
+))
+}});
+
+define({id: "6cf0e842", mode: "inline", inputs: ["PieChart","tod_pie","d3","display"], body: async (PieChart,tod_pie,d3,display) => {
+display(await(
+PieChart(tod_pie, {
+  name: d => d.name,
+  value: d => d.value,
+  width: 500,
+  height: 400,
+  colors: ["#FFE86A",  "#9895C9", "#E9A33A"],
+  labelRadius: 90,
+  startAngle: -Math.PI / 2,
+  endAngle: Math.PI / 2,
+  innerRadius: 0,
+  title: (d) => {
+    const total = d3.sum(tod_pie, p => p.value); // make sure tod_pie exists here
+    const percentage = ((d.value / total) * 100).toFixed(1);
+    return `${d.name}\n${percentage}%\n${d.value}`;
+  }
+})
+))
+}});
+
+define({id: "6a66685b", mode: "inline", inputs: ["chart_dow","display"], body: async (chart_dow,display) => {
+display(await(
+chart_dow()
+))
+}});
+
+define({id: "2ea0d25e", mode: "inline", inputs: ["bubbles","display"], body: async (bubbles,display) => {
+display(await(
+bubbles
+))
+}});
+
+define({id: "f9678ad9", mode: "inline", inputs: ["aggregated","display"], body: async (aggregated,display) => {
+display(await(
+aggregated.filter(d => d["Season"] == "Winter").length
+))
+}});
+
+define({id: "b973fd7c", mode: "inline", inputs: ["aggregated","display"], body: async (aggregated,display) => {
+display(await(
+aggregated.filter(d => d["Season"] == "Spring").length
+))
+}});
+
+define({id: "8a8ab4d8", mode: "inline", inputs: ["aggregated","display"], body: async (aggregated,display) => {
+display(await(
+aggregated.filter(d => d["Season"] == "Summer").length
+))
+}});
+
+define({id: "3187c561", mode: "inline", inputs: ["aggregated","display"], body: async (aggregated,display) => {
+display(await(
+aggregated.filter(d => d["Season"] == "Autumn").length
+))
+}});
+
+define({id: "f2e1e461", mode: "inline", inputs: ["seasonBar","display"], body: async (seasonBar,display) => {
+display(await(
+seasonBar
+))
+}});
+
+define({id: "f34a4c09", mode: "inline", inputs: ["cumulativeTicketsSold","display"], body: async (cumulativeTicketsSold,display) => {
+display(await(
+cumulativeTicketsSold
+))
+}});
+
+define({id: "2f51552f", inputs: ["htl","display"], body: async (htl,display) => {
+display(await(
+htl.html`<button onclick="window.print()" style="padding: 10px 20px; background: #487eb7ff; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 20px 0;">
+Print/Save as PDF
+</button>`
+
+))
+}});
+
+define({id: "28c84f9a", body: () => {
+{
+  const button = document.getElementById("print-button");
+  if (button) {
+    button.addEventListener("click", () => {
+      window.print();
+    });
+  }
+}
+}});
+
+</script>
+</head>
+<body>
+<input id="observablehq-sidebar-toggle" type="checkbox" title="Toggle sidebar">
+<label id="observablehq-sidebar-backdrop" for="observablehq-sidebar-toggle"></label>
+<nav id="observablehq-sidebar">
+  <ol>
+    <label id="observablehq-sidebar-close" for="observablehq-sidebar-toggle"></label>
+    <li class="observablehq-link"><a href="./">METLN</a></li>
+  </ol>
+  <ol>
+    <li class="observablehq-link observablehq-link-active"><a href="./totalevents">All  Events</a></li>
+    <li class="observablehq-link"><a href="./tables">Selected Events</a></li>
+    <li class="observablehq-link"><a href="./customerOverview">Customer Database</a></li>
+  </ol>
+</nav>
+<script>{const e=document.querySelector("#observablehq-sidebar"),o=document.querySelector("#observablehq-sidebar-toggle"),r=sessionStorage.getItem("observablehq-sidebar");r?o.checked=r==="true":o.indeterminate=!0;for(const t of document.querySelectorAll("#observablehq-sidebar summary")){const s=t.parentElement;switch(sessionStorage.getItem(`observablehq-sidebar:${t.textContent}`)){case"true":s.open=!0;break;case"false":s.classList.contains("observablehq-section-active")||(s.open=!1);break}}addEventListener("beforeunload",()=>sessionStorage.setItem("observablehq-sidebar-scrolly",`${e.scrollTop}`));const a=sessionStorage.getItem("observablehq-sidebar-scrolly");a!=null&&(e.style.cssText="overflow: hidden;",e.scrollTop=+a,e.style.cssText="");}</script>
+<div id="observablehq-center">
+<aside id="observablehq-toc" data-selector="h1:not(:first-of-type)[id], h2:first-child[id], :not(h1) + h2[id]">
+<nav>
+</nav>
+</aside>
+<main id="observablehq-main" class="observablehq">
+<h1 id="who-and-when" tabindex="-1"><a class="observablehq-header-anchor" href="#who-and-when">Who &amp; When</a></h1>
+<h2 id="overview-across-all-events" tabindex="-1"><a class="observablehq-header-anchor" href="#overview-across-all-events">Overview Across All Events</a></h2>
+<p>Visualizations on this page draw from transaction data to highlight purchase dates, times, and client demographics. To see this data for indiviudal events please head to the event table in <a href="./tables">Selected Events</a></p>
+<p>These charts are intended to provide a high-level overview, helping you quickly identify broad patterns and emerging trends across all events.</p>
+<div class="observablehq observablehq--block"><!--:7e74136e:--></div>
+<div class="observablehq observablehq--block"><!--:2dd96a3b:--></div>
+<div class="observablehq observablehq--block"><!--:77bb462c:--></div>
+<div class="observablehq observablehq--block"><!--:49f1930f:--></div>
+<div class="observablehq observablehq--block"><!--:295bacbb:--></div>
+<div class="observablehq observablehq--block"><!--:bfb4bbff:--></div>
+<div class="observablehq observablehq--block"><!--:049f08e4:--></div>
+<div class="observablehq observablehq--block"><!--:58d4751e:--></div>
+<div class="observablehq observablehq--block"><!--:4f4e1091:--></div>
+<div class="observablehq observablehq--block"><!--:21b49ecf:--></div>
+<div class="observablehq observablehq--block"><!--:36a79f61:--></div>
+<div class="observablehq observablehq--block"><!--:4a4681b2:--></div>
+<div class="observablehq observablehq--block"><!--:4f81349a:--></div>
+<div class="observablehq observablehq--block"><!--:ccb2a5f8:--></div>
+<div class="observablehq observablehq--block"><!--:9edfbc66:--></div>
+<div class="observablehq observablehq--block"><!--:bf499d73:--></div>
+<div class="observablehq observablehq--block"><!--:55911f78:--></div>
+<div class="observablehq observablehq--block"><!--:f31b68c4:--></div>
+<div class="observablehq observablehq--block"><!--:4414f4ac:--></div>
+<div class="observablehq observablehq--block"><!--:9680abc1:--></div>
+<div class="observablehq observablehq--block"><!--:4ee73a30:--></div>
+<div class="observablehq observablehq--block"><!--:3e516748:--></div>
+<div class="observablehq observablehq--block"><!--:bd56e404:--></div>
+<div class="observablehq observablehq--block"><!--:7f67ed02:--></div>
+<div class="observablehq observablehq--block"><!--:e4c9d559:--></div>
+<div class="observablehq observablehq--block"><!--:1fc5bcd8:--></div>
+<!-- ```js
+const reactiveSales = salesData.filter(d => d["weeksUntil"] <= userWeeks)
+```
+
+```js
+const salesDataInput = Inputs.range([1, d3.max(salesData, d => d.weeksUntil)], {step: 1, label: "Weeks Until Event", placeholder: 30})
+const userWeeks = Generators.input(salesDataInput)
+``` -->
+<div class="observablehq observablehq--block"><!--:64c17e2a:--></div>
+<div class="observablehq observablehq--block"><!--:745d15a2:--></div>
+<div class="observablehq observablehq--block"><observablehq-loading></observablehq-loading><!--:7c5fd617:--></div>
+<style>
+@media print {
+  .grid {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .card {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    -webkit-column-break-inside: avoid !important;
+    box-decoration-break: clone;
+    margin-bottom: 12px;
+  }
+}
+</style>
+<div class="grid grid-cols-2" style="grid-auto-rows: auto;">
+  <div class="card">
+    <h1>Who is Buying?</h1>
+    <h2>Gender distribution based on customer name.<br>Some error expected.</h2>
+    <observablehq-loading></observablehq-loading><!--:a672a679:-->
+  </div>
+  <div class="card">
+    <h1>What Time?</h1>
+    <h2>Morning: Before 12:00 pm<br> Afternoon: 12:00 pm - 6:00 pm<br> Evening: After 6:00 pm</h2><h2>
+  <observablehq-loading></observablehq-loading><!--:6cf0e842:-->
+  </h2></div>
+<div class="card" style="grid-column: span 2">
+    <h1>What Day?</h1>
+    <h2>Distribution of ticket sales by the day of week they were purchased.</h2>
+    <observablehq-loading></observablehq-loading><!--:6a66685b:-->
+</div>
+<div class="card" style="grid-column: span 1">
+  <h1> When are the events being held? </h1> <h2>Bubble size represents number of events held on that day.  Event counts included.</h2>
+  <observablehq-loading></observablehq-loading><!--:2ea0d25e:-->
+</div>
+<div class="card"><h1>What season?</h1>
+<h2>Total number of events for each season.  Stacked bar further shows number of tickets per event.<br><br>
+  <b>Winter: <observablehq-loading></observablehq-loading><!--:f9678ad9:--> events.</b><br>
+    <b>Spring: <observablehq-loading></observablehq-loading><!--:b973fd7c:--> events.</b><br>
+    <b>Summer: <observablehq-loading></observablehq-loading><!--:8a8ab4d8:--> events.<br>
+    Autumn: <observablehq-loading></observablehq-loading><!--:3187c561:--> events.</b><br>
+    <br>
+  <observablehq-loading></observablehq-loading><!--:f2e1e461:-->
+</h2></div>
+<div class="card grid-rowspan-2 grid-colspan-3" "="" style="grid-column: span 2">
+  <h1>How far in advance?</h1>
+  <h2>This shows how many weeks in advance tickets are purchased</h2>
+  <div class="graph" style="display: flex; justify-content: center; align-items: center; text-align: center;">
+    <observablehq-loading></observablehq-loading><!--:f34a4c09:-->
+  </div>
+</div>
+<div class="observablehq observablehq--block"><observablehq-loading></observablehq-loading><!--:2f51552f:--></div>
+<div class="observablehq observablehq--block"><!--:28c84f9a:--></div>
+</div></main>
+<footer id="observablehq-footer">
+<nav><a rel="prev" href="./"><span>METLN</span></a><a rel="next" href="./tables"><span>Selected Events</span></a></nav>
+<div>Built with <a href="https://observablehq.com/" target="_blank" rel="noopener noreferrer">Observable</a> on <a title="2025-12-05T09:28:02">Dec 5, 2025</a>.</div>
+</footer>
+</div>
+</body>
+</html>

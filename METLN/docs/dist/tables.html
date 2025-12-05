@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="generator" content="Observable Framework v1.13.3">
+<title>Individual Event Dashboard | METLN</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;display=swap" crossorigin>
+<link rel="preload" as="style" href="./_observablehq/theme-air,near-midnight.dcdbf18e.css">
+<link rel="preload" as="style" href="./_observablehq/stdlib/inputs.ea9fd553.css">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;display=swap" crossorigin>
+<link rel="stylesheet" type="text/css" href="./_observablehq/theme-air,near-midnight.dcdbf18e.css">
+<link rel="stylesheet" type="text/css" href="./_observablehq/stdlib/inputs.ea9fd553.css">
+<link rel="modulepreload" href="./_observablehq/client.00fa72d3.js">
+<link rel="modulepreload" href="./_observablehq/runtime.e080113b.js">
+<link rel="modulepreload" href="./_observablehq/stdlib.73a8ec5a.js">
+<link rel="modulepreload" href="./_npm/gender-detection-from-name@1.11.4/2d9e6ef3.js">
+<link rel="modulepreload" href="./_npm/d3@7.9.0/e780feca.js">
+<link rel="modulepreload" href="./_observablehq/stdlib/inputs.4ef1d259.js">
+<link rel="modulepreload" href="./_npm/@observablehq/plot@0.6.17/d761ef9b.js">
+<link rel="modulepreload" href="./_npm/d3-dsv@3.0.1/9cffc2bd.js">
+<link rel="modulepreload" href="./_npm/htl@0.3.1/72f4716c.js">
+<link rel="modulepreload" href="./_npm/isoformat@0.2.1/18cbf477.js">
+<link rel="modulepreload" href="./_npm/d3-array@3.2.4/e93ca09f.js">
+<link rel="modulepreload" href="./_npm/d3-axis@3.0.0/0f2de24d.js">
+<link rel="modulepreload" href="./_npm/d3-brush@3.0.0/65eb105b.js">
+<link rel="modulepreload" href="./_npm/d3-chord@3.0.1/7ef8fb2e.js">
+<link rel="modulepreload" href="./_npm/d3-color@3.1.0/aeb57b94.js">
+<link rel="modulepreload" href="./_npm/d3-contour@4.0.2/1d2aed74.js">
+<link rel="modulepreload" href="./_npm/d3-delaunay@6.0.4/5ced1d52.js">
+<link rel="modulepreload" href="./_npm/d3-dispatch@3.0.1/9ba9c7f3.js">
+<link rel="modulepreload" href="./_npm/d3-drag@3.0.0/4202580c.js">
+<link rel="modulepreload" href="./_npm/d3-ease@3.0.1/cdd7e898.js">
+<link rel="modulepreload" href="./_npm/d3-fetch@3.0.1/b4e2ad9a.js">
+<link rel="modulepreload" href="./_npm/d3-force@3.0.0/5e804d15.js">
+<link rel="modulepreload" href="./_npm/d3-format@3.1.0/86074ef6.js">
+<link rel="modulepreload" href="./_npm/d3-geo@3.1.1/40599fb3.js">
+<link rel="modulepreload" href="./_npm/d3-hierarchy@3.1.2/e49e792c.js">
+<link rel="modulepreload" href="./_npm/d3-interpolate@3.0.1/8d1e5425.js">
+<link rel="modulepreload" href="./_npm/d3-path@3.1.0/20d3f133.js">
+<link rel="modulepreload" href="./_npm/d3-polygon@3.0.1/7553081f.js">
+<link rel="modulepreload" href="./_npm/d3-quadtree@3.0.1/0dfd751c.js">
+<link rel="modulepreload" href="./_npm/d3-random@3.0.1/3c90ee06.js">
+<link rel="modulepreload" href="./_npm/d3-scale@4.0.2/843b6a76.js">
+<link rel="modulepreload" href="./_npm/d3-scale-chromatic@3.1.0/ba24c2e7.js">
+<link rel="modulepreload" href="./_npm/d3-selection@3.0.0/4d94e5b7.js">
+<link rel="modulepreload" href="./_npm/d3-shape@3.2.0/6d3a6726.js">
+<link rel="modulepreload" href="./_npm/d3-time@3.1.0/9f03c579.js">
+<link rel="modulepreload" href="./_npm/d3-time-format@4.1.0/07c9626f.js">
+<link rel="modulepreload" href="./_npm/d3-timer@3.0.1/b58a267d.js">
+<link rel="modulepreload" href="./_npm/d3-transition@3.0.1/004da2ac.js">
+<link rel="modulepreload" href="./_npm/d3-zoom@3.0.0/b5786b3f.js">
+<link rel="modulepreload" href="./_npm/interval-tree-1d@1.0.4/53fe8176.js">
+<link rel="modulepreload" href="./_npm/internmap@2.0.3/e08981d9.js">
+<link rel="modulepreload" href="./_npm/delaunator@5.0.1/02d43215.js">
+<link rel="modulepreload" href="./_npm/binary-search-bounds@2.0.5/cbf6ba23.js">
+<link rel="modulepreload" href="./_npm/robust-predicates@3.0.2/aa00730b.js">
+<link rel="icon" href="./_file/observable.1af93621.png" type="image/png" sizes="32x32">
+<script type="module">
+
+import {define} from "./_observablehq/client.00fa72d3.js";
+import {registerFile} from "./_observablehq/stdlib.73a8ec5a.js";
+
+registerFile("./data/cleaned_transaction.csv", {"name":"./data/cleaned_transaction.csv","mimeType":"text/csv","path":"./_file/data/cleaned_transaction.4db8f713.csv","lastModified":1764944834114,"size":138283});
+registerFile("./data/customer_summary_clean.csv", {"name":"./data/customer_summary_clean.csv","mimeType":"text/csv","path":"./_file/data/customer_summary_clean.f238f44a.csv","lastModified":1764944834115,"size":141960});
+
+define({id: "38f8bcd2", body: () => {
+/* Summary of variables
+transactionArray - basic transformation of data, 1 row per transaction with types converted and additional columns added
+chosenEvents - object with key : val pairs. key = event name, val = all rows from transactionArray for that event
+singleEventTable - array which is displayed in the interactive table, contains calculations for gender distribution, total tickets, total rev, and event date
+genderCounts - map of gender for all selected events
+pie_array - array for usage in gender pie chart
+iterable_array - interim array, contains a slice of the singleEventTable reactively based table selection
+specificTransacts - filtered version of transactionArray that reactively updates based on table selection, 1 row per transaction with all same fields
+
+IMPORTANT will need to install d3 to run some of these functions
+*/
+}});
+
+define({id: "2318c28b", inputs: ["FileAttachment"], outputs: ["customers"], body: async (FileAttachment) => {
+// Data ingestion
+let customers = await FileAttachment("./data/customer_summary_clean.csv").csv({typed: true})
+return {customers};
+}});
+
+define({id: "77bb462c", inputs: ["FileAttachment"], outputs: ["transactions"], body: async (FileAttachment) => {
+let transactions = await FileAttachment("./data/cleaned_transaction.csv").csv({typed: true})
+return {transactions};
+}});
+
+define({id: "49f1930f", inputs: ["d3"], outputs: ["formatDay"], body: (d3) => {
+const formatDay = d3.timeFormat("%A");
+
+return {formatDay};
+}});
+
+define({id: "273fb7b5", outputs: ["getGender","gender_guesser"], body: async () => {
+const {getGender} = await import("./_npm/gender-detection-from-name@1.11.4/2d9e6ef3.js");
+// NPM library for detecting gender from a name
+// Requires installation via npm or other manager
+const gender_guesser = getGender;
+return {getGender,gender_guesser};
+}});
+
+define({id: "bfb4bbff", outputs: ["getTimeofDay"], body: () => {
+//Function for identifying time of day for transaction
+function getTimeofDay(dateVal){
+    let hour = dateVal.getHours()
+    
+    if (hour <= 12){
+        return "Morning"
+    }
+    if (hour > 12 && hour < 18){
+        return "Afternoon"
+    }
+    return "Evening"
+}
+return {getTimeofDay};
+}});
+
+define({id: "621de81b", outputs: ["getSeason"], body: () => {
+// Function for updating season of a transaction
+function getSeason(dateVal){
+  const month = dateVal.getMonth()
+  let season = null
+  if (month == 0 || month == 1 || month == 2){
+    season = "Winter"
+  }
+  else if (month == 2 || month == 3 || month == 4){
+    season = "Spring"
+  }
+  else if (month == 5 || month == 6 || month == 7){
+    season = "Summer"
+  }
+  else if (month == 8 || month == 9 || month == 10){
+    season = "Autumn"
+  }
+  return season
+}
+return {getSeason};
+}});
+
+define({id: "f52627b3", inputs: ["d3","specificTransacts"], outputs: ["aggregated"], body: (d3,specificTransacts) => {
+// Aggregates data for seasonal analysis
+// Creates ticket counts by season and event
+const aggregated = Array.from(
+  d3.rollup(
+    specificTransacts,
+    v => v.length,              
+    d => d.Season,
+    d => d["Item Name"]
+  ),
+  ([Season, eventMap]) =>
+    Array.from(eventMap, ([Event, Tickets]) => ({
+      Season,
+      Event,
+      Tickets
+    }))
+).flat();
+
+return {aggregated};
+}});
+
+define({id: "69a7b0ef", inputs: ["customers","transactions","formatDay","getTimeofDay","gender_guesser","getSeason"], outputs: ["customerArray","transactionArray"], body: (customers,transactions,formatDay,getTimeofDay,gender_guesser,getSeason) => {
+//Creates array from file attachment
+let customerArray = Array.from(customers)
+for (let i = 0; i < customerArray.length; i++){
+    //Iterates through each object and converts dollar amount strings to numbers
+    for (var property in customerArray[i]){
+        let value = customerArray[i][property]
+        if (typeof value === 'string' && value.includes("$")){
+            //Regex formats dates properly
+            customerArray[i][property] = parseFloat(value.replace(/[^0-9.-]+/g, '')) 
+        }
+    }
+
+}
+
+let transactionArray = Array.from(transactions)
+for (let i = 0; i < transactionArray.length; i++){
+    //Iterates through each object and converts dollar amount strings to numbers
+    for (var property in transactionArray[i]){
+        let value = transactionArray[i][property]
+        if (typeof value === 'string' && value.includes("$")){
+            //Regex formats dates properly
+            transactionArray[i][property] = parseFloat(value.replace(/[^0-9.-]+/g, '')) 
+        }
+    }
+
+    //Updates date strings to date values
+    transactionArray[i]["Event Date"] = new Date(transactionArray[i]["Event Date"])
+    transactionArray[i]["Date"] = new Date(transactionArray[i]["Date"])
+    transactionArray[i]["Day_Of_Week"] = formatDay(transactionArray[i]["Date"])
+    transactionArray[i]["timeOfDay"] = getTimeofDay(transactionArray[i]["Date"])
+    transactionArray[i]["Gender"] = gender_guesser(transactionArray[i]["First Name"])
+    transactionArray[i]["Season"] = getSeason(transactionArray[i]["Event Date"])
+
+
+
+}
+return {customerArray,transactionArray};
+}});
+
+define({id: "89d234e0", inputs: ["transactionArray"], outputs: ["chosenEvents"], body: (transactionArray) => {
+//Creates an object with key : val pairs where each key is an event name, val = an array with each transaction for that event
+
+const chosenEvents = {}
+for (const row of transactionArray) {
+  const singleEvent = row["Item Name"]
+
+  if (!chosenEvents[singleEvent]){
+    chosenEvents[singleEvent] = []
+  }
+
+  chosenEvents[singleEvent].push(row)
+}
+return {chosenEvents};
+}});
+
+define({id: "902a0727", inputs: ["chosenEvents","d3"], outputs: ["singleEventTable"], body: (chosenEvents,d3) => {
+// Creates array for use in the interactive table
+const singleEventTable = []
+for (const [key, val] of Object.entries(chosenEvents)){
+  singleEventTable.push({"Name" : key,
+                        "Tickets" : d3.count(val, d => d["Net Revenue"] > 0),
+                        "Net Revenue" : d3.sum(val, d => d["Net Revenue"]),
+                        "Male Count" : d3.filter(val, d => d["Gender"] == "male").length,
+                        "Female Count" : d3.filter(val, d => d["Gender"] == "female").length,
+                        "Event Date" : val[0]["Event Date"],
+  }
+  )
+}
+
+return {singleEventTable};
+}});
+
+define({id: "6cf67819", inputs: ["specificTransacts"], outputs: ["data"], body: (specificTransacts) => {
+//Next few code blocks are used for gender pie
+let data=specificTransacts
+
+return {data};
+}});
+
+define({id: "f7a6a444", inputs: ["data"], outputs: ["data_filter"], body: (data) => {
+//Excludes unknown gender from selection
+const data_filter=data.filter(d => d.Gender === "male" || d.Gender === "female" && d["Net Revenue"] > 0)
+return {data_filter};
+}});
+
+define({id: "eb7bef67", inputs: ["d3","data_filter"], outputs: ["genderCounts","pie_array","genderOrder"], body: (d3,data_filter) => {
+//Calculates count of each gender
+const genderCounts = d3.rollup(
+  data_filter,
+  v => v.length,
+  d => d.Gender
+)
+//Creates array from counts for plotting
+const pie_array = Array.from(genderCounts, ([gender, count]) => ({
+  name: gender,
+  value: count
+}));
+
+// sorts data so colors dont flip in pie chart
+const genderOrder = ["male", "female"];
+pie_array.sort((a, b) => genderOrder.indexOf(a.name) - genderOrder.indexOf(b.name));
+return {genderCounts,pie_array,genderOrder};
+}});
+
+define({id: "08bd3232", inputs: ["PieChart","pie_array","d3"], outputs: ["genderPie"], body: (PieChart,pie_array,d3) => {
+const genderPie = PieChart(pie_array, {
+    name: d => d.name,
+    value: d => d.value,
+    width: 500,
+    height: 400,
+    colors: ["#89CFF0", "#FFB7CE"],
+    labelRadius: 90,
+    title: (d) => {
+      const total = d3.sum(pie_array, p => p.value);
+      const percentage = ((d.value / total) * 100).toFixed(1);
+      return `${d.name}\n${percentage}%\n${d.value}`;
+    }})
+return {genderPie};
+}});
+
+define({id: "86ae0ef0", inputs: ["selection"], outputs: ["iterableArray"], body: (selection) => {
+// Removing final object from array
+// this array is for the gender graph
+const iterableArray = selection.slice(0, selection.length)
+return {iterableArray};
+}});
+
+define({id: "db69335b", inputs: ["d3","specificTransacts"], outputs: ["purchaseDates"], body: (d3,specificTransacts) => {
+// Used for heatmap
+const purchaseDates = d3.rollup(
+  specificTransacts,
+  v => v.length,
+  d => d3.utcDay.floor(d.Date)
+)
+
+return {purchaseDates};
+}});
+
+define({id: "2a17a7de", inputs: ["purchaseDates"], outputs: ["dailyCounts"], body: (purchaseDates) => {
+// Also for heatmap
+const dailyCounts = Array.from(
+  purchaseDates,
+  ([Date, count]) => ({ Date, count })
+);
+
+return {dailyCounts};
+}});
+
+define({id: "b0300cb3", inputs: ["d3","dailyCounts"], outputs: ["format","weeklyCounts","_weekLabels"], body: (d3,dailyCounts) => {
+// Formats dates
+const format = d3.timeFormat("%b %d");
+
+const weeklyCounts = dailyCounts.map(d => {
+  const date = new Date(d.Date); //convert input string to date object
+  const weekStart = d3.utcWeek.floor(date); // finds week start for the given value
+  const weekEnd = new Date(weekStart.getTime() + 6*24*60*60*1000); // finds week end for given value
+  const weekLabel = `${format(weekStart)}–${format(weekEnd)}`; //Creates label for week
+  return { //appends these values to the original
+    ...d,
+    weekStart,
+    weekLabel,
+    dayOfWeek: date.getUTCDay()
+  };
+});
+
+// Get a sorted list of week labels for axis placement
+const _weekLabels = Array.from(new Set(weeklyCounts.map(d => d.weekLabel))).sort(
+  (a,b) => d3.ascending(
+    weeklyCounts.find(d => d.weekLabel === a).weekStart,
+    weeklyCounts.find(d => d.weekLabel === b).weekStart
+  )
+);
+
+return {format,weeklyCounts,_weekLabels};
+}});
+
+define({id: "5b851a3f", inputs: ["d3","Plot","weeklyCounts"], outputs: ["formatTick","cellHeatmap"], body: (d3,Plot,weeklyCounts) => {
+// Calendar heatmap 
+// Used a lot of sources https://observablehq.com/@observablehq/plot-simplified-calendar
+// https://observablehq.com/d/19a3553a052966b0
+function formatTick(d) {
+  let end = new Date(d);
+  end.setDate(end.getDate() + 6);
+  const f = d3.timeFormat("%_d %b")
+  return f(d) + " - " + f(end);
+}
+
+const cellHeatmap = Plot.plot({
+  marginLeft: 80,
+  y: {type: "band"}, //this forces the error to go away thanks inspect! 
+  //y: {tickFormat: Plot.formatWeekday("en", "narrow"), tickSize: 0},
+  marks: [
+    Plot.rect(weeklyCounts, {
+      x: d => d.dayOfWeek,
+      y: d => d.weekStart,
+      fill: "count",
+      tip: true,
+      stroke: "black"
+    }),
+    Plot.axisX({ tickFormat: i => ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][i] }),
+    Plot.axisY({ label: "" , tickFormat: formatTick})
+  ],
+  color: {type: "linear",
+    domain: [0, d3.max(weeklyCounts, d => d.count)],
+    range: ["#ffffff", "#b30000"],
+    legend: true
+  }}
+)
+return {formatTick,cellHeatmap};
+}});
+
+define({id: "791da929", inputs: ["d3"], outputs: ["PieChart"], body: (d3) => {
+// Function for creating a pie chart
+// copied from observable
+function PieChart(data, {
+  name = ([x]) => x,  // given d in data, returns the (ordinal) label
+  value = ([, y]) => y, // given d in data, returns the (quantitative) value
+  title, // given d in data, returns the title text
+  width = 640, // outer width, in pixels
+  height = 400, // outer height, in pixels
+  innerRadius = 0, // inner radius of pie, in pixels (non-zero for donut)
+  outerRadius = Math.min(width, height) / 2, // outer radius of pie, in pixels
+  labelRadius = (innerRadius * 0.2 + outerRadius * 0.8), // center radius of labels
+  format = ",", // a format specifier for values (in the label)
+  names, // array of names (the domain of the color scale)
+  colors, // array of colors for names
+  stroke = innerRadius > 0 ? "none" : "white", // stroke separating widths
+  strokeWidth = 1, // width of stroke separating wedges
+  strokeLinejoin = "round", // line join of stroke separating wedges
+  padAngle = stroke === "none" ? 1 / outerRadius : 0, // angular separation between wedges, in radians
+} = {}) {
+  // Compute values.
+  const N = d3.map(data, name);
+  const V = d3.map(data, value);
+  const I = d3.range(N.length).filter(i => !isNaN(V[i]));
+
+  // Unique the names.
+  if (names === undefined) names = N;
+  names = new d3.InternSet(names);
+
+  // Chose a default color scheme based on cardinality.
+  if (colors === undefined) colors = d3.schemeSpectral[names.size];
+  if (colors === undefined) colors = d3.quantize(t => d3.interpolateSpectral(t * 0.8 + 0.1), names.size);
+
+  // Construct scales.
+  const color = d3.scaleOrdinal(names, colors);
+
+  // Compute titles.
+  if (title === undefined) {
+    const formatValue = d3.format(format);
+    title = i => `${N[i]}\n${formatValue(V[i])}`;
+  } else {
+    const O = d3.map(data, d => d);
+    const T = title;
+    title = i => T(O[i], i, data);
+  }
+
+  // Construct arcs.
+  const arcs = d3.pie().padAngle(padAngle).sort(null).value(i => V[i])(I);
+  const arc = d3.arc().innerRadius(innerRadius).outerRadius(outerRadius);
+  const arcLabel = d3.arc().innerRadius(labelRadius).outerRadius(labelRadius);
+  
+  const svg = d3.create("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("viewBox", [-width / 2, -height / 2, width, height])
+      .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
+
+  svg.append("g")
+      .attr("stroke", stroke)
+      .attr("stroke-width", strokeWidth)
+      .attr("stroke-linejoin", strokeLinejoin)
+    .selectAll("path")
+    .data(arcs)
+    .join("path")
+      .attr("fill", d => color(N[d.data]))
+      .attr("d", arc)
+    .append("title")
+      .text(d => title(d.data));
+
+  svg.append("g")
+      .attr("font-family", "sans-serif")
+      .attr("font-size", 20)
+      .attr("text-anchor", "middle")
+    .selectAll("text")
+    .data(arcs)
+    .join("text")
+      .attr("transform", d => `translate(${arcLabel.centroid(d)})`)
+    .selectAll("tspan")
+    .data(d => {
+      const lines = `${title(d.data)}`.split(/\n/);
+      return (d.endAngle - d.startAngle) > 0.25 ? lines : lines.slice(0, 1);
+    })
+    .join("tspan")
+      .attr("x", 0)
+      .attr("y", (_, i) => `${i * 1.1}em`)
+      .attr("font-weight", (_, i) => i ? null : "bold")
+      .text(d => d);
+
+  return Object.assign(svg.node(), {scales: {color}});
+}
+return {PieChart};
+}});
+
+define({id: "a43b97f9", inputs: ["iterableArray"], outputs: ["selectedNames"], body: (iterableArray) => {
+// Creating separate array just to log names of checkboxed items
+const selectedNames = []
+for (const event of iterableArray){
+    if (!(event["Name"] in selectedNames)){
+          selectedNames.push(event["Name"])
+    }
+}
+return {selectedNames};
+}});
+
+define({id: "868f38f3", inputs: ["transactionArray","selectedNames"], outputs: ["specificTransacts"], body: (transactionArray,selectedNames) => {
+//Creating array that just contains transaction details for the selected events
+//Should be used for the pie chart and other graphs
+const specificTransacts = transactionArray.filter(d => selectedNames.includes(d["Item Name"]))
+return {specificTransacts};
+}});
+
+define({id: "ad54a1ad", inputs: ["d3","specificTransacts"], outputs: ["morningRev","afternoonRev","eveningRev"], body: (d3,specificTransacts) => {
+// Calculating total revenue of each morning, afternoon, and evening for the selected events
+// Should be able to support differing ticket prices
+const morningRev = d3.sum(specificTransacts.filter(d => d.timeOfDay == "Morning"), rev => rev["Gross Revenue"])
+const afternoonRev = d3.sum(specificTransacts.filter(d => d.timeOfDay == "Afternoon"), rev => rev["Gross Revenue"])
+const eveningRev = d3.sum(specificTransacts.filter(d => d.timeOfDay == "Evening"), rev => rev["Gross Revenue"])
+return {morningRev,afternoonRev,eveningRev};
+}});
+
+define({id: "bc386eff", inputs: ["d3","data_filter"], outputs: ["maleRev","femaleRev"], body: (d3,data_filter) => {
+const maleRev = d3.sum(data_filter.filter(d => d.Gender == "male"), rev => rev["Net Revenue"])
+const femaleRev = d3.sum(data_filter.filter(d => d.Gender == "female"), rev => rev["Net Revenue"])
+return {maleRev,femaleRev};
+}});
+
+define({id: "5fc44764", inputs: ["d3","specificTransacts"], outputs: ["tod_pie"], body: (d3,specificTransacts) => {
+//THE NEXT 3 BLOCKS ARE THE TOD PIE CHART 
+const tod_pie = Array.from(
+  d3.rollup(
+    //Updated data value to support multi select
+    specificTransacts,
+    //chosenEvents[selection["Name"]],  
+    v => v.length,
+    d => d.timeOfDay
+  ),
+  ([name, value]) => ({name, value}) 
+);
+return {tod_pie};
+}});
+
+define({id: "1164de3c", inputs: ["tod_pie"], outputs: ["tod_pie_ordered"], body: (tod_pie) => {
+const tod_pie_ordered = [
+  tod_pie.find(d => d.name === "Morning"),
+  tod_pie.find(d => d.name === "Afternoon"),
+  tod_pie.find(d => d.name === "Evening")
+].filter(d => d !== undefined);
+return {tod_pie_ordered};
+}});
+
+define({id: "16664c96", inputs: ["d3","specificTransacts"], outputs: ["salesByWeek"], body: (d3,specificTransacts) => {
+// Cumulative graph for the weeks leading up to an event for all selected events
+// Does not use dates but instead uses a measure of how far out from the event the ticket purchase is
+const salesByWeek = d3.rollup(
+  specificTransacts,
+  v => v.length, // count tickets
+  d => {
+    const eventDate = new Date(d["Event Date"]);
+    const purchaseDate = new Date(d.Date);
+    const daysUntil = Math.floor((eventDate - purchaseDate) / (1000 * 60 * 60 * 24));
+    const weeksUntil = Math.floor(daysUntil / 7);
+    return weeksUntil;
+  }
+);
+return {salesByWeek};
+}});
+
+define({id: "0bbfb17f", inputs: ["salesByWeek"], outputs: ["salesData"], body: (salesByWeek) => {
+// Array with weeks until event date, tickets sold that week, and total tickets sold
+const salesData = (() => {
+  const data = Array.from(salesByWeek, ([week, count]) => ({
+    weeksUntil: week,
+    ticketsSold: count
+  })).sort((a, b) => b.weeksUntil - a.weeksUntil);
+  
+  let cumulative = 0;
+  data.forEach(d => {
+    cumulative += d.ticketsSold;
+    d.cumulativeTickets = cumulative;
+  });
+  
+  return data;
+})();
+return {salesData};
+}});
+
+define({id: "ace40f00", inputs: ["Plot","salesData"], outputs: ["cumulativeTicketsSold"], body: (Plot,salesData) => {
+// Uses above inputs
+const cumulativeTicketsSold = Plot.plot({
+    width: 860,
+    x: {label: "Weeks Before Event", 
+      reverse: true,
+      domain: salesData.slice(-10).map(d => d.weeksUntil)},
+    marks: [
+      Plot.lineY(salesData.slice(-10), {
+        x: "weeksUntil",
+        y: "cumulativeTickets",
+        stroke: "steelblue",
+        strokeWidth: 2,
+        tip: true
+      }),
+      Plot.dot(salesData.slice(-10), {
+        x: "weeksUntil",
+        y: "cumulativeTickets",
+        fill: "steelblue"
+      }),
+      Plot.gridX({strokeDasharray: "5,3"}),
+      Plot.gridY({strokeDasharray: "5,3"})
+    ],
+    y: {label: "Tickets Sold"},
+    x: {label: "Weeks Before Event", reverse: true,interval: 1}
+    })
+    
+return {cumulativeTicketsSold};
+}});
+
+define({id: "22b2f7b1", inputs: ["Inputs","singleEventTable","Generators"], outputs: ["userInput","search"], body: (Inputs,singleEventTable,Generators) => {
+// Async generators necessary for html formatting
+const userInput = Inputs.search(singleEventTable, {placeholder: "Search events"})
+const search = Generators.input(userInput)
+return {userInput,search};
+}});
+
+define({id: "fdf9f226", inputs: ["Inputs","search","Generators"], outputs: ["eventInput","selection"], body: (Inputs,search,Generators) => {
+const eventInput = Inputs.table(search, {sort: "Tickets", reverse: true, layout: "auto", rows:16})
+const selection = Generators.input(eventInput);
+return {eventInput,selection};
+}});
+
+define({id: "50bb5092", inputs: ["d3","tod_pie"], outputs: ["total"], body: (d3,tod_pie) => {
+const total = d3.sum(tod_pie, p => p.value)
+return {total};
+}});
+
+define({id: "ac1fc78b", inputs: ["d3","specificTransacts"], outputs: ["weekStart"], body: (d3,specificTransacts) => {
+const weekStart = Array.from(
+  d3.timeWeek.range(
+    d3.min(specificTransacts, d => new Date(d.Date)),
+    d3.max(specificTransacts, d => new Date(d.Date))
+  )
+);
+
+return {weekStart};
+}});
+
+define({id: "3d4d12c8", inputs: ["d3","specificTransacts"], outputs: ["transaction_array_dow"], body: (d3,specificTransacts) => {
+// Used for half pie
+const transaction_array_dow = Array.from(
+  d3.rollup(
+    specificTransacts,  
+    v => v.length,
+    d => d.Day_Of_Week
+  ),
+  ([name, value]) => ({name, value}) 
+);
+return {transaction_array_dow};
+}});
+
+define({id: "d5a91a18", inputs: ["transaction_array_dow"], outputs: ["data_dow"], body: (transaction_array_dow) => {
+const data_dow = transaction_array_dow
+return {data_dow};
+}});
+
+define({id: "70387bf6", inputs: ["width","d3","data_dow","pie_dow"], outputs: ["chart_dow"], body: (width,d3,data_dow,pie_dow) => {
+// Also used for half pie chart
+function chart_dow() {
+  const height = Math.min(width, 550);
+  const radius = Math.min(width, height * 1.2) / 2;
+
+  const arc = d3.arc()
+      .innerRadius(radius * 0.67)
+      .outerRadius(radius - 1);
+
+  const order = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  data_dow.sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name));
+
+  const color = d3.scaleOrdinal()
+      .domain(order)
+      .range(["#4CBF70", "#FF6F61", "#7FCECC", "#C985FF", "#B4D96A", "#FF9F4A", "#6E89FF"]
+);
+
+  const svg = d3.create("svg")
+      .attr("width", width)
+      .attr("height", height / 1.5)
+      .attr("viewBox", [-width / 2, -height / 2, width, height / 2])
+      .attr("style", "max-width: 100%; height: auto;");
+
+  svg.append("g")
+    .selectAll()
+    .data(pie_dow(data_dow))
+    .join("path")
+      .attr("fill", d => color(d.data.name))
+      .attr("d", arc)
+    .append("title")
+      .text(d => `${d.data.name}: ${d.data.value.toLocaleString()}`);
+
+  svg.append("g")
+      .attr("font-family", "sans-serif")
+      .attr("font-size", 14)
+      .attr("text-anchor", "middle")
+    .selectAll()
+    .data(pie_dow(data_dow))
+    .join("text")
+      .attr("transform", d => `translate(${arc.centroid(d)})`)
+      .call(text => text.append("tspan")
+          .attr("y", "-0.4em")
+          .attr("font-weight", "bold")
+          .text(d => d.data.name))
+      
+      
+      .call(text => text.append("tspan")
+
+      //.call(text => text.filter(d => (d.endAngle - d.startAngle) > 0.25)
+          //.append("tspan")
+          .attr("x", 0)
+          .attr("y", "0.7em")
+          .attr("fill-opacity", 0.7)
+          .text(d => d.data.value.toLocaleString("en-US")));
+
+  return svg.node();
+}
+return {chart_dow};
+}});
+
+define({id: "9afe90b0", inputs: ["width","d3"], outputs: ["height","radius","pie_dow"], body: (width,d3) => {
+const height = Math.min(width, 700);
+const radius = Math.min(width, height) / 2;
+
+const pie_dow = d3.pie()
+    .padAngle(1 / radius)
+    .sort(null)
+    .value(d => d.value)
+    .startAngle(-Math.PI / 2)
+    .endAngle(Math.PI / 2);
+
+return {height,radius,pie_dow};
+}});
+
+define({id: "20e1134b", inputs: ["d3","specificTransacts"], outputs: ["uniqueItemNames"], body: (d3,specificTransacts) => {
+const uniqueItemNames = Array.from(
+  d3.group(specificTransacts, d => d["Item Name"]).keys()
+);
+return {uniqueItemNames};
+}});
+
+define({id: "2fa6a0e4", mode: "inline", inputs: ["userInput","display"], body: async (userInput,display) => {
+display(await(
+userInput
+))
+}});
+
+define({id: "32c4da9f", mode: "inline", inputs: ["eventInput","display"], body: async (eventInput,display) => {
+display(await(
+eventInput
+))
+}});
+
+define({id: "036a6507", mode: "inline", inputs: ["uniqueItemNames","display"], body: async (uniqueItemNames,display) => {
+display(await(
+uniqueItemNames.length
+))
+}});
+
+define({id: "756305ea", mode: "inline", inputs: ["specificTransacts","display"], body: async (specificTransacts,display) => {
+display(await(
+specificTransacts.length
+))
+}});
+
+define({id: "ce1d0d9c", mode: "inline", inputs: ["d3","specificTransacts","display"], body: async (d3,specificTransacts,display) => {
+display(await(
+d3.sum(specificTransacts, d => d["Net Revenue"]).toLocaleString('en-US', { style: 'currency', currency: 'USD',minimumFractionDigits: 0 })
+))
+}});
+
+define({id: "fe562a8b", mode: "inline", inputs: ["genderPie","display"], body: async (genderPie,display) => {
+display(await(
+genderPie
+))
+}});
+
+define({id: "d11ef9f0", mode: "inline", inputs: ["maleRev","display"], body: async (maleRev,display) => {
+display(await(
+maleRev.toLocaleString('en-US', { style: 'currency', currency: 'USD',minimumFractionDigits: 0 })
+))
+}});
+
+define({id: "692d2780", mode: "inline", inputs: ["femaleRev","display"], body: async (femaleRev,display) => {
+display(await(
+femaleRev.toLocaleString('en-US', { style: 'currency', currency: 'USD',minimumFractionDigits: 0 })
+))
+}});
+
+define({id: "c999d987", mode: "inline", inputs: ["PieChart","tod_pie_ordered","d3","tod_pie","display"], body: async (PieChart,tod_pie_ordered,d3,tod_pie,display) => {
+display(await(
+PieChart(tod_pie_ordered, {
+    name: d => d.name,
+    value: d => d.value,
+    width: 500,
+    height: 400,
+    colors: ["#FFE86A", "#E9A33A", "#9895C9 "],  
+    labelRadius: 90,
+    startAngle: -Math.PI / 2,  
+    endAngle: Math.PI / 2,
+    innerRadius: 0,
+    title: (d) => {
+      const total = d3.sum(tod_pie, p => p.value);
+      const percentage = ((d.value / total) * 100).toFixed(1);
+      return `${d.name}\n${percentage}%\n${d.value}`;}
+    })
+))
+}});
+
+define({id: "dd20ff32", mode: "inline", inputs: ["morningRev","display"], body: async (morningRev,display) => {
+display(await(
+morningRev.toLocaleString('en-US', { style: 'currency', currency: 'USD',minimumFractionDigits: 0 })
+))
+}});
+
+define({id: "9d172356", mode: "inline", inputs: ["afternoonRev","display"], body: async (afternoonRev,display) => {
+display(await(
+afternoonRev.toLocaleString('en-US', { style: 'currency', currency: 'USD',minimumFractionDigits: 0 })
+))
+}});
+
+define({id: "dd4dce8a", mode: "inline", inputs: ["eveningRev","display"], body: async (eveningRev,display) => {
+display(await(
+eveningRev.toLocaleString('en-US', { style: 'currency', currency: 'USD',minimumFractionDigits: 0 })
+))
+}});
+
+define({id: "6a66685b", mode: "inline", inputs: ["chart_dow","display"], body: async (chart_dow,display) => {
+display(await(
+chart_dow()
+))
+}});
+
+define({id: "f34a4c09", mode: "inline", inputs: ["cumulativeTicketsSold","display"], body: async (cumulativeTicketsSold,display) => {
+display(await(
+cumulativeTicketsSold
+))
+}});
+
+define({id: "7a59b980", mode: "inline", inputs: ["cellHeatmap","display"], body: async (cellHeatmap,display) => {
+display(await(
+cellHeatmap
+))
+}});
+
+</script>
+</head>
+<body>
+<input id="observablehq-sidebar-toggle" type="checkbox" title="Toggle sidebar">
+<label id="observablehq-sidebar-backdrop" for="observablehq-sidebar-toggle"></label>
+<nav id="observablehq-sidebar">
+  <ol>
+    <label id="observablehq-sidebar-close" for="observablehq-sidebar-toggle"></label>
+    <li class="observablehq-link"><a href="./">METLN</a></li>
+  </ol>
+  <ol>
+    <li class="observablehq-link"><a href="./totalevents">All  Events</a></li>
+    <li class="observablehq-link observablehq-link-active"><a href="./tables">Selected Events</a></li>
+    <li class="observablehq-link"><a href="./customerOverview">Customer Database</a></li>
+  </ol>
+</nav>
+<script>{const e=document.querySelector("#observablehq-sidebar"),o=document.querySelector("#observablehq-sidebar-toggle"),r=sessionStorage.getItem("observablehq-sidebar");r?o.checked=r==="true":o.indeterminate=!0;for(const t of document.querySelectorAll("#observablehq-sidebar summary")){const s=t.parentElement;switch(sessionStorage.getItem(`observablehq-sidebar:${t.textContent}`)){case"true":s.open=!0;break;case"false":s.classList.contains("observablehq-section-active")||(s.open=!1);break}}addEventListener("beforeunload",()=>sessionStorage.setItem("observablehq-sidebar-scrolly",`${e.scrollTop}`));const a=sessionStorage.getItem("observablehq-sidebar-scrolly");a!=null&&(e.style.cssText="overflow: hidden;",e.scrollTop=+a,e.style.cssText="");}</script>
+<div id="observablehq-center">
+<aside id="observablehq-toc" data-selector="h1:not(:first-of-type)[id], h2:first-child[id], :not(h1) + h2[id]">
+<nav>
+</nav>
+</aside>
+<main id="observablehq-main" class="observablehq">
+<h1 id="what-who-and-when" tabindex="-1"><a class="observablehq-header-anchor" href="#what-who-and-when">What, Who, &amp; When</a></h1>
+<h2 id="ticket-data-by-individual-event" tabindex="-1"><a class="observablehq-header-anchor" href="#ticket-data-by-individual-event">Ticket Data by Individual Event</a></h2>
+<p>Visualizations on this page use transaction data to report on individual or grouped events.</p>
+<p>All graphs are reactive to the events selected from the table.</p>
+<div class="observablehq observablehq--block"><!--:38f8bcd2:--></div>
+<div class="observablehq observablehq--block"><!--:2318c28b:--></div>
+<div class="observablehq observablehq--block"><!--:77bb462c:--></div>
+<div class="observablehq observablehq--block"><!--:49f1930f:--></div>
+<div class="observablehq observablehq--block"><!--:273fb7b5:--></div>
+<div class="observablehq observablehq--block"><!--:bfb4bbff:--></div>
+<div class="observablehq observablehq--block"><!--:621de81b:--></div>
+<div class="observablehq observablehq--block"><!--:f52627b3:--></div>
+<div class="observablehq observablehq--block"><!--:69a7b0ef:--></div>
+<div class="observablehq observablehq--block"><!--:89d234e0:--></div>
+<div class="observablehq observablehq--block"><!--:902a0727:--></div>
+<div class="observablehq observablehq--block"><!--:6cf67819:--></div>
+<div class="observablehq observablehq--block"><!--:f7a6a444:--></div>
+<div class="observablehq observablehq--block"><!--:eb7bef67:--></div>
+<div class="observablehq observablehq--block"><!--:08bd3232:--></div>
+<div class="observablehq observablehq--block"><!--:86ae0ef0:--></div>
+<div class="observablehq observablehq--block"><!--:db69335b:--></div>
+<div class="observablehq observablehq--block"><!--:2a17a7de:--></div>
+<div class="observablehq observablehq--block"><!--:b0300cb3:--></div>
+<div class="observablehq observablehq--block"><!--:5b851a3f:--></div>
+<div class="observablehq observablehq--block"><!--:791da929:--></div>
+<div class="observablehq observablehq--block"><!--:a43b97f9:--></div>
+<div class="observablehq observablehq--block"><!--:868f38f3:--></div>
+<div class="observablehq observablehq--block"><!--:ad54a1ad:--></div>
+<div class="observablehq observablehq--block"><!--:bc386eff:--></div>
+<div class="observablehq observablehq--block"><!--:5fc44764:--></div>
+<div class="observablehq observablehq--block"><!--:1164de3c:--></div>
+<div class="observablehq observablehq--block"><!--:16664c96:--></div>
+<div class="observablehq observablehq--block"><!--:0bbfb17f:--></div>
+<!-- ```js
+const reactiveSales = salesData.filter(d => d["weeksUntil"] <= userWeeks)
+```
+
+```js
+const salesDataInput = Inputs.range([1, d3.max(salesData, d => d.weeksUntil)], {step: 1, label: "Weeks Until Event", placeholder: 30})
+const userWeeks = Generators.input(salesDataInput)
+``` -->
+<div class="observablehq observablehq--block"><!--:ace40f00:--></div>
+<div class="observablehq observablehq--block"><!--:22b2f7b1:--></div>
+<div class="observablehq observablehq--block"><!--:fdf9f226:--></div>
+<div class="observablehq observablehq--block"><!--:50bb5092:--></div>
+<div class="observablehq observablehq--block"><!--:ac1fc78b:--></div>
+<div class="observablehq observablehq--block"><!--:3d4d12c8:--></div>
+<div class="observablehq observablehq--block"><!--:d5a91a18:--></div>
+<div class="observablehq observablehq--block"><!--:70387bf6:--></div>
+<div class="observablehq observablehq--block"><!--:9afe90b0:--></div>
+<div class="observablehq observablehq--block"><!--:20e1134b:--></div>
+<style>
+@media print {
+  .grid {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .card {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    -webkit-column-break-inside: avoid !important;
+    box-decoration-break: clone;
+    margin-bottom: 12px;
+  }
+}
+</style>
+<div class="grid grid-cols-3" style="grid-auto-rows: auto;">
+  <div class="card grid-colspan-3"><h1>Event Selection</h1>
+    <h2>Pick the events you’re interested in using this table. The graphs will refresh to show only those events. If nothing is selected, they’ll show all events by default.</h2>
+    <observablehq-loading></observablehq-loading><!--:2fa6a0e4:-->
+    <observablehq-loading></observablehq-loading><!--:32c4da9f:--> 
+  </div>
+  <div class="card grid-colspan-3 grid-rowspan-1"><h1>Event(s) Summary</h1><h1> </h1><h2>Events Selected: <observablehq-loading></observablehq-loading><!--:036a6507:--><br>
+  Total Number of Tickets Sold: <observablehq-loading></observablehq-loading><!--:756305ea:--><br>
+  Net Revenue: <observablehq-loading></observablehq-loading><!--:ce1d0d9c:--></h2></div>
+  <div class="card grid-colspan-2 grid-rowspan-2"><h1>Who is buying?</h1><h2>Gender distribution based on customer name.
+  Some error expected.</h2>
+    <observablehq-loading></observablehq-loading><!--:fe562a8b:-->
+  </div>
+  <div class="card grid-colspan-1 grid-rowspan-1" style="background-color:#89CFF0; font-size: 20px; line-height: 1.4"><h1>Male</h1>
+    <observablehq-loading></observablehq-loading><!--:d11ef9f0:--> in net sales
+  </div>
+  <div class="card grid-colspan-1" style="background-color:#FFB7CE; font-size: 20px; line-height: 1.4"><h1>Female</h1>
+    <observablehq-loading></observablehq-loading><!--:692d2780:--> in net sales
+  </div>
+  <div class="card grid-colspan-2 grid-rowspan-3"><h1>What time?</h1>
+  <h2>Percentage of tickets sold and total number per time of day. </h2>
+    <observablehq-loading></observablehq-loading><!--:c999d987:-->
+  </div>
+  <div class="card grid-rowspan-1" style="background-color: #FFE86A; font-size: 20px; line-height: 1.4;"><h1>Morning</h1>
+    5 am - 12 pm<br>
+    <observablehq-loading></observablehq-loading><!--:dd20ff32:--> in net sales
+  </div>
+  <div class="card grid-rowspan-1" style="background-color: #E9A33A; font-size: 20px; line-height: 1.4"><h1>Afternoon</h1>
+    12:01 pm - 5:59 pm<br>
+    <observablehq-loading></observablehq-loading><!--:9d172356:--> in net sales
+  </div>
+  <div class="card grid-rowspan-1" style="background-color: #9895C9 ;font-size: 20px; line-height: 1.4"><h1>Evening</h1>
+    6:00 pm - 4:59 am<br>
+    <observablehq-loading></observablehq-loading><!--:dd4dce8a:--> in net sales
+  </div>
+  <div class="card grid-rowspan-2 grid-colspan-3"><h1>What days?</h1>
+  <h2>Total ticket sales by day of week. </h2>
+  <observablehq-loading></observablehq-loading><!--:6a66685b:-->
+  </div>
+  <div class="card grid-rowspan-2 grid-colspan-3"><h1>How early?</h1>
+  <h2>Examines the cumulative number of tickets based on number of weeks before event date. </h2>
+    <observablehq-loading></observablehq-loading><!--:f34a4c09:-->
+  </div>
+  <div class="card grid-rowspan-2 grid-colspan-3"><h1>Day by Day</h1>
+  <h2>Columns represent days of the week, rows represent weeks, and color shows the number of tickets purchased on each date.<br>Recommended to use with a small number of chronologically close events.</h2>
+  <observablehq-loading></observablehq-loading><!--:7a59b980:-->
+    </div>
+</div>
+</main>
+<footer id="observablehq-footer">
+<nav><a rel="prev" href="./totalevents"><span>All  Events</span></a><a rel="next" href="./customerOverview"><span>Customer Database</span></a></nav>
+<div>Built with <a href="https://observablehq.com/" target="_blank" rel="noopener noreferrer">Observable</a> on <a title="2025-12-05T09:28:02">Dec 5, 2025</a>.</div>
+</footer>
+</div>
+</body>
+</html>
