@@ -5,6 +5,7 @@ Many of these graphs are dynamic in nature so we recommend launching the obvserv
 
 ## Methodology
 The Main Trust for Local News supplied all the data from their internal records. For the purpose of these visualizations we filtered out any null or empty data cells as those were overwhelming the data sets. We also used [gender-detection-from-name](https://www.npmjs.com/package/gender-detection-from-name).  This detects gender by first name and there is room for error, especially with more neutral names (Sam, Pat etc).  
+For Weeks before we capped it at a max of 10 weeks out. METLN expressed that they had to move some dates which was causing outliers (over 30 weeks out) which was skewing the data. If there is new data that includes tickets that go on sale substantially before the event this will need to be updated within the code. 
 
 ## All Customers Trends 
 
