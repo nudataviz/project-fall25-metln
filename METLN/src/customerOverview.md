@@ -95,14 +95,14 @@ const mapv2 = (() => {
   const map = new maplibregl.Map({
     container: 'mapv2',
     style: 'https://tiles.openfreemap.org/styles/bright',
-    center: [-96, 37], //center on US 
-    zoom: 3 //zoomed out 
+    center: [-96, 37], // center on US 
+    zoom: 3
   });
   
   map.addControl(new maplibregl.NavigationControl());
   
   map.on('load', () => {
-    // Add GeoJson Layer ie classnotes
+    // Prepare GeoJSON data
     const geojson = {
       type: 'FeatureCollection',
       features: customer_data
@@ -113,20 +113,28 @@ const mapv2 = (() => {
             type: 'Point',
             coordinates: [d.longitude, d.latitude]
           },
-          properties: {}
+          properties: {
+            name: d.mr_geo_city_name || 'Unknown Town', 
+            event:d.event_purchased||'Unknown',        
+            category: d.preferred_main_category || 'Unknown', // add preferred 
+            status:d.registration_status|| 'Unknown',
+            time:d.visit_time|| 'Unknown'
+          }
         }))
     };
     
+    // Add source
     map.addSource('customers', {
       type: 'geojson',
       data: geojson
     });
     
+    // Heatmap layer
     map.addLayer({
       id: 'customers-heat',
       type: 'heatmap',
       source: 'customers',
-      maxzoom:15,
+      maxzoom: 15,
       paint: {
         'heatmap-weight': 1,
         'heatmap-intensity': 1,
@@ -146,7 +154,7 @@ const mapv2 = (() => {
       }
     });
     
-    // Add circle layer for zoomed in view
+    // Circle layer
     map.addLayer({
       id: 'customers-point',
       type: 'circle',
@@ -159,12 +167,38 @@ const mapv2 = (() => {
         'circle-stroke-color': '#fff'
       }
     });
+
+    
+    map.on('click', 'customers-point', (e) => {
+      const features = map.queryRenderedFeatures(e.point, {
+        layers: ['customers-point']
+      });
+      if (!features.length) return;
+
+      const feature = features[0];
+      const { name,event, category,status,time } = feature.properties;
+
+      new maplibregl.Popup()
+        .setLngLat(feature.geometry.coordinates)
+        .setHTML(`<strong>${name}</strong><br>Event Purchased:${event}<br>Category: ${category}<br>Status:${status}<br>Visit Time: ${time}`)
+        .addTo(map);
+    });
+
+
+    map.on('mouseenter', 'customers-point', () => {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', 'customers-point', () => {
+      map.getCanvas().style.cursor = '';  //asked claude "How to format a mouse click on maplibre using geojson" 
+    });
+
   });
-  
-  //return container;
+
 })();
-//from heatmap documentation on maplibre
+
+//https://maplibre.org/maplibre-gl-js/docs/API/classes/Popup/
 ```
+
 
 
 ```js
