@@ -1,5 +1,6 @@
 ---
 title: Customer Overview
+toc: false
 ---
 
 # What & Why
@@ -19,9 +20,10 @@ import maplibregl from "npm:maplibre-gl";
 let customers_full = await FileAttachment("/data/Event_Purchaser_2025-11-10T1531_CLEAN - Event_Purchaser_2025-11-10T1531.csv").csv({typed: true})
 ```
 
-```js
+```js echo
 //is this the correct Column? The correct number for that column?! I do not know. 
 let customer_data = Array.from(customers_full)
+display(customer_data)
 for (let i = 0; i < customer_data.length; i++){
     if (customer_data[i]["mr_geo_latlong"]) {  // a few null categories
         const [lat, lon] = customer_data[i]["mr_geo_latlong"].split(";")[0].split(",").map(Number);
@@ -83,50 +85,46 @@ const mapv1=Plot.plot({
   ${mapv1}
 </div>
 
-<div class="card"><h1>Regional Heatmap</h1><h2>Uses same data as above map.  Higher intensity color indicates more data present for that location.</h2>
-
-  <div id="mapv2" style="height: 400px; width: 100%;"></div> 
-
+<div class="grid grid-cols-3">
+    <div class="card grid-colspan-2">
+        <h1>National/Gobal Heatmap</h1>
+        <h2>Uses same data as above map. 
+            Higher intensity color indicates more data present for that location.</h2>
+        <div id="mapv2" style="height: 500px; width: 100%;"></div> 
+    </div>
+    <div class="card grid-colspan-1" style="background-color: #e3f2fd;">
+        <h1>Preferred Main Category</h1>
+        <h2>Bubble size changes with count of preferred category.  
+        Each customer can have multiple main categories and so can appear in multiple bubbles, 
+        thus the bubbles are not numbered.</h2>
+        ${bubbleChart}
+    </div>
 </div>
 
 ```js
-const mapv2 = (() => {
-
   const map = new maplibregl.Map({
     container: 'mapv2',
     style: 'https://tiles.openfreemap.org/styles/bright',
-    center: [-96, 37], //center on US 
-    zoom: 3 //zoomed out 
+    center: [-96, 37], // center on US 
+    zoom: 2.75
   });
   
   map.addControl(new maplibregl.NavigationControl());
   
   map.on('load', () => {
-    // Add GeoJson Layer ie classnotes
-    const geojson = {
-      type: 'FeatureCollection',
-      features: customer_data
-        .filter(d => d.latitude && d.longitude)
-        .map(d => ({
-          type: 'Feature',
-          geometry: {
-            type: 'Point',
-            coordinates: [d.longitude, d.latitude]
-          },
-          properties: {}
-        }))
-    };
     
+    // Add source
     map.addSource('customers', {
       type: 'geojson',
       data: geojson
     });
     
+    // Heatmap layer
     map.addLayer({
       id: 'customers-heat',
       type: 'heatmap',
       source: 'customers',
-      maxzoom:15,
+      maxzoom: 15,
       paint: {
         'heatmap-weight': 1,
         'heatmap-intensity': 1,
@@ -146,7 +144,7 @@ const mapv2 = (() => {
       }
     });
     
-    // Add circle layer for zoomed in view
+    // Circle layer
     map.addLayer({
       id: 'customers-point',
       type: 'circle',
@@ -159,12 +157,77 @@ const mapv2 = (() => {
         'circle-stroke-color': '#fff'
       }
     });
+
+    
+    map.on('click', 'customers-point', (e) => {
+      const features = map.queryRenderedFeatures(e.point, {
+        layers: ['customers-point']
+      });
+      if (!features.length) return;
+
+      const feature = features[0];
+      const { name,event, category,status,time } = feature.properties;
+
+      new maplibregl.Popup()
+        .setLngLat(feature.geometry.coordinates)
+        .setHTML(`<strong>${name}</strong><br>Event Purchased:${event}<br>Category: ${category}<br>Status:${status}<br>Visit Time: ${time}`)
+        .addTo(map);
+    });
+
+
+    map.on('mouseenter', 'customers-point', () => {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', 'customers-point', () => {
+      map.getCanvas().style.cursor = '';  //asked claude "How to format a mouse click on maplibre using geojson" 
+    });
+
   });
-  
-  //return container;
-})();
-//from heatmap documentation on maplibre
+
+//https://maplibre.org/maplibre-gl-js/docs/API/classes/Popup/
 ```
+
+```js echo
+// Prepare GeoJSON data
+const geojson = {
+    type: 'FeatureCollection',
+    features: customer_data
+        .filter(d => d.latitude && d.longitude)
+        .map(d => ({
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [d.longitude, d.latitude]
+          },
+          properties: {
+            name: d.mr_geo_city_name || 'Unknown Town', 
+            event:d.event_purchased||'Unknown',        
+            category: d.preferred_main_category || 'Unknown', // add preferred 
+            status:d.registration_status|| 'Unknown',
+            time:d.visit_time|| 'Unknown'
+          }
+    }))
+};
+```
+
+```js echo
+// set the category by clicking on a bubble in the bubble chart
+const category = Mutable("ALL");
+const setCategory = (d) => category.value = d;
+```
+
+```js echo
+// Filter GeoJSON according to "preferred main category"
+const filtered = {
+    type: 'FeatureCollection',
+    features: geojson.features.filter(d => category == "ALL" || d.properties.category == category)
+}
+if (map.loaded()) {
+  display(`setting category to ${category}`)
+  map.getSource("customers").setData(filtered);
+}
+```
+
 
 
 ```js
@@ -230,7 +293,7 @@ node.append("circle")
   .attr("r", d => d.r)
   .on("click", e => {
     const d = d3.select(e.target).data()[0];
-    display(`You just clicked ${d.data.name}`)
+    setCategory(d.data.name);
   });
 
 const text = node
@@ -275,11 +338,6 @@ node
 return (svg.node());
 })()
 ```
-
-<div class="card" style="background-color: #e3f2fd;">
-<h1>Preferred Main Category</h1><h2>Bubble size changes with count of preferred category.  Each customer can have multiple main categories and so can appear in multiple bubbles, thus the bubbles are not numbered.</h2>
- ${bubbleChart}
-</div>`
 
 ```js
 const gettingCurrent_cat = customer_data
