@@ -1,7 +1,7 @@
 # Maine Ticket Sale Analysis </h1>
 ## A visualiztion of trends in local ticket sales</h2>
 
-This interactive dashboard was made using data provided by the Main Trust for Local News to look at trends from <a href="https://www.tickets207.com/" title="Tickets207">Tickets207</a>
+This interactive dashboard was made using data provided by the Maine Trust for Local News to look at trends from <a href="https://www.tickets207.com/" title="Tickets207">Tickets207</a>
 <br>
 <br>
 Our goal is to create a dashboard to offer insight into
