@@ -5,7 +5,7 @@ title: Customer Overview
 # What & Why
 ## Supplemental Data
 
-This page analyzes a separate dataset containing user-specific information. Data definitions were unavailable so graphics are largely exploratory but column names are included.
+This page analyzes a separate dataset containing user-specific information. Data definitions were unavailable so these graphs are largely exploratory.  Column names are included in descriptions.
 
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.13.0/dist/maplibre-gl.css" />
  
