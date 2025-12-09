@@ -4,9 +4,7 @@ title: Total Event Overview
 # Who & When
 ## Overview Across All Events
 
-Visualizations on this page draw from transaction data to highlight purchase dates, times, and client demographics. To see this data for indiviudal events please head to the event table in <a href="./tables">Selected Events</a>
-
-These charts are intended to provide a high-level overview, helping you quickly identify broad patterns and emerging trends across all events.
+These visualizations use transaction data to examine peak purchase times and gender demographics. They provide a high-level overview to quickly identify common trends across all events on Tickets207.
 
 ```js
 //need to download npm i gender-detection-from-name
@@ -620,7 +618,7 @@ display(seasonBar)
 
   <div class="card">
     <h1>What Time?</h1>
-    <h2>Morning: Before 12:00 pm<br> Afternoon: 12:00 pm - 6:00 pm<br> Evening: After 6:00 pm<h2>
+    <h2><b>Morning:</b> Before 12:00 pm<br> <b>Afternoon:</b> 12:00 pm - 6:00 pm<br> <b>Evening:</b> After 6:00 pm<h2>
   ${PieChart(tod_pie, {
   name: d => d.name,
   value: d => d.value,
@@ -641,27 +639,27 @@ display(seasonBar)
 
 <div class="card" style="grid-column: span 2">
     <h1>What Day?</h1>
-    <h2>Distribution of ticket sales by the day of week they were purchased.</h2>
+    <h2>Ticket sale counts by day of week.</h2>
     ${chart_dow()}
 
 </div>
 <div class="card" style="grid-column: span 1">
-  <h1> When are the events being held? </h1> <h2>Bubble size represents number of events held on that day.  Event counts included.</h2>
+  <h1> When are the events being held? </h1> <h2>Bubble size grows with number of events held.  Event counts included.</h2>
   ${bubbles}
 
 </div>
 <div class="card"><h1>What season?</h1>
-<h2>Total number of events for each season.  Stacked bar further shows number of tickets per event.<br><br>
-  <b>Winter: ${aggregated.filter(d => d["Season"] == "Winter").length} events.</b><br>
-    <b>Spring: ${aggregated.filter(d => d["Season"] == "Spring").length} events.</b><br>
-    <b>Summer: ${aggregated.filter(d => d["Season"] == "Summer").length} events.<br>
-    Autumn: ${aggregated.filter(d => d["Season"] == "Autumn").length} events.</b><br>
+<h2>Total number of events for each season.  Color delineates individual events.<br><br>
+  <b>Winter:</b> ${aggregated.filter(d => d["Season"] == "Winter").length} events.<br>
+    <b>Spring:</b> ${aggregated.filter(d => d["Season"] == "Spring").length} events.<br>
+    <b>Summer:</b> ${aggregated.filter(d => d["Season"] == "Summer").length} events.<br>
+    <b>Autumn:</b> ${aggregated.filter(d => d["Season"] == "Autumn").length} events.<br>
     <br>
   ${seasonBar}
 </div>
 <div class="card grid-rowspan-2 grid-colspan-3"" style="grid-column: span 2">
   <h1>How far in advance?</h1>
-  <h2>This shows how many weeks in advance tickets are purchased</h2>
+  <h2>Cumulative ticket sales by number of weeks prior to event.</h2>
   <div class="graph" style="display: flex; justify-content: center; align-items: center; text-align: center;">
     ${cumulativeTicketsSold}
   </div>

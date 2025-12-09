@@ -1,18 +1,15 @@
 # Maine Ticket Sale Analysis </h1>
-## A visualiztion of trends in local ticket sales</h2>
+## Examining trends in local ticket sales</h2>
 
-This interactive dashboard was made using data provided by the Maine Trust for Local News to look at trends from <a href="https://www.tickets207.com/" title="Tickets207">Tickets207</a>
+This interactive dashboard is powered by data from the <a href="https://www.tickets207.com/" title="Tickets207">Tickets207</a> platform to explore trends in ticket sales for events hosted by Maine Trust for Local News.
 <br>
 <br>
-Our goal is to create a dashboard to offer insight into
+We set out to understand some of the basic patterns behind ticket sales by exploring three questions:
 - Who is buying tickets?
 - When are they buying them?
 - What are they buying?
 
-<br>
-
-We also have some additional customer data which we have used to partially explore the "why" behind ticket purchases.
-
+We also incorporated additional customer data to explore the "why" behind ticket purchases.
 
 
 

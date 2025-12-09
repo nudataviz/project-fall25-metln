@@ -6,9 +6,7 @@ title: Individual Event Dashboard
 ## Ticket Data by Individual Event
 
 
-Visualizations on this page use transaction data to report on individual or grouped events.
-
-All graphs are reactive to the events selected from the table.
+These visualizations identify high-traffic purchase times and days for individual or grouped events. All charts update based on the events you select from the table.
 
 ```js
 /* Summary of variables
@@ -667,13 +665,13 @@ const uniqueItemNames = Array.from(
 
 <div class="grid grid-cols-3" style="grid-auto-rows: auto;">
   <div class="card grid-colspan-3"><h1>Event Selection</h1>
-    <h2>Pick the events you’re interested in using this table. The graphs will refresh to show only those events. If nothing is selected, they’ll show all events by default.</h2>
+    <h2>Pick the events you’re interested in using this table. The graphs will refresh to show only those events. Default selection will include all </h2>
     ${userInput}
     ${eventInput} 
   </div>
-  <div class="card grid-colspan-3 grid-rowspan-1"><h1>Event(s) Summary<h1> <h2>Events Selected: ${uniqueItemNames.length}<br>
-  Total Number of Tickets Sold: ${specificTransacts.length}<br>
-  Net Revenue: ${d3.sum(specificTransacts, d => d["Net Revenue"]).toLocaleString('en-US', { style: 'currency', currency: 'USD',minimumFractionDigits: 0 })}</h2></div>
+  <div class="card grid-colspan-3 grid-rowspan-1"><h1>Event(s) Summary<h1> <h2>Events Selected: <b>${uniqueItemNames.length}</b><br>
+  Total Tickets Sold: <b>${specificTransacts.length}</b><br>
+  Net Revenue: <b>${d3.sum(specificTransacts, d => d["Net Revenue"]).toLocaleString('en-US', { style: 'currency', currency: 'USD',minimumFractionDigits: 0 })}</b></h2></div>
   
   <div class="card grid-colspan-2 grid-rowspan-2"><h1>Who is buying?</h1><h2>Gender distribution based on customer name.
   Some error expected.</h2>
@@ -720,11 +718,12 @@ const uniqueItemNames = Array.from(
   ${chart_dow()}
   </div>
   <div class="card grid-rowspan-2 grid-colspan-3"><h1>How early?</h1>
-  <h2>Examines the cumulative number of tickets based on number of weeks before event date. </h2>
+  <h2>Cumulative ticket sales by number of weeks prior to event.</h2>
     ${cumulativeTicketsSold}
   </div>
   <div class ="card grid-rowspan-2 grid-colspan-3"><h1>Day by Day</h1>
-  <h2>Columns represent days of the week, rows represent weeks, and color shows the number of tickets purchased on each date.<br>Recommended to use with a small number of chronologically close events.</h2>
+  <h2>
+This calendar heatmap shows transaction activity across time. Columns represent days of the week, rows represent weeks, and color intensity indicates ticket volume. Works best with a small number of chronologically close events.h2>
   ${cellHeatmap}
     </div>
   
