@@ -1,11 +1,15 @@
 ---
 title: Customer Overview
+toc: false
 ---
 
 # What & Why
 ## Supplemental Data
 
-This page analyzes a separate dataset containing user-specific information. Data definitions were unavailable so these graphs are largely exploratory.  Column names are included in descriptions.
+Analyses on this page use a distinct dataset.
+
+This was a large set of data with a variety of dimensions.  Explanation of column names is included in graphs, but we don't have details on 
+data definitions.
 
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.13.0/dist/maplibre-gl.css" />
  
@@ -16,9 +20,10 @@ import maplibregl from "npm:maplibre-gl";
 let customers_full = await FileAttachment("/data/Event_Purchaser_2025-11-10T1531_CLEAN - Event_Purchaser_2025-11-10T1531.csv").csv({typed: true})
 ```
 
-```js
-//is this the correct Column? The correct number for that column?! I do not know. 
+```js 
+//Adds Lat Long to Array (this may be a differnt column based on data definition) 
 let customer_data = Array.from(customers_full)
+//display(customer_data)
 for (let i = 0; i < customer_data.length; i++){
     if (customer_data[i]["mr_geo_latlong"]) {  // a few null categories
         const [lat, lon] = customer_data[i]["mr_geo_latlong"].split(";")[0].split(",").map(Number);
@@ -47,7 +52,7 @@ const new_england = {
 ```
 
 ```js
-// Plot of lat/long and 
+// Plot Of new england/New york regions 
 const mapv1=Plot.plot({
   height:400,
   projection: {
@@ -80,45 +85,33 @@ const mapv1=Plot.plot({
   ${mapv1}
 </div>
 
-<div class="card"><h1>Regional Heatmap</h1><h2>Uses same data as above map.  Higher intensity color indicates more data present for that location.</h2>
-
-  <div id="mapv2" style="height: 400px; width: 100%;"></div> 
-
+<div class="grid grid-cols-2">
+    <div class="card grid-colspan-1">
+        <h1>National/Global Heatmap</h1>
+        <h2>Uses same data as above map. 
+            Higher intensity color indicates more data present for that location.</h2>
+        <div id="mapv2" style="height: 500px; width: 100%;"></div> 
+    </div>
+    <div class="card grid-colspan-1" style="background-color: #e3f2fd;">
+        <h1>Preferred Main Category</h1>
+        <h2>Bubble size changes with count of preferred category.  
+        Each customer can have multiple main categories and so can appear in multiple bubbles. Clicking on bubble will update the heatmap with location if data exists</h2>
+        ${bubbleChart}
+    </div>
 </div>
 
 ```js
-const mapv2 = (() => {
-
+//makes heat map
   const map = new maplibregl.Map({
     container: 'mapv2',
     style: 'https://tiles.openfreemap.org/styles/bright',
     center: [-96, 37], // center on US 
-    zoom: 3
+    zoom: 2.75
   });
   
   map.addControl(new maplibregl.NavigationControl());
   
   map.on('load', () => {
-    // Prepare GeoJSON data
-    const geojson = {
-      type: 'FeatureCollection',
-      features: customer_data
-        .filter(d => d.latitude && d.longitude)
-        .map(d => ({
-          type: 'Feature',
-          geometry: {
-            type: 'Point',
-            coordinates: [d.longitude, d.latitude]
-          },
-          properties: {
-            name: d.mr_geo_city_name || 'Unknown Town', 
-            event:d.event_purchased||'Unknown',        
-            category: d.preferred_main_category || 'Unknown', // add preferred 
-            status:d.registration_status|| 'Unknown',
-            time:d.visit_time|| 'Unknown'
-          }
-        }))
-    };
     
     // Add source
     map.addSource('customers', {
@@ -191,14 +184,54 @@ const mapv2 = (() => {
 
   });
 
-})();
-
 //https://maplibre.org/maplibre-gl-js/docs/API/classes/Popup/
+```
+
+```js 
+// Makes GeoJson for heat map
+const geojson = {
+    type: 'FeatureCollection',
+    features: customer_data
+        .filter(d => d.latitude && d.longitude)
+        .map(d => ({
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [d.longitude, d.latitude]
+          },
+          properties: {
+            name: d.mr_geo_city_name || 'Unknown Town', 
+            event:d.event_purchased||'Unknown',        
+            category: d.preferred_main_category || 'Unknown', // add preferred 
+            status:d.registration_status|| 'Unknown',
+            time:d.visit_time|| 'Unknown'
+          }
+    }))
+};
+```
+
+```js
+// set the category by clicking on a bubble in the bubble chart
+const category = Mutable("ALL");
+const setCategory = (d) => category.value = d;
+```
+
+```js
+// Filter GeoJSON according to "preferred main category"
+const filtered = {
+    type: 'FeatureCollection',
+    features: geojson.features.filter(d => category == "ALL" || d.properties.category == category)
+}
+if (map.loaded()) {
+  //display(`setting category to ${category}`)
+  map.getSource("customers").setData(filtered);
+}
 ```
 
 
 
 ```js
+//roll up for bubble graph and makes array
 const categoryCount = d3.rollup(
   customers_full.filter(d => d.preferred_main_category != null),
   v => v.length,
@@ -213,6 +246,7 @@ const bubbleData = Array.from(categoryCount, ([preferred_main_category, count]) 
 
 
 ```js
+//bubble chart
 const data = { 
   name: "root", 
   children: bubbleData.map(d => ({
@@ -258,7 +292,11 @@ node.append("title")
 node.append("circle")
   .attr("fill", d => d.children ? "#fff" : "#ddd")
   .attr("stroke", d => d.children ? "#bbb" : null)
-  .attr("r", d => d.r);
+  .attr("r", d => d.r)
+  .on("click", e => {
+    const d = d3.select(e.target).data()[0]; //adds click element 
+    setCategory(d.data.name);
+  });
 
 const text = node
   .filter(d => !d.children && d.r > 10)
@@ -271,6 +309,7 @@ const text = node
 node
   .filter(d => !d.children && d.r > 20)
   .append("foreignObject")
+    .style("pointer-events", "none")
     .attr("x", d => -d.r)
     .attr("y", d => -d.r)
     .attr("width", d => d.r * 2)
@@ -301,11 +340,6 @@ node
 return (svg.node());
 })()
 ```
-
-<div class="card" style="background-color: #e3f2fd;">
-<h1>Preferred Main Category</h1><h2>Bubble size changes with count of preferred category.  Each customer can have multiple main categories and so can appear in multiple bubbles, thus the bubbles are not numbered.</h2>
- ${bubbleChart}
-</div>`
 
 ```js
 const gettingCurrent_cat = customer_data
@@ -341,6 +375,7 @@ const chart = Plot.plot({
 
 
 ```js
+//gets registration info for plot
 const RegistrationArray = Array.from(
   d3.rollup(
     customers_full.filter(d => d.registration_status != null),  
@@ -353,22 +388,6 @@ const RegistrationArray = Array.from(
 
 
 
-```js
-const registration_bar = Plot.plot({
-  marks: [
-    Plot.barY(customers_full.filter(d => d.registration_status != null), 
-      Plot.groupX(
-        {y: "count"}, 
-        {x: "registration_status", fill: "registration_status", tip: true}
-      )
-    ),
-    Plot.ruleY([0])
-  ],
-  x: {label: "registration_status"},
-  y: {label: "Count"},
-  //color: {legend: true}
-})
-```
 <div class="card">
 <h1>Registration Status</h1><h2>Percentage and total number of customers at each registration status.</h2>
   ${registration_pie}
@@ -376,6 +395,7 @@ const registration_bar = Plot.plot({
 
 
 ```js
+//sets time order so its not all over the place 
 const timeOrder = [
   "4 AM - 5 AM", "5 AM - 6 AM", "6 AM - 7 AM", "7 AM - 8 AM", "8 AM - 9 AM",
   "9 AM - 10 AM", "10 AM - 11 AM", "11 AM - 12 PM",
@@ -389,6 +409,7 @@ customers_full.sort((a, b) =>
 );
 ```
 ```js
+//Makes plot of time people are on website (based on spreadsheet-unsure how this data is collected)
 const time_of_visit = Plot.plot({
   //title:"Time Visited",
   marginLeft: 100,
@@ -407,11 +428,28 @@ const time_of_visit = Plot.plot({
 ```
 
 <div class="card">
-<h1>Visit Time</h1><h2>Count of visit times for users. Hover each bar with your mouse for more detail on number of users for interval.</h2>
+<h1>Visit Time</h1></h2>Likely indicates a time the user visited the website.  Each bar shows total number of visits per time period.  Hover each bar with your mouse for more detail.</h2>
   ${time_of_visit}
 </div>
 
 ```js
+//makes pie graph based on registration
+const registration_pie=PieChart(RegistrationArray, {
+      name: d => d.name,
+      value: d => d.value,
+      width: 500,
+      height: 400,
+      labelRadius: 90,
+      title: (d) => {
+        const total = d3.sum(RegistrationArray, p => p.value);
+        const percentage = ((d.value / total) * 100).toFixed(1);
+        return `${d.name}\n${percentage}%\n${d.value}`;
+      }
+    })
+```
+
+```js
+//This makes PIE graphs
 // copied from observable
 function PieChart(data, {
   name = ([x]) => x,  // given d in data, returns the (ordinal) label
@@ -503,18 +541,3 @@ function PieChart(data, {
 }
 ```
 
-```js
-const registration_pie=PieChart(RegistrationArray, {
-      name: d => d.name,
-      value: d => d.value,
-      width: 500,
-      height: 400,
-      //colors: ["#89CFF0", "#FFB7CE"],
-      labelRadius: 90,
-      title: (d) => {
-        const total = d3.sum(RegistrationArray, p => p.value);
-        const percentage = ((d.value / total) * 100).toFixed(1);
-        return `${d.name}\n${percentage}%\n${d.value}`;
-      }
-    })
-```
