@@ -5,10 +5,7 @@ title: Customer Overview
 # What & Why
 ## Supplemental Data
 
-Analyses on this page use a distinct dataset.
-
-This was a large set of data with a variety of dimensions.  Explanation of column names is included in graphs, but we don't have details on 
-data definitions.
+This page analyzes a separate dataset containing user-specific information. These graphs are exploratory and contain the column names used, but we do not have data definitions.
 
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.13.0/dist/maplibre-gl.css" />
  
@@ -410,7 +407,7 @@ const time_of_visit = Plot.plot({
 ```
 
 <div class="card">
-<h1>Visit Time</h1></h2>Likely indicates a time the user visited the website.  Each bar shows total number of visits per time period.  Hover each bar with your mouse for more detail.</h2>
+<h1>Visit Time</h1><h2>Count of visit times for users. Hover each bar with your mouse for more detail on number of users for interval.</h2>
   ${time_of_visit}
 </div>
 
