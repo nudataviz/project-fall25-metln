@@ -72,9 +72,10 @@ let customers_full = await FileAttachment("./data/Event_Purchaser_2025-11-10T153
 return {customers_full};
 }});
 
-define({id: "de615b34", inputs: ["customers_full"], outputs: ["customer_data"], body: (customers_full) => {
-//is this the correct Column? The correct number for that column?! I do not know. 
+define({id: "907f60d1", inputs: ["customers_full"], outputs: ["customer_data"], body: (customers_full) => {
+//Adds Lat Long to Array (this may be a differnt column based on data definition) 
 let customer_data = Array.from(customers_full)
+//display(customer_data)
 for (let i = 0; i < customer_data.length; i++){
     if (customer_data[i]["mr_geo_latlong"]) {  // a few null categories
         const [lat, lon] = customer_data[i]["mr_geo_latlong"].split(";")[0].split(",").map(Number);
@@ -106,8 +107,8 @@ const new_england = {
 return {new_england};
 }});
 
-define({id: "0a38b784", inputs: ["Plot","new_england","customer_data"], outputs: ["mapv1"], body: (Plot,new_england,customer_data) => {
-// Plot of lat/long and 
+define({id: "1919b40c", inputs: ["Plot","new_england","customer_data"], outputs: ["mapv1"], body: (Plot,new_england,customer_data) => {
+// Plot Of new england/New york regions 
 const mapv1=Plot.plot({
   height:400,
   projection: {
@@ -142,39 +143,24 @@ mapv1
 ))
 }});
 
-define({id: "470ce2f4", inputs: ["maplibregl","customer_data"], outputs: ["mapv2"], body: (maplibregl,customer_data) => {
-const mapv2 = (() => {
+define({id: "011ba8dc", mode: "inline", inputs: ["bubbleChart","display"], body: async (bubbleChart,display) => {
+display(await(
+bubbleChart
+))
+}});
 
+define({id: "d7852e16", inputs: ["maplibregl","geojson"], outputs: ["map"], body: (maplibregl,geojson) => {
+//makes heat map
   const map = new maplibregl.Map({
     container: 'mapv2',
     style: 'https://tiles.openfreemap.org/styles/bright',
     center: [-96, 37], // center on US 
-    zoom: 3
+    zoom: 2.75
   });
   
   map.addControl(new maplibregl.NavigationControl());
   
   map.on('load', () => {
-    // Prepare GeoJSON data
-    const geojson = {
-      type: 'FeatureCollection',
-      features: customer_data
-        .filter(d => d.latitude && d.longitude)
-        .map(d => ({
-          type: 'Feature',
-          geometry: {
-            type: 'Point',
-            coordinates: [d.longitude, d.latitude]
-          },
-          properties: {
-            name: d.mr_geo_city_name || 'Unknown Town', 
-            event:d.event_purchased||'Unknown',        
-            category: d.preferred_main_category || 'Unknown', // add preferred 
-            status:d.registration_status|| 'Unknown',
-            time:d.visit_time|| 'Unknown'
-          }
-        }))
-    };
     
     // Add source
     map.addSource('customers', {
@@ -247,13 +233,56 @@ const mapv2 = (() => {
 
   });
 
-})();
-
 //https://maplibre.org/maplibre-gl-js/docs/API/classes/Popup/
-return {mapv2};
+return {map};
 }});
 
-define({id: "6ee3090c", inputs: ["d3","customers_full"], outputs: ["categoryCount","bubbleData"], body: (d3,customers_full) => {
+define({id: "5265732b", inputs: ["customer_data"], outputs: ["geojson"], body: (customer_data) => {
+// Makes GeoJson for heat map
+const geojson = {
+    type: 'FeatureCollection',
+    features: customer_data
+        .filter(d => d.latitude && d.longitude)
+        .map(d => ({
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [d.longitude, d.latitude]
+          },
+          properties: {
+            name: d.mr_geo_city_name || 'Unknown Town', 
+            event:d.event_purchased||'Unknown',        
+            category: d.preferred_main_category || 'Unknown', // add preferred 
+            status:d.registration_status|| 'Unknown',
+            time:d.visit_time|| 'Unknown'
+          }
+    }))
+};
+return {geojson};
+}});
+
+define({id: "ca4e599e", inputs: ["Mutable"], outputs: ["category","setCategory"], body: (Mutable) => {
+// set the category by clicking on a bubble in the bubble chart
+const category = Mutable("ALL");
+const setCategory = (d) => category.value = d;
+return {category,setCategory};
+}});
+
+define({id: "4ba20451", inputs: ["geojson","category","map"], outputs: ["filtered"], body: (geojson,category,map) => {
+// Filter GeoJSON according to "preferred main category"
+const filtered = {
+    type: 'FeatureCollection',
+    features: geojson.features.filter(d => category == "ALL" || d.properties.category == category)
+}
+if (map.loaded()) {
+  //display(`setting category to ${category}`)
+  map.getSource("customers").setData(filtered);
+}
+return {filtered};
+}});
+
+define({id: "16a9fb78", inputs: ["d3","customers_full"], outputs: ["categoryCount","bubbleData"], body: (d3,customers_full) => {
+//roll up for bubble graph and makes array
 const categoryCount = d3.rollup(
   customers_full.filter(d => d.preferred_main_category != null),
   v => v.length,
@@ -267,7 +296,8 @@ const bubbleData = Array.from(categoryCount, ([preferred_main_category, count]) 
 return {categoryCount,bubbleData};
 }});
 
-define({id: "592600b6", inputs: ["bubbleData"], outputs: ["data"], body: (bubbleData) => {
+define({id: "92f861a2", inputs: ["bubbleData"], outputs: ["data"], body: (bubbleData) => {
+//bubble chart
 const data = { 
   name: "root", 
   children: bubbleData.map(d => ({
@@ -278,7 +308,7 @@ const data = {
 return {data};
 }});
 
-define({id: "110e3de3", inputs: ["d3","data"], outputs: ["bubbleChart"], body: (d3,data) => {
+define({id: "36ab35f6", inputs: ["d3","data","setCategory"], outputs: ["bubbleChart"], body: (d3,data,setCategory) => {
 const bubbleChart = (() => {
 const width = 928;
 const height = width;
@@ -315,7 +345,11 @@ node.append("title")
 node.append("circle")
   .attr("fill", d => d.children ? "#fff" : "#ddd")
   .attr("stroke", d => d.children ? "#bbb" : null)
-  .attr("r", d => d.r);
+  .attr("r", d => d.r)
+  .on("click", e => {
+    const d = d3.select(e.target).data()[0]; //adds click element 
+    setCategory(d.data.name);
+  });
 
 const text = node
   .filter(d => !d.children && d.r > 10)
@@ -328,6 +362,7 @@ const text = node
 node
   .filter(d => !d.children && d.r > 20)
   .append("foreignObject")
+    .style("pointer-events", "none")
     .attr("x", d => -d.r)
     .attr("y", d => -d.r)
     .attr("width", d => d.r * 2)
@@ -358,12 +393,6 @@ node
 return (svg.node());
 })()
 return {bubbleChart};
-}});
-
-define({id: "011ba8dc", mode: "inline", inputs: ["bubbleChart","display"], body: async (bubbleChart,display) => {
-display(await(
-bubbleChart
-))
 }});
 
 define({id: "d5c7069e", inputs: ["customer_data"], outputs: ["gettingCurrent_cat"], body: (customer_data) => {
@@ -402,7 +431,8 @@ chart
 ))
 }});
 
-define({id: "cae9b2df", inputs: ["d3","customers_full"], outputs: ["RegistrationArray"], body: (d3,customers_full) => {
+define({id: "7c48c288", inputs: ["d3","customers_full"], outputs: ["RegistrationArray"], body: (d3,customers_full) => {
+//gets registration info for plot
 const RegistrationArray = Array.from(
   d3.rollup(
     customers_full.filter(d => d.registration_status != null),  
@@ -414,31 +444,14 @@ const RegistrationArray = Array.from(
 return {RegistrationArray};
 }});
 
-define({id: "90f0c64d", inputs: ["Plot","customers_full"], outputs: ["registration_bar"], body: (Plot,customers_full) => {
-const registration_bar = Plot.plot({
-  marks: [
-    Plot.barY(customers_full.filter(d => d.registration_status != null), 
-      Plot.groupX(
-        {y: "count"}, 
-        {x: "registration_status", fill: "registration_status", tip: true}
-      )
-    ),
-    Plot.ruleY([0])
-  ],
-  x: {label: "registration_status"},
-  y: {label: "Count"},
-  //color: {legend: true}
-})
-return {registration_bar};
-}});
-
 define({id: "b0e7d2c7", mode: "inline", inputs: ["registration_pie","display"], body: async (registration_pie,display) => {
 display(await(
 registration_pie
 ))
 }});
 
-define({id: "ed7051bf", inputs: ["customers_full"], outputs: ["timeOrder"], body: (customers_full) => {
+define({id: "17a1df0a", inputs: ["customers_full"], outputs: ["timeOrder"], body: (customers_full) => {
+//sets time order so its not all over the place 
 const timeOrder = [
   "4 AM - 5 AM", "5 AM - 6 AM", "6 AM - 7 AM", "7 AM - 8 AM", "8 AM - 9 AM",
   "9 AM - 10 AM", "10 AM - 11 AM", "11 AM - 12 PM",
@@ -453,7 +466,8 @@ customers_full.sort((a, b) =>
 return {timeOrder};
 }});
 
-define({id: "298a1972", inputs: ["Plot","timeOrder","customers_full"], outputs: ["time_of_visit"], body: (Plot,timeOrder,customers_full) => {
+define({id: "5d4bef96", inputs: ["Plot","timeOrder","customers_full"], outputs: ["time_of_visit"], body: (Plot,timeOrder,customers_full) => {
+//Makes plot of time people are on website (based on spreadsheet-unsure how this data is collected)
 const time_of_visit = Plot.plot({
   //title:"Time Visited",
   marginLeft: 100,
@@ -478,7 +492,25 @@ time_of_visit
 ))
 }});
 
-define({id: "3df9d3f0", inputs: ["d3"], outputs: ["PieChart"], body: (d3) => {
+define({id: "1b27cd01", inputs: ["PieChart","RegistrationArray","d3"], outputs: ["registration_pie"], body: (PieChart,RegistrationArray,d3) => {
+//makes pie graph based on registration
+const registration_pie=PieChart(RegistrationArray, {
+      name: d => d.name,
+      value: d => d.value,
+      width: 500,
+      height: 400,
+      labelRadius: 90,
+      title: (d) => {
+        const total = d3.sum(RegistrationArray, p => p.value);
+        const percentage = ((d.value / total) * 100).toFixed(1);
+        return `${d.name}\n${percentage}%\n${d.value}`;
+      }
+    })
+return {registration_pie};
+}});
+
+define({id: "e87fed6f", inputs: ["d3"], outputs: ["PieChart"], body: (d3) => {
+//This makes PIE graphs
 // copied from observable
 function PieChart(data, {
   name = ([x]) => x,  // given d in data, returns the (ordinal) label
@@ -571,23 +603,6 @@ function PieChart(data, {
 return {PieChart};
 }});
 
-define({id: "8da66fbc", inputs: ["PieChart","RegistrationArray","d3"], outputs: ["registration_pie"], body: (PieChart,RegistrationArray,d3) => {
-const registration_pie=PieChart(RegistrationArray, {
-      name: d => d.name,
-      value: d => d.value,
-      width: 500,
-      height: 400,
-      //colors: ["#89CFF0", "#FFB7CE"],
-      labelRadius: 90,
-      title: (d) => {
-        const total = d3.sum(RegistrationArray, p => p.value);
-        const percentage = ((d.value / total) * 100).toFixed(1);
-        return `${d.name}\n${percentage}%\n${d.value}`;
-      }
-    })
-return {registration_pie};
-}});
-
 </script>
 </head>
 <body>
@@ -606,10 +621,6 @@ return {registration_pie};
 </nav>
 <script>{const e=document.querySelector("#observablehq-sidebar"),o=document.querySelector("#observablehq-sidebar-toggle"),r=sessionStorage.getItem("observablehq-sidebar");r?o.checked=r==="true":o.indeterminate=!0;for(const t of document.querySelectorAll("#observablehq-sidebar summary")){const s=t.parentElement;switch(sessionStorage.getItem(`observablehq-sidebar:${t.textContent}`)){case"true":s.open=!0;break;case"false":s.classList.contains("observablehq-section-active")||(s.open=!1);break}}addEventListener("beforeunload",()=>sessionStorage.setItem("observablehq-sidebar-scrolly",`${e.scrollTop}`));const a=sessionStorage.getItem("observablehq-sidebar-scrolly");a!=null&&(e.style.cssText="overflow: hidden;",e.scrollTop=+a,e.style.cssText="");}</script>
 <div id="observablehq-center">
-<aside id="observablehq-toc" data-selector="h1:not(:first-of-type)[id], h2:first-child[id], :not(h1) + h2[id]">
-<nav>
-</nav>
-</aside>
 <main id="observablehq-main" class="observablehq">
 <h1 id="what-and-why" tabindex="-1"><a class="observablehq-header-anchor" href="#what-and-why">What &amp; Why</a></h1>
 <h2 id="supplemental-data" tabindex="-1"><a class="observablehq-header-anchor" href="#supplemental-data">Supplemental Data</a></h2>
@@ -619,50 +630,59 @@ data definitions.</p>
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.13.0/dist/maplibre-gl.css">
 <div class="observablehq observablehq--block"><!--:7d181a31:--></div>
 <div class="observablehq observablehq--block"><!--:7f086426:--></div>
-<div class="observablehq observablehq--block"><!--:de615b34:--></div>
+<div class="observablehq observablehq--block"><!--:907f60d1:--></div>
 <div class="observablehq observablehq--block"><!--:1d7276b0:--></div>
 <div class="observablehq observablehq--block"><!--:0b0e9779:--></div>
-<div class="observablehq observablehq--block"><!--:0a38b784:--></div>
+<div class="observablehq observablehq--block"><!--:1919b40c:--></div>
 <div class="card">
 <h1>Regional Overview</h1>
 <h2>Hover to see Location and Events Purchased<br>Graph displays rows which had latitude and longitude points and places dots labeled with the corresponding event purchase.</h2>
   <observablehq-loading></observablehq-loading><!--:bdd6467f:-->
 </div>
-<div class="card"><h1>Regional Heatmap</h1><h2>Uses same data as above map.  Higher intensity color indicates more data present for that location.</h2>
-  <div id="mapv2" style="height: 400px; width: 100%;"></div> 
+<div class="grid grid-cols-2">
+    <div class="card grid-colspan-1">
+        <h1>National/Global Heatmap</h1>
+        <h2>Uses same data as above map. 
+            Higher intensity color indicates more data present for that location.</h2>
+        <div id="mapv2" style="height: 500px; width: 100%;"></div> 
+    </div>
+    <div class="card grid-colspan-1" style="background-color: #e3f2fd;">
+        <h1>Preferred Main Category</h1>
+        <h2>Bubble size changes with count of preferred category.  
+        Each customer can have multiple main categories and so can appear in multiple bubbles. Clicking on bubble will update the heatmap with location if data exists</h2>
+        <observablehq-loading></observablehq-loading><!--:011ba8dc:-->
+    </div>
 </div>
-<div class="observablehq observablehq--block"><!--:470ce2f4:--></div>
-<div class="observablehq observablehq--block"><!--:6ee3090c:--></div>
-<div class="observablehq observablehq--block"><!--:592600b6:--></div>
-<div class="observablehq observablehq--block"><!--:110e3de3:--></div>
-<div class="card" style="background-color: #e3f2fd;">
-<h1>Preferred Main Category</h1><h2>Bubble size changes with count of preferred category.  Each customer can have multiple main categories and so can appear in multiple bubbles, thus the bubbles are not numbered.</h2>
- <observablehq-loading></observablehq-loading><!--:011ba8dc:-->
-</div>`
+<div class="observablehq observablehq--block"><!--:d7852e16:--></div>
+<div class="observablehq observablehq--block"><!--:5265732b:--></div>
+<div class="observablehq observablehq--block"><!--:ca4e599e:--></div>
+<div class="observablehq observablehq--block"><!--:4ba20451:--></div>
+<div class="observablehq observablehq--block"><!--:16a9fb78:--></div>
+<div class="observablehq observablehq--block"><!--:92f861a2:--></div>
+<div class="observablehq observablehq--block"><!--:36ab35f6:--></div>
 <div class="observablehq observablehq--block"><!--:d5c7069e:--></div>
 <div class="observablehq observablehq--block"><!--:b4bdfc71:--></div>
 <div class="card">
 <h1>Current Category</h1><h2>Shows counts of each current category from the customer data.  Hover each bar to see the applicable category.</h2>
   <observablehq-loading></observablehq-loading><!--:cc57fc19:-->
 </div>
-<div class="observablehq observablehq--block"><!--:cae9b2df:--></div>
-<div class="observablehq observablehq--block"><!--:90f0c64d:--></div>
+<div class="observablehq observablehq--block"><!--:7c48c288:--></div>
 <div class="card">
 <h1>Registration Status</h1><h2>Percentage and total number of customers at each registration status.</h2>
   <observablehq-loading></observablehq-loading><!--:b0e7d2c7:-->
 </div>
-<div class="observablehq observablehq--block"><!--:ed7051bf:--></div>
-<div class="observablehq observablehq--block"><!--:298a1972:--></div>
+<div class="observablehq observablehq--block"><!--:17a1df0a:--></div>
+<div class="observablehq observablehq--block"><!--:5d4bef96:--></div>
 <div class="card">
 <h1>Visit Time</h1>Likely indicates a time the user visited the website.  Each bar shows total number of visits per time period.  Hover each bar with your mouse for more detail.
   <observablehq-loading></observablehq-loading><!--:1327f8bf:-->
 </div>
-<div class="observablehq observablehq--block"><!--:3df9d3f0:--></div>
-<div class="observablehq observablehq--block"><!--:8da66fbc:--></div>
+<div class="observablehq observablehq--block"><!--:1b27cd01:--></div>
+<div class="observablehq observablehq--block"><!--:e87fed6f:--></div>
 </main>
 <footer id="observablehq-footer">
 <nav><a rel="prev" href="./tables"><span>Selected Events</span></a></nav>
-<div>Built with <a href="https://observablehq.com/" target="_blank" rel="noopener noreferrer">Observable</a> on <a title="2025-12-08T13:16:34">Dec 8, 2025</a>.</div>
+<div>Built with <a href="https://observablehq.com/" target="_blank" rel="noopener noreferrer">Observable</a> on <a title="2025-12-10T10:46:31">Dec 10, 2025</a>.</div>
 </footer>
 </div>
 </body>

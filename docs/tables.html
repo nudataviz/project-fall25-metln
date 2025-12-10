@@ -849,8 +849,7 @@ cellHeatmap
 <main id="observablehq-main" class="observablehq">
 <h1 id="what-who-and-when" tabindex="-1"><a class="observablehq-header-anchor" href="#what-who-and-when">What, Who, &amp; When</a></h1>
 <h2 id="ticket-data-by-individual-event" tabindex="-1"><a class="observablehq-header-anchor" href="#ticket-data-by-individual-event">Ticket Data by Individual Event</a></h2>
-<p>Visualizations on this page use transaction data to report on individual or grouped events.</p>
-<p>All graphs are reactive to the events selected from the table.</p>
+<p>These visualizations identify high-traffic purchase times and days for individual or grouped events. All charts update based on the events you select from the table.</p>
 <div class="observablehq observablehq--block"><!--:38f8bcd2:--></div>
 <div class="observablehq observablehq--block"><!--:2318c28b:--></div>
 <div class="observablehq observablehq--block"><!--:77bb462c:--></div>
@@ -916,13 +915,13 @@ const userWeeks = Generators.input(salesDataInput)
 </style>
 <div class="grid grid-cols-3" style="grid-auto-rows: auto;">
   <div class="card grid-colspan-3"><h1>Event Selection</h1>
-    <h2>Pick the events you’re interested in using this table. The graphs will refresh to show only those events. If nothing is selected, they’ll show all events by default.</h2>
+    <h2>Pick the events you’re interested in using this table. The graphs will refresh to show only those events. Default selection will include all </h2>
     <observablehq-loading></observablehq-loading><!--:2fa6a0e4:-->
     <observablehq-loading></observablehq-loading><!--:32c4da9f:--> 
   </div>
-  <div class="card grid-colspan-3 grid-rowspan-1"><h1>Event(s) Summary</h1><h1> </h1><h2>Events Selected: <observablehq-loading></observablehq-loading><!--:036a6507:--><br>
-  Total Number of Tickets Sold: <observablehq-loading></observablehq-loading><!--:756305ea:--><br>
-  Net Revenue: <observablehq-loading></observablehq-loading><!--:ce1d0d9c:--></h2></div>
+  <div class="card grid-colspan-3 grid-rowspan-1"><h1>Event(s) Summary</h1><h1> </h1><h2>Events Selected: <b><observablehq-loading></observablehq-loading><!--:036a6507:--></b><br>
+  Total Tickets Sold: <b><observablehq-loading></observablehq-loading><!--:756305ea:--></b><br>
+  Net Revenue: <b><observablehq-loading></observablehq-loading><!--:ce1d0d9c:--></b></h2></div>
   <div class="card grid-colspan-2 grid-rowspan-2"><h1>Who is buying?</h1><h2>Gender distribution based on customer name.
   Some error expected.</h2>
     <observablehq-loading></observablehq-loading><!--:fe562a8b:-->
@@ -954,18 +953,19 @@ const userWeeks = Generators.input(salesDataInput)
   <observablehq-loading></observablehq-loading><!--:6a66685b:-->
   </div>
   <div class="card grid-rowspan-2 grid-colspan-3"><h1>How early?</h1>
-  <h2>Examines the cumulative number of tickets based on number of weeks before event date. </h2>
+  <h2>Cumulative ticket sales by number of weeks prior to event.</h2>
     <observablehq-loading></observablehq-loading><!--:f34a4c09:-->
   </div>
   <div class="card grid-rowspan-2 grid-colspan-3"><h1>Day by Day</h1>
-  <h2>Columns represent days of the week, rows represent weeks, and color shows the number of tickets purchased on each date.<br>Recommended to use with a small number of chronologically close events.</h2>
+  <h2>
+This calendar heatmap shows transaction activity across time. Columns represent days of the week, rows represent weeks, and color intensity indicates ticket volume. Works best with a small number of chronologically close events.h2&gt;
   <observablehq-loading></observablehq-loading><!--:7a59b980:-->
-    </div>
+    </h2></div>
 </div>
 </main>
 <footer id="observablehq-footer">
 <nav><a rel="prev" href="./totalevents"><span>All  Events</span></a><a rel="next" href="./customerOverview"><span>Customer Database</span></a></nav>
-<div>Built with <a href="https://observablehq.com/" target="_blank" rel="noopener noreferrer">Observable</a> on <a title="2025-12-08T13:16:34">Dec 8, 2025</a>.</div>
+<div>Built with <a href="https://observablehq.com/" target="_blank" rel="noopener noreferrer">Observable</a> on <a title="2025-12-10T10:46:31">Dec 10, 2025</a>.</div>
 </footer>
 </div>
 </body>
