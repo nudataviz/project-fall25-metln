@@ -781,8 +781,7 @@ define({id: "28c84f9a", body: () => {
 <main id="observablehq-main" class="observablehq">
 <h1 id="who-and-when" tabindex="-1"><a class="observablehq-header-anchor" href="#who-and-when">Who &amp; When</a></h1>
 <h2 id="overview-across-all-events" tabindex="-1"><a class="observablehq-header-anchor" href="#overview-across-all-events">Overview Across All Events</a></h2>
-<p>Visualizations on this page draw from transaction data to highlight purchase dates, times, and client demographics. To see this data for indiviudal events please head to the event table in <a href="./tables">Selected Events</a></p>
-<p>These charts are intended to provide a high-level overview, helping you quickly identify broad patterns and emerging trends across all events.</p>
+<p>These visualizations use transaction data to examine peak purchase times and gender demographics. They provide a high-level overview to quickly identify common trends across all events on Tickets207.</p>
 <div class="observablehq observablehq--block"><!--:7e74136e:--></div>
 <div class="observablehq observablehq--block"><!--:2dd96a3b:--></div>
 <div class="observablehq observablehq--block"><!--:77bb462c:--></div>
@@ -844,30 +843,30 @@ const userWeeks = Generators.input(salesDataInput)
   </div>
   <div class="card">
     <h1>What Time?</h1>
-    <h2>Morning: Before 12:00 pm<br> Afternoon: 12:00 pm - 6:00 pm<br> Evening: After 6:00 pm</h2><h2>
+    <h2><b>Morning:</b> Before 12:00 pm<br> <b>Afternoon:</b> 12:00 pm - 6:00 pm<br> <b>Evening:</b> After 6:00 pm</h2><h2>
   <observablehq-loading></observablehq-loading><!--:6cf0e842:-->
   </h2></div>
 <div class="card" style="grid-column: span 2">
     <h1>What Day?</h1>
-    <h2>Distribution of ticket sales by the day of week they were purchased.</h2>
+    <h2>Ticket sale counts by day of week.</h2>
     <observablehq-loading></observablehq-loading><!--:6a66685b:-->
 </div>
 <div class="card" style="grid-column: span 1">
-  <h1> When are the events being held? </h1> <h2>Bubble size represents number of events held on that day.  Event counts included.</h2>
+  <h1> When are the events being held? </h1> <h2>Bubble size grows with number of events held.  Event counts included.</h2>
   <observablehq-loading></observablehq-loading><!--:2ea0d25e:-->
 </div>
 <div class="card"><h1>What season?</h1>
-<h2>Total number of events for each season.  Stacked bar further shows number of tickets per event.<br><br>
-  <b>Winter: <observablehq-loading></observablehq-loading><!--:f9678ad9:--> events.</b><br>
-    <b>Spring: <observablehq-loading></observablehq-loading><!--:b973fd7c:--> events.</b><br>
-    <b>Summer: <observablehq-loading></observablehq-loading><!--:8a8ab4d8:--> events.<br>
-    Autumn: <observablehq-loading></observablehq-loading><!--:3187c561:--> events.</b><br>
+<h2>Total number of events for each season.  Color delineates individual events.<br><br>
+  <b>Winter:</b> <observablehq-loading></observablehq-loading><!--:f9678ad9:--> events.<br>
+    <b>Spring:</b> <observablehq-loading></observablehq-loading><!--:b973fd7c:--> events.<br>
+    <b>Summer:</b> <observablehq-loading></observablehq-loading><!--:8a8ab4d8:--> events.<br>
+    <b>Autumn:</b> <observablehq-loading></observablehq-loading><!--:3187c561:--> events.<br>
     <br>
   <observablehq-loading></observablehq-loading><!--:f2e1e461:-->
 </h2></div>
 <div class="card grid-rowspan-2 grid-colspan-3" "="" style="grid-column: span 2">
   <h1>How far in advance?</h1>
-  <h2>This shows how many weeks in advance tickets are purchased</h2>
+  <h2>Cumulative ticket sales by number of weeks prior to event.</h2>
   <div class="graph" style="display: flex; justify-content: center; align-items: center; text-align: center;">
     <observablehq-loading></observablehq-loading><!--:f34a4c09:-->
   </div>
@@ -877,7 +876,7 @@ const userWeeks = Generators.input(salesDataInput)
 </div></main>
 <footer id="observablehq-footer">
 <nav><a rel="prev" href="./"><span>METLN</span></a><a rel="next" href="./tables"><span>Selected Events</span></a></nav>
-<div>Built with <a href="https://observablehq.com/" target="_blank" rel="noopener noreferrer">Observable</a> on <a title="2025-12-08T13:16:34">Dec 8, 2025</a>.</div>
+<div>Built with <a href="https://observablehq.com/" target="_blank" rel="noopener noreferrer">Observable</a> on <a title="2025-12-10T10:46:31">Dec 10, 2025</a>.</div>
 </footer>
 </div>
 </body>

@@ -13,6 +13,7 @@ export default {
          {name: "All  Events", path: "/totalevents"},
          {name: "Selected Events", path: "/tables"},
          {name: "Customer Database", path: "/customerOverview"},
+         //{name: "BogData", path: "/bog_graph"},
        ],
   //   }
   // ],
